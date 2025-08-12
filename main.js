@@ -12,7 +12,7 @@ let controls;
 init();
 animate();
 EventListener();
-Camera_Inspector(camera,controls);
+//Camera_Inspector(camera,controls);
 
 function init()
 {
@@ -24,7 +24,7 @@ function init()
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-	renderer.toneMappingExposure = 1;
+	renderer.toneMappingExposure = 0.75;
   document.body.appendChild( renderer.domElement );
 
 
@@ -39,7 +39,6 @@ function init()
 						scene.environment = texture;
 
 	} );
-
 
   InstGLTFLoader('./models/MedicalCartAssembly.glb',new THREE.Vector3(0,0,0),new THREE.Vector3(0,Math.PI, 0),0.005,"MedicalCartModel",null, scene);
   
