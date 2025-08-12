@@ -17,11 +17,12 @@ Camera_Inspector(camera,controls);
 function init()
 {
   scene = new THREE.Scene();
-  scene.background= new THREE.Color( 0xFFFFFF );
+  //scene.background= new THREE.Color( 0xFFFFFF );
   camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	renderer.toneMappingExposure = 1;
   document.body.appendChild( renderer.domElement );
