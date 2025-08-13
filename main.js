@@ -8,6 +8,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 let scene, camera, renderer, stats, mixer, clock;
 let controls;
+let threeContainer = document.getElementById("threeContainer");
 
 init();
 animate();
@@ -25,7 +26,8 @@ function init()
   renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	renderer.toneMappingExposure = 0.75;
-  document.body.appendChild( renderer.domElement );
+  //document.body.appendChild( renderer.domElement );
+  threeContainer.appendChild( renderer.domElement );
 
 
   //hdri 環境光源
@@ -68,7 +70,6 @@ function onWindowResize()
 		camera.aspect = window.innerWidth / window.innerHeight;
 		camera.updateProjectionMatrix();
 		renderer.setSize( window.innerWidth, window.innerHeight );
-
 }
 
 function animate() 
