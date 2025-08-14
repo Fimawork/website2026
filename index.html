@@ -73,6 +73,43 @@
 				pointer-events: none;
 			}
 
+			.mainBottom_panel
+			{
+				position: fixed;
+				bottom:9%;
+                width: 100%;
+                height: 5%;
+                display: flex;
+                justify-content:center;
+                
+                z-index: 9;
+            }
+
+			.main_btn{
+                position: relative;
+                width: 7.5%;
+                height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-family: "Roboto", sans-serif;
+                font-size: 12px;
+                color: rgba(0, 0, 0, 0.9);
+				background-color: rgba(255, 255, 255, 0);
+
+				pointer-events: auto;
+
+				margin-left: 10px;
+				margin-right: 10px;
+
+				border-radius: 15% / 50%;
+            }
+
+			.main_btn:hover
+			{
+				background-color: rgba(255, 255, 255, 0.5);
+			}
+
 			@media screen and (max-width:768px)
 			{
 
@@ -101,7 +138,12 @@
 		<div id="frozenGlassPanel">
 			<div id="threeContainer"></div>
 		</div>
-		
+		<div class="mainBottom_panel">
+			<div class="main_btn" onclick="DefaultCamera()">RESET CAMERA</div>
+			<div class="main_btn" onclick="">BACKGROUND</div>
+			<div class="main_btn" onclick="">DESCRIPTION</div>
+			<div class="main_btn" onclick="">PRINT SCREEN</div>
+		</div>
 		<div class="main_title">Medical Cart Configurator</div>
 		<script type="module" src="main.js"></script>
 

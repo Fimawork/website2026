@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import {CameraManager,targetPosition,CameraDefaultPos, Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+import {CameraManager,UpdateCameraPosition,targetPosition,CameraDefaultPos, InputEvent,Camera_Inspector,ControlsTargetDefaultPos,SetDefaultCameraStatus,InstFBXLoader,InstGLTFLoader,FindMataterialByName} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 let scene, camera, renderer, stats, mixer, clock;
@@ -79,11 +79,13 @@ function animate()
   controls.update();
   renderer.render( scene, camera );
 
+  UpdateCameraPosition(camera,controls);
+
 }
 
 function EventListener()
-  {
-      window.addEventListener("keydown",function (event) {
+{
+  window.addEventListener("keydown",function (event) {
 
       switch (event.code) 
       {
@@ -105,7 +107,7 @@ function EventListener()
 
         console.log(scene.getObjectByName("test"));
 
-        
+        CameraManager(0);
 
         break;
 
@@ -130,5 +132,16 @@ function EventListener()
       
     });
 
+  window.addEventListener("pointerdown", (event) => {InputEvent();});
+  window.addEventListener("wheel", (event) => {InputEvent();});
 
-  }
+
+}
+
+function DefaultCamera()
+{
+  CameraManager(0);
+}
+
+///將函數掛載到全域範圍
+window.DefaultCamera = DefaultCamera;
