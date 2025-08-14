@@ -19,10 +19,10 @@ function init()
 {
   scene = new THREE.Scene();
   //scene.background= new THREE.Color( 0xFFFFFF );
-  camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
+  camera = new THREE.PerspectiveCamera( 50, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );//非全螢幕比例設定
+
   renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	renderer.toneMappingExposure = 0.75;
@@ -67,9 +67,9 @@ function init()
 
 function onWindowResize() 
 {
-		camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;//非全螢幕比例設定
 		camera.updateProjectionMatrix();
-		renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
 }
 
 function animate() 
