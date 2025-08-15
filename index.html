@@ -80,34 +80,45 @@
                 width: 100%;
                 height: 5%;
                 display: flex;
-                justify-content:center;
-                
+                justify-content:center; 
                 z-index: 9;
             }
 
-			.main_btn{
+			.main_btn
+			{
                 position: relative;
                 width: 7.5%;
                 height: 100%;
+				background-color: rgba(255, 255, 255, 0);
 				display: flex;
 				justify-content: center;
 				align-items: center;
+				margin-left: 1%;
+				margin-right: 1%;
+				border-radius: 15% / 50%;
+				pointer-events: auto;
+            }
+
+			.btn_text
+			{
+				position: absolute;
+                right: 0px;
+                left: 0px;
+				text-align: center;
 				font-family: "Roboto", sans-serif;
                 font-size: 12px;
                 color: rgba(0, 0, 0, 0.9);
-				background-color: rgba(255, 255, 255, 0);
-
-				pointer-events: auto;
-
-				margin-left: 10px;
-				margin-right: 10px;
-
-				border-radius: 15% / 50%;
-            }
+				display: block;
+			}
 
 			.main_btn:hover
 			{
 				background-color: rgba(255, 255, 255, 0.5);
+			}
+
+			i{
+				color: rgba(255, 255, 255, 0);
+				display: none;
 			}
 
 			@media screen and (max-width:768px)
@@ -116,6 +127,27 @@
 				.main_title
 				{
 					font-size: 15px;
+				}
+
+				.mainBottom_panel
+				{
+					bottom:6%;
+            	}
+
+				.main_btn
+				{
+					margin-left: 5%;
+					margin-right: 5%;
+            	}
+
+				.btn_text
+				{
+					display: none;
+				}
+
+				i{
+					color: rgba(0, 0, 0, 0.6);
+					display: block;
 				}
 
 			}
@@ -134,17 +166,32 @@
 	</head>
 	
 	<body>  
+		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
 		<div id="backgroundImage"></div> 
 		<div id="frozenGlassPanel">
 			<div id="threeContainer"></div>
 		</div>
 		<div class="mainBottom_panel">
-			<div class="main_btn" onclick="DefaultCamera()">RESET CAMERA</div>
-			<div class="main_btn" onclick="">BACKGROUND</div>
-			<div class="main_btn" onclick="">DESCRIPTION</div>
-			<div class="main_btn" onclick="">PRINT SCREEN</div>
+			<div class="main_btn" onclick="DefaultCamera()">
+				<div class="btn_text">RESET CAMERA</div>
+				<i class="fa-solid fa-rotate-right fa-1x"></i>
+			</div>
+			<div class="main_btn" onclick="">
+				<div class="btn_text">BACKGROUND</div>
+				<i class="fa-solid fa-eye-slash fa-1x"></i>
+			</div>
+			<div class="main_btn" onclick="">
+				<div class="btn_text">DESCRIPTION</div>
+				<i class="fa-solid fa-list fa-1x"></i>
+			</div>
+			<div class="main_btn" onclick="">
+				<div class="btn_text">PRINT SCREEN</div>
+				<i class="fa-solid fa-camera fa-1x"></i>
+			</div>
 		</div>
-		<div class="main_title">Medical Cart Configurator</div>
+		<div class="main_title">Medical Cart Configurator
+			
+		</div>
 		<script type="module" src="main.js"></script>
 
     </body>
