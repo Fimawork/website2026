@@ -10,10 +10,19 @@ let scene, camera, renderer, stats, mixer, clock;
 let controls;
 let threeContainer = document.getElementById("threeContainer");
 
+const modelPosition=new THREE.Vector3(0,0,0);
+const modelRotation=new THREE.Vector3(0,Math.PI, 0);
+const modeScale=0.005;
+
+let base_index=24;//預設為24吋底座
+let caster_index=4;//預設為4吋移動輪
+
 init();
 animate();
 EventListener();
 //Camera_Inspector(camera,controls);
+
+
 
 function init()
 {
@@ -42,7 +51,28 @@ function init()
 
 	} );
 
-  InstGLTFLoader('./models/MedicalCartAssembly.glb',new THREE.Vector3(0,0,0),new THREE.Vector3(0,Math.PI, 0),0.005,"MedicalCartModel",null, scene);
+  
+
+  InstGLTFLoader('./models/MedicalCartAssembly.glb',modelPosition,modelRotation,modeScale,"MedicalCartModel",null, scene);
+  //InstGLTFLoader('./models/BaseAssembly.glb',modelPosition,modelRotation,modeScale,"BaseModule",null, scene);
+
+  ///場景
+
+		const defaultScenes = [
+			() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
+      
+		];
+
+		async function SetupDefaultScene() {
+			for (const task of defaultScenes) {
+			  await task(); // 確保每個任務依次完成
+			}
+			console.log('All scenes loaded');
+		  }
+
+		SetupDefaultScene();
+
+  
   
   const CameraDefaultPos=new THREE.Vector3(0,5,-12);
   const ControlsTargetDefaultPos=new THREE.Vector3(0,2.5,0);
@@ -99,15 +129,14 @@ function EventListener()
 //
         //console.log(center);
         
-        //console.log(sandTextureAluminum.clearcoatNormalScale);
+        BaseManager(20);
+        //console.log(scene.getObjectByName("24BaseModule"));
 
         break;
 
         case "ArrowDown":
 
-        console.log(scene.getObjectByName("test"));
-
-        CameraManager(0);
+        BaseManager(24);
 
         break;
 
@@ -142,6 +171,96 @@ function DefaultCamera()
 {
   CameraManager(0);
 }
+
+function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base
+{
+  switch(i)
+  {
+    case 20://20吋底座
+
+    if(scene.getObjectByName("20Base")==null)
+    {
+      InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,"20Base",null, scene);
+    }
+
+    if(scene.getObjectByName("24Base")!=null)//如果目前場景上為24吋則刪除之
+    {
+      scene.remove(scene.getObjectByName("24Base"));
+
+      //刪除移動輪
+      if(scene.getObjectByName("4inchCasterFor20BaseModule")!=null) 
+      {
+        scene.remove(scene.getObjectByName("4inchCasterFor20BaseModule"));
+      }
+
+      if(scene.getObjectByName("4inchCasterFor24BaseModule")!=null)
+      {
+        scene.remove(scene.getObjectByName("4inchCasterFor24BaseModule"));
+      }
+
+    }
+
+    base_index=20;
+
+    CasterManager(caster_index);//更新移動輪
+    
+    break;
+
+    case 24://24吋底座
+
+    if(scene.getObjectByName("24Base")==null)
+    {
+      InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,"24Base",null, scene);
+    }
+
+    if(scene.getObjectByName("20Base")!=null)//如果目前場景上為20吋則刪除之
+    {
+      scene.remove(scene.getObjectByName("20Base"));
+
+      //刪除移動輪
+      if(scene.getObjectByName("4inchCasterFor20BaseModule")!=null) 
+      {
+        scene.remove(scene.getObjectByName("4inchCasterFor20BaseModule"));
+      }
+
+      if(scene.getObjectByName("4inchCasterFor24BaseModule")!=null)
+      {
+        scene.remove(scene.getObjectByName("4inchCasterFor24BaseModule"));
+      }
+    }
+
+    base_index=24;
+
+    CasterManager(caster_index);//更新移動輪
+    
+    break;
+  }
+}
+
+
+function CasterManager(i)//移動輪設定功能
+{
+  switch(i)
+  {
+    case 4:
+
+    if(base_index==20&&scene.getObjectByName("4inchCasterFor20BaseModule")==null)//4吋輪for20吋底座
+    {
+      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor20BaseModule",null, scene);
+    }
+
+    if(base_index==24&&scene.getObjectByName("4inchCasterFor24BaseModule")==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor24BaseModule",null, scene);
+    }
+
+    caster_index=4;
+
+    break;
+  }
+}
+
+
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
