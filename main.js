@@ -264,3 +264,5 @@ function CasterManager(i)//移動輪設定功能
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
+
+window.BaseManager = BaseManager;
