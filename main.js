@@ -172,33 +172,22 @@ function DefaultCamera()
   CameraManager(0);
 }
 
-function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base
+function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 {
   switch(i)
   {
     case 20://20吋底座
 
-    if(scene.getObjectByName("20Base")==null)
+    if(scene.getObjectByName("20Base")==null)//載入20吋底座
     {
       InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,"20Base",null, scene);
     }
 
-    if(scene.getObjectByName("24Base")!=null)//如果目前場景上為24吋則刪除之
-    {
-      scene.remove(scene.getObjectByName("24Base"));
+    DestroyObject(scene.getObjectByName("24Base"));
+    DestroyObject(scene.getObjectByName("4LegBase"));
 
-      //刪除移動輪
-      if(scene.getObjectByName("4inchCasterFor20BaseModule")!=null) 
-      {
-        scene.remove(scene.getObjectByName("4inchCasterFor20BaseModule"));
-      }
-
-      if(scene.getObjectByName("4inchCasterFor24BaseModule")!=null)
-      {
-        scene.remove(scene.getObjectByName("4inchCasterFor24BaseModule"));
-      }
-
-    }
+    //刪除移動輪
+    ResetCasterModule();
 
     base_index=20;
 
@@ -213,23 +202,32 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base
       InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,"24Base",null, scene);
     }
 
-    if(scene.getObjectByName("20Base")!=null)//如果目前場景上為20吋則刪除之
-    {
-      scene.remove(scene.getObjectByName("20Base"));
+    DestroyObject(scene.getObjectByName("20Base"));
+    DestroyObject(scene.getObjectByName("4LegBase"));
 
-      //刪除移動輪
-      if(scene.getObjectByName("4inchCasterFor20BaseModule")!=null) 
-      {
-        scene.remove(scene.getObjectByName("4inchCasterFor20BaseModule"));
-      }
-
-      if(scene.getObjectByName("4inchCasterFor24BaseModule")!=null)
-      {
-        scene.remove(scene.getObjectByName("4inchCasterFor24BaseModule"));
-      }
-    }
+    //刪除移動輪
+    ResetCasterModule();
 
     base_index=24;
+
+    CasterManager(caster_index);//更新移動輪
+    
+    break;
+
+    case 40://4腳底座
+
+    if(scene.getObjectByName("4LegBase")==null)//載入4腳底座
+    {
+      InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,"4LegBase",null, scene);
+    }
+
+    DestroyObject(scene.getObjectByName("20Base"));
+    DestroyObject(scene.getObjectByName("24Base"));
+
+    //刪除移動輪
+    ResetCasterModule();
+
+    base_index=40;
 
     CasterManager(caster_index);//更新移動輪
     
@@ -254,12 +252,31 @@ function CasterManager(i)//移動輪設定功能
       InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor24BaseModule",null, scene);
     }
 
+    if(base_index==40&&scene.getObjectByName("4inchCasterFor4LegBaseModule")==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor4LegBaseModule",null, scene);
+    }
+
     caster_index=4;
 
     break;
   }
 }
 
+function ResetCasterModule()
+{
+  DestroyObject(scene.getObjectByName("4inchCasterFor20BaseModule"));
+  DestroyObject(scene.getObjectByName("4inchCasterFor24BaseModule"));
+  DestroyObject(scene.getObjectByName("4inchCasterFor4LegBaseModule"));
+}
+
+function DestroyObject(target)
+{
+  if(target!=null)
+  {
+    scene.remove(target);
+  }
+}
 
 
 ///將函數掛載到全域範圍
