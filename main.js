@@ -14,6 +14,7 @@ const modelPosition=new THREE.Vector3(0,0,0);
 const modelRotation=new THREE.Vector3(0,Math.PI, 0);
 const modeScale=0.005;
 
+let instrumentMount_index=0;//預設為固定支撐版
 let base_index=24;//預設為24吋底座
 let caster_index=4;//預設為4吋移動輪
 
@@ -60,6 +61,7 @@ function init()
 
 		const defaultScenes = [
 			() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
+      () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
       
 		];
 
@@ -170,6 +172,23 @@ function EventListener()
 function DefaultCamera()
 {
   CameraManager(0);
+}
+
+function InstrumentMountManager(i)//儀器支撐板設定
+{
+  switch(i)
+  {
+    case 0:
+
+    if(scene.getObjectByName("FixedAnglePanel")==null)//4吋輪for20吋底座
+    {
+      InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,"FixedAnglePanel",null, scene);
+    }
+
+    instrumentMount_index=0;
+
+    break;
+  }
 }
 
 function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
