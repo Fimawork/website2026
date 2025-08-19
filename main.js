@@ -15,6 +15,7 @@ const modelRotation=new THREE.Vector3(0,Math.PI, 0);
 const modeScale=0.005;
 
 let instrumentMount_index=0;//預設為固定支撐版
+let column_index=1520;//預設為1.5/2inch可調高度圓管
 let base_index=24;//預設為24吋底座
 let caster_index=4;//預設為4吋移動輪
 
@@ -54,7 +55,7 @@ function init()
 
   
 
-  InstGLTFLoader('./models/MedicalCartAssembly.glb',modelPosition,modelRotation,modeScale,"MedicalCartModel",null, scene);
+  //InstGLTFLoader('./models/MedicalCartAssembly.glb',modelPosition,modelRotation,modeScale,"MedicalCartModel",null, scene);
   //InstGLTFLoader('./models/BaseAssembly.glb',modelPosition,modelRotation,modeScale,"BaseModule",null, scene);
 
   ///場景
@@ -62,6 +63,7 @@ function init()
 		const defaultScenes = [
 			() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
       () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
+      () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
 		];
 
@@ -76,8 +78,8 @@ function init()
 
   
   
-  const CameraDefaultPos=new THREE.Vector3(0,5,-12);
-  const ControlsTargetDefaultPos=new THREE.Vector3(0,2.5,0);
+  const CameraDefaultPos=new THREE.Vector3(-4.506,7.196,-8.597);
+  const ControlsTargetDefaultPos=new THREE.Vector3(0.000,2.500,0);
   camera.position.copy(CameraDefaultPos);
 
   //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
@@ -183,6 +185,23 @@ function InstrumentMountManager(i)//儀器支撐板設定
     if(scene.getObjectByName("FixedAnglePanel")==null)//4吋輪for20吋底座
     {
       InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,"FixedAnglePanel",null, scene);
+    }
+
+    instrumentMount_index=0;
+
+    break;
+  }
+}
+
+function ColumnManager(i)
+{
+  switch(i)
+  {
+    case 1520:
+
+    if(scene.getObjectByName("15And20HeighAdjustableTube")==null)//4吋輪for20吋底座
+    {
+      InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,"15And20HeighAdjustableTube",null, scene);
     }
 
     instrumentMount_index=0;
