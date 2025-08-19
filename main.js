@@ -19,6 +19,19 @@ let column_index=1520;//預設為1.5/2inch可調高度圓管
 let base_index=24;//預設為24吋底座
 let caster_index=4;//預設為4吋移動輪
 
+
+let mousePos = { x: undefined, y: undefined };
+let INTERSECTED;
+//////Raycaster工具//////
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+let _instrument_mount_content = document.querySelector('#instrument_mount_content');
+let _column_content = document.querySelector('#column_content');
+let _base_content = document.querySelector('#base_content');
+let _accessory_content = document.querySelector('#accessory_content');
+
+
 init();
 animate();
 EventListener();
@@ -96,8 +109,17 @@ function init()
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
-  window.addEventListener( 'resize', onWindowResize );
+  window.addEventListener( 'resize', onWindowResize );  
+
+  //////EventListener//////
+	window.addEventListener('pointermove', (event) => {
+    mousePos = { x: event.clientX, y: event.clientY };
+		onPointerMove(event);
+    //console.log(INTERSECTED);
+  });
 }
+
+
 
 function onWindowResize() 
 {
@@ -114,6 +136,8 @@ function animate()
   renderer.render( scene, camera );
 
   UpdateCameraPosition(camera,controls);
+
+  RaycastFunction();
 
 }
 
@@ -189,6 +213,9 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
     instrumentMount_index=0;
 
+    //更新支架規格欄位
+    _instrument_mount_content.textContent = "Fixed Mounting Plate";
+
     break;
   }
 }
@@ -204,7 +231,10 @@ function ColumnManager(i)
       InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,"15And20HeighAdjustableTube",null, scene);
     }
 
-    instrumentMount_index=0;
+    column_index=1520;
+
+    //更新中柱規格欄位
+    _column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
 
     break;
   }
@@ -230,6 +260,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     base_index=20;
 
     CasterManager(caster_index);//更新移動輪
+
+    //更新底座規格欄位
+    _base_content.textContent="5-Leg Base (20”)";
     
     break;
 
@@ -249,6 +282,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     base_index=24;
 
     CasterManager(caster_index);//更新移動輪
+
+    //更新底座規格欄位
+    _base_content.textContent="5-Leg Base (24”)";
     
     break;
 
@@ -268,6 +304,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     base_index=40;
 
     CasterManager(caster_index);//更新移動輪
+
+    //更新底座規格欄位
+    _base_content.textContent="4-Leg Base";
     
     break;
   }
@@ -316,8 +355,49 @@ function DestroyObject(target)
   }
 }
 
+//////Raycaster工具//////
+function onPointerMove( event ) 
+{
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	
+}
+
+function RaycastFunction()
+{
+	// update the picking ray with the camera and pointer position
+	raycaster.setFromCamera( pointer, camera );
+		
+	const intersects = raycaster.intersectObjects( scene.children);
+		
+	if ( intersects.length > 0 ) 
+	{
+		if ( INTERSECTED != intersects[ 0 ].object ) 
+		{
+			INTERSECTED = intersects[ 0 ].object;
+			
+      INTERSECTED.traverseAncestors( function ( object ) {
+
+        if (object.parent===scene) 
+        //往父層回推，將INTERSECTED重新指定為在scene底下第一層的type為Object3D的物件	
+        {
+          INTERSECTED=object;
+        }
+			
+      } );
+		}
+	} 
+
+  
+		
+	else 
+	{
+		INTERSECTED = null;
+    
+	}
+}
+
+
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
-
 window.BaseManager = BaseManager;
