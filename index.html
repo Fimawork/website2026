@@ -111,10 +111,7 @@
 				display: block;
 			}
 
-			.main_btn:hover
-			{
-				background-color: rgba(255, 255, 255, 0.5);
-			}
+			
 
 			i{
 				color: rgba(255, 255, 255, 0);
@@ -144,6 +141,13 @@
     		  border: 1px solid rgba(255, 255, 255, 0.15);
     		}
 
+			@media (hover: hover) 
+			{
+			  	.main_btn:hover
+				{
+					background-color: rgba(255, 255, 255, 0.5);
+				}
+			}
 
 			@media screen and (max-width:768px)
 			{
@@ -160,6 +164,12 @@
 					transform: translate(-50%, 0%);
 				}
 
+				#threeContainer
+				{
+					height: 85%;
+				}
+
+
 				.main_title
 				{
 					top: 6%;
@@ -173,9 +183,17 @@
 
 				.main_btn
 				{
+					width: 39px;
+					height: 39px;
 					margin-left: 5%;
 					margin-right: 5%;
+					border-radius: 50% / 50%;
             	}
+
+				.main_btn:active
+				{
+					background-color: rgba(255, 255, 255, 0.5);
+				}
 
 				.btn_text
 				{
@@ -229,6 +247,8 @@
 			  <div class="cell" id="column_content">Description</div>
 			  <div class="cell">Base</div>
 			  <div class="cell" id="base_content">Description</div>
+			  <div class="cell">Caster</div>
+			  <div class="cell" id="caster_content">Description</div>
 			  <div class="cell">Accessories</div>
 			  <div class="cell" id="accessory_content">Description, Description, Description, Description, Description</div>
 		</div>

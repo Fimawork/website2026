@@ -29,6 +29,7 @@ const pointer = new THREE.Vector2();
 let _instrument_mount_content = document.querySelector('#instrument_mount_content');
 let _column_content = document.querySelector('#column_content');
 let _base_content = document.querySelector('#base_content');
+let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
 
 
@@ -91,8 +92,8 @@ function init()
 
   
   
-  const CameraDefaultPos=new THREE.Vector3(-4.506,7.196,-8.597);
-  const ControlsTargetDefaultPos=new THREE.Vector3(0.000,2.500,0);
+  const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
+  const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
   camera.position.copy(CameraDefaultPos);
 
   //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
@@ -335,6 +336,9 @@ function CasterManager(i)//移動輪設定功能
     }
 
     caster_index=4;
+
+    //更新移動輪規格欄位
+    _caster_content.textContent="4 Twin-wheel Caster ";
 
     break;
   }
