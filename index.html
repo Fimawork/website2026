@@ -54,6 +54,7 @@
 				justify-content: center;
 				align-items: center;
 			}
+			
 
 			#threeContainer
 			{
@@ -124,7 +125,7 @@
 				top:30%;
 				left: 12%;
     		 	display: grid;
-    		 	grid-template-columns: 1fr 2fr;
+    		 	grid-template-columns: 0.1fr 1fr 2fr 0.1fr;
     		 	gap: 0px;
     		 	width: 21%;
     		 	background-color: rgba(255, 255, 255, 0);
@@ -141,11 +142,42 @@
     		  border: 1px solid rgba(255, 255, 255, 0.15);
     		}
 
+			.label 
+			{
+				width: 30px;
+				height: 30px;
+				color: #000000;
+				font-family: sans-serif;
+				padding: 2px;
+				background: rgba(255, 255, 255, 0.75);
+				border-radius: 50% / 50%;
+				border-style: solid;
+  				border-width: 1px;
+
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				pointer-events: fill;
+			}
+
+			.alignCenter
+			{
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+			}
+
 			@media (hover: hover) 
 			{
 			  	.main_btn:hover
 				{
 					background-color: rgba(255, 255, 255, 0.5);
+				}
+
+				.label:hover 
+				{
+					background-color: rgba(0, 0, 0, 0.05);
 				}
 			}
 
@@ -195,6 +227,11 @@
 					background-color: rgba(255, 255, 255, 0.5);
 				}
 
+				.label:active
+				{
+					background-color: rgba(0, 0, 0, 0.05);
+				}
+
 				.btn_text
 				{
 					display: none;
@@ -241,16 +278,30 @@
 		</div>
 
 		<div class="grid-table">
-			  <div class="cell">Instrument Mount</div>
-			  <div class="cell" id="instrument_mount_content">Description</div>
-			  <div class="cell">Column</div>
-			  <div class="cell" id="column_content">Description</div>
-			  <div class="cell">Base</div>
-			  <div class="cell" id="base_content">Description</div>
-			  <div class="cell">Caster</div>
-			  <div class="cell" id="caster_content">Description</div>
-			  <div class="cell">Accessories</div>
-			  <div class="cell" id="accessory_content">Description, Description, Description, Description, Description</div>
+			<div class="cell alignCenter">1</div>
+			<div class="cell alignCenter">Instrument Mount</div>
+			<div class="cell" id="instrument_mount_content">Description</div>
+			<div class="cell alignCenter">Edit</div>
+
+			<div class="cell alignCenter">2</div>
+			<div class="cell alignCenter">Column</div>
+			<div class="cell" id="column_content">Description</div>
+			<div class="cell alignCenter">Edit</div>
+
+			<div class="cell alignCenter">3</div>
+			<div class="cell alignCenter">Base</div>
+			<div class="cell" id="base_content">Description</div>
+			<div class="cell alignCenter">Edit</div>
+
+			<div class="cell alignCenter">4</div>
+			<div class="cell alignCenter">Caster</div>
+			<div class="cell" id="caster_content">Description</div>
+			<div class="cell alignCenter">Edit</div>
+
+			<div class="cell alignCenter">5</div>
+			<div class="cell alignCenter">Accessories</div>
+			<div class="cell" id="accessory_content">Description, Description, Description, Description, Description, Description, Description</div>
+			<div class="cell alignCenter">Edit</div>
 		</div>
 		
 
