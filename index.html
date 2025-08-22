@@ -158,7 +158,7 @@
 				display: flex;
 				justify-content: center;
 				flex-direction: column;
-				pointer-events: fill;
+				pointer-events: auto;
 			}
 
 			.alignCenter
@@ -306,23 +306,24 @@
 		
 
 		<div class="mainBottom_panel">
-			<div class="main_btn" onclick="DefaultCamera()">
+			<div class="main_btn" onclick="EditMode(0)">
 				<div class="btn_text">RESET CAMERA</div>
 				<i class="fa-solid fa-rotate-right fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="BaseManager(20)">
+			<div class="main_btn" onclick="EditMode(1)">
 				<div class="btn_text">BACKGROUND</div>
 				<i class="fa-solid fa-eye-slash fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="BaseManager(24)">
+			<div class="main_btn" onclick="EditMode(2)">
 				<div class="btn_text">DESCRIPTION</div>
 				<i class="fa-solid fa-list fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="BaseManager(40)">
+			<div class="main_btn" onclick="EditMode(3)">
 				<div class="btn_text">PRINT SCREEN</div>
 				<i class="fa-solid fa-camera fa-1x"></i>
 			</div>
 		</div>
+		<div class="label" onclick="EditMode(4)">123</div>
 		<div class="main_title">Medical Cart Configurator
 			
 		</div>
