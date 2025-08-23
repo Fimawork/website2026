@@ -7,6 +7,14 @@ import {CameraManager,UpdateCameraPosition,CameraDefaultPos, InputEvent,Camera_I
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
+//Outline
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
+
 let scene, camera, renderer, stats, mixer, clock;
 let controls;
 let threeContainer = document.getElementById("threeContainer");
@@ -22,7 +30,7 @@ let caster_index=4;//預設為4吋移動輪
 
 
 let mousePos = { x: undefined, y: undefined };
-let INTERSECTED;
+let current_INTERSECTED,INTERSECTED;
 //////Raycaster工具//////
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -44,6 +52,19 @@ let labelTarget_accessory=new THREE.Object3D();
 
 let targetPosition=null;
 
+//outline
+let selectedObjects = [];
+let composer, effectFXAA, outlinePass;
+const scale=2.5;//提高渲染解析度渲染後縮小顯示
+
+const params = {
+				edgeStrength: 3.0,
+				edgeGlow: 1.5,
+				edgeThickness: 3.0,
+				pulsePeriod: 0,
+				color:'#6bb4f7'
+			};
+
 init();
 animate();
 EventListener();
@@ -57,7 +78,10 @@ function init()
   //scene.background= new THREE.Color( 0xFFFFFF );
   camera = new THREE.PerspectiveCamera( 50, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );//非全螢幕比例設定
+  //renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );//非全螢幕比例設定
+
+  //提高渲染解析度渲染後縮小顯示
+  renderer.setSize(threeContainer.clientWidth * scale, threeContainer.clientHeight * scale, false);
 
   renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -72,7 +96,6 @@ function init()
 	labelRenderer.domElement.style.top = '0px';
   
 	threeContainer.appendChild( labelRenderer.domElement );
-
 
   //hdri 環境光源
    new RGBELoader()
@@ -142,6 +165,29 @@ function init()
   controls.zoomSpeed=0.5;
   controls.update();
 
+  // postprocessing
+
+	composer = new EffectComposer( renderer );
+
+	const renderPass = new RenderPass( scene, camera );
+	composer.addPass( renderPass );
+
+	outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
+	composer.addPass( outlinePass );
+
+	const outputPass = new OutputPass();
+	composer.addPass( outputPass );
+
+	effectFXAA = new ShaderPass( FXAAShader );
+	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
+	composer.addPass( effectFXAA );
+
+  outlinePass.edgeStrength = params.edgeStrength;
+  outlinePass.edgeGlow= params.edgeGlow;
+	outlinePass.edgeThickness= params.edgeThickness;
+  outlinePass.visibleEdgeColor.set(params.color);
+  
+
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
@@ -154,6 +200,7 @@ function init()
 		onPointerMove(event);
     //console.log(INTERSECTED);
   });
+
 }
 
 
@@ -166,6 +213,10 @@ function onWindowResize()
 
     ///for使用css2d
     labelRenderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
+
+    composer.setSize( threeContainer.clientWidth* scale, threeContainer.clientHeight* scale, false );
+
+		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / threeContainer.clientWidth, 1 / threeContainer.clientHeight );
 }
 
 function animate() 
@@ -173,7 +224,8 @@ function animate()
   requestAnimationFrame( animate );
   
   controls.update();
-  renderer.render( scene, camera );
+  //renderer.render( scene, camera );
+  composer.render();//使用postprocessing替代
 
   ///for使用css2d
   labelRenderer.render( scene, camera );
@@ -181,6 +233,8 @@ function animate()
   UpdateCameraPosition(camera,controls);
 
   RaycastFunction();
+
+  
 
 }
 
@@ -426,6 +480,17 @@ function RaycastFunction()
         //往父層回推，將INTERSECTED重新指定為在scene底下第一層的type為Object3D的物件	
         {
           INTERSECTED=object;
+          
+          if(current_INTERSECTED!=INTERSECTED)
+          {
+            current_INTERSECTED=INTERSECTED;
+            console.log(current_INTERSECTED);
+
+            addSelectedObject( current_INTERSECTED );
+						outlinePass.selectedObjects = selectedObjects;
+            
+          }
+          
         }
 			
       } );
@@ -435,38 +500,36 @@ function RaycastFunction()
 	else 
 	{
 		INTERSECTED = null;
-    
+
+    outlinePass.selectedObjects = [];
 	}
 }
 
 function SetupSceneLabel()//綁定預設物件
 {
   
-  InstantiateLabel(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"),new THREE.Vector3(0.75,0,0),'label','1',"EditMode",1);
+  InstantiateLabel(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"),new THREE.Vector3(0.75,0,0),'label','1');
 
-  InstantiateLabel(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube"),new THREE.Vector3(0.75,0,0),'label','2',"EditMode",2);
+  InstantiateLabel(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube"),new THREE.Vector3(0.75,0,0),'label','2');
 
-  InstantiateLabel(labelTarget_base,scene.getObjectByName("24Base"),new THREE.Vector3(2,0,0),'label','3',"EditMode",3);
+  InstantiateLabel(labelTarget_base,scene.getObjectByName("24Base"),new THREE.Vector3(2,0,0),'label','3');
 
-  InstantiateLabel(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule"),new THREE.Vector3(-1.5,-0.5,0),'label','4',"EditMode",4);
+  InstantiateLabel(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule"),new THREE.Vector3(-1.5,-0.5,0),'label','4');
 
 
 }
 
-function InstantiateLabel(thisLabelTarget,targetObject,offsetPosition,thisCSS,thisContent,thisEvent,eventIndex)
+function InstantiateLabel(thisLabelTarget,targetObject,offsetPosition,thisCSS,thisContent)
 {
   const thisDiv = document.createElement( 'div' );
 	thisDiv.className = thisCSS;
 	thisDiv.textContent = thisContent;
-  thisDiv.setAttribute("onclick", thisEvent+`(${eventIndex})`);
-
 
 	const sceneLabel = new CSS2DObject( thisDiv );
 	sceneLabel.position.copy(offsetPosition );
-	sceneLabel.center.set( 0, 1 );
+	sceneLabel.center.set( 0.5, 0.5 );
 	//sceneLabel.layers.set( 0);
   
-
   const box = new THREE.Box3().setFromObject(targetObject); // 創建包圍盒
   const center = new THREE.Vector3();
   box.getCenter(center); // 計算中心點
@@ -485,36 +548,47 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     CameraManager(0);
 
-    //console.log("YES");
+    console.log("YES");
 
     break;
 
     case 1:
 
     CameraManager(1);
-    //console.log("YES");
+    console.log("YES");
     break;
 
     case 2:
 
     CameraManager(2);
+    console.log("YES");
     
     break;
 
     case 3:
 
     CameraManager(3);
+    console.log("YES");
     
     break;
 
     case 4:
 
     CameraManager(4);
+    console.log("YES");
 
     break;
   }
   
 }
+
+function addSelectedObject( object ) 
+{
+	selectedObjects = [];
+	selectedObjects.push( object );
+}
+
+
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;

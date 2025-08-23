@@ -77,9 +77,10 @@
 			.mainBottom_panel
 			{
 				position: absolute;
-				bottom:9%;
-                width: 100%;
-                height: 5%;
+				right: 8%;
+				top:21%;
+                width: 30%;
+                height: 4%;
                 display: flex;
                 justify-content:center; 
                 z-index: 9;
@@ -88,7 +89,7 @@
 			.main_btn
 			{
                 position: relative;
-                width: 7.5%;
+                width: 15%;
                 height: 100%;
 				background-color: rgba(255, 255, 255, 0);
 				display: flex;
@@ -123,9 +124,9 @@
 			{
 				position: absolute;	
 				top:30%;
-				left: 12%;
+				left: 9%;
     		 	display: grid;
-    		 	grid-template-columns: 0.1fr 1fr 2fr 0.1fr;
+    		 	grid-template-columns: 0.1fr 1fr 2fr;
     		 	gap: 0px;
     		 	width: 21%;
     		 	background-color: rgba(255, 255, 255, 0);
@@ -158,7 +159,7 @@
 				display: flex;
 				justify-content: center;
 				flex-direction: column;
-				pointer-events: auto;
+				pointer-events: none;
 			}
 
 			.alignCenter
@@ -173,11 +174,6 @@
 			  	.main_btn:hover
 				{
 					background-color: rgba(255, 255, 255, 0.5);
-				}
-
-				.label:hover 
-				{
-					background-color: rgba(0, 0, 0, 0.05);
 				}
 			}
 
@@ -210,15 +206,18 @@
 
 				.mainBottom_panel
 				{
-					top:85%;
+					width: 100%;
+					left: 50%;
+					top:88%;
+					transform: translate(-50%,-50%);
             	}
 
 				.main_btn
 				{
 					width: 39px;
 					height: 39px;
-					margin-left: 5%;
-					margin-right: 5%;
+					margin-left: 3%;
+					margin-right: 3%;
 					border-radius: 50% / 50%;
             	}
 
@@ -246,7 +245,7 @@
 				{
 					position: absolute;	
 					top:96%;
-					right: 5%;
+					left: 5%;
     			 	width: 90%;
     			}
 
@@ -281,53 +280,51 @@
 			<div class="cell alignCenter">1</div>
 			<div class="cell alignCenter">Instrument Mount</div>
 			<div class="cell" id="instrument_mount_content">Description</div>
-			<div class="cell alignCenter">Edit</div>
 
 			<div class="cell alignCenter">2</div>
 			<div class="cell alignCenter">Column</div>
 			<div class="cell" id="column_content">Description</div>
-			<div class="cell alignCenter">Edit</div>
 
 			<div class="cell alignCenter">3</div>
 			<div class="cell alignCenter">Base</div>
 			<div class="cell" id="base_content">Description</div>
-			<div class="cell alignCenter">Edit</div>
 
 			<div class="cell alignCenter">4</div>
 			<div class="cell alignCenter">Caster</div>
 			<div class="cell" id="caster_content">Description</div>
-			<div class="cell alignCenter">Edit</div>
 
 			<div class="cell alignCenter">5</div>
 			<div class="cell alignCenter">Accessories</div>
 			<div class="cell" id="accessory_content">Description, Description, Description, Description, Description, Description, Description</div>
-			<div class="cell alignCenter">Edit</div>
 		</div>
 		
 
 		<div class="mainBottom_panel">
-			<div class="main_btn" onclick="EditMode(0)">
-				<div class="btn_text">RESET CAMERA</div>
+			<div class="main_btn" onclick="EditMode(1)">
+				<div class="btn_text">Instrument Mount</div>
 				<i class="fa-solid fa-rotate-right fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="EditMode(1)">
-				<div class="btn_text">BACKGROUND</div>
+			<div class="main_btn" onclick="EditMode(2)">
+				<div class="btn_text">Column</div>
 				<i class="fa-solid fa-eye-slash fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="EditMode(2)">
-				<div class="btn_text">DESCRIPTION</div>
+			<div class="main_btn" onclick="EditMode(3)">
+				<div class="btn_text">Base</div>
 				<i class="fa-solid fa-list fa-1x"></i>
 			</div>
+			<div class="main_btn" onclick="EditMode(4)">
+				<div class="btn_text">Caster</div>
+				<i class="fa-solid fa-camera fa-1x"></i>
+			</div>
 			<div class="main_btn" onclick="EditMode(3)">
-				<div class="btn_text">PRINT SCREEN</div>
+				<div class="btn_text">Accessories</div>
 				<i class="fa-solid fa-camera fa-1x"></i>
 			</div>
 		</div>
-		<div class="label" onclick="EditMode(4)">123</div>
-		<div class="main_title">Medical Cart Configurator
-			
-		</div>
+
+		<div class="main_title">Medical Cart Configurator</div>
 		<script type="module" src="main.js"></script>
 
     </body>
+
 </html>
