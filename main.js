@@ -41,6 +41,12 @@ let _base_content = document.querySelector('#base_content');
 let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
 
+let _labelContainer = document.querySelector('#labelContainer');
+let _ShowLabelToggle = document.querySelector('#ShowLabelToggle');
+
+let isLabelOn=true;
+
+
 let current_instrument_mount=[];
 let current_column=[];
 let current_base=[];
@@ -221,9 +227,6 @@ function animate()
 
   RaycastFunction();
 
- 
-  
-
 }
 
 function EventListener()
@@ -242,8 +245,7 @@ function EventListener()
 //
         //console.log(center);
         
-        current_instrument_mount.push(scene.getObjectByName("FixedAnglePanel"));
-        console.log(current_instrument_mount);
+         ColumnManager(1520);
         break;
 
         case "ArrowDown":
@@ -252,14 +254,14 @@ function EventListener()
 
         //addSelectedObject(current_instrument_mount[0]);
 
-        BaseManager(20);
+       ColumnManager(2000);
 
         break;
 
         case "ArrowUp":
         
         //EditMode(1);
-        BaseManager(24);
+        ColumnManager(1500);
 
         break;
 
@@ -295,16 +297,20 @@ function InstrumentMountManager(i)//儀器支撐板設定
 {
   current_instrument_mount=[];//移除原outline指定物件
 
+  let name="";
+
   switch(i)
   {
     case 0:
     
-    if(scene.getObjectByName("FixedAnglePanel")==null)//
+    name="FixedAnglePanel";
+    
+    if(scene.getObjectByName(name)==null)//
     {
-      InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,"FixedAnglePanel",null, scene);
+      InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
       
       //指定新outline指定物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName("FixedAnglePanel"));}, 500);//1000=1sec}
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     instrumentMount_index=0;
@@ -320,22 +326,73 @@ function ColumnManager(i)
 {
   current_column=[];//移除原outline指定物件
 
+  let name="";
+
   switch(i)
   {
-    case 1520:
+    case 1500:
 
-    if(scene.getObjectByName("15And20HeighAdjustableTube")==null)//4吋輪for20吋底座
+    name="15StainlessSteelTube";
+
+    if(scene.getObjectByName(name)==null)//1.5"&2"管
     {
-      InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,"15And20HeighAdjustableTube",null, scene);
+      InstGLTFLoader('./models/15StainlessSteelTube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
       //指定新outline指定物件
-      setTimeout(() => {current_column.push(scene.getObjectByName("15And20HeighAdjustableTube"));}, 500);//1000=1sec}
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
+
+    DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
+    DestroyObject(scene.getObjectByName("20AluminumTube"));
+
+    column_index=1500;
+
+    //更新中柱規格欄位
+    _column_content.textContent="Ø1-1/2 inches stainless steel pole";
+
+    break;
+
+    case 1520:
+
+    name="15And20HeighAdjustableTube";
+
+    if(scene.getObjectByName(name)==null)//1.5"&2"管
+    {
+      InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+    }
+
+    DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
+    DestroyObject(scene.getObjectByName("20AluminumTube"));
 
     column_index=1520;
 
     //更新中柱規格欄位
     _column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
+
+    break;
+
+    case 2000:
+
+    name="20AluminumTube";
+
+    if(scene.getObjectByName(name)==null)//2吋鋁管
+    {
+      InstGLTFLoader('./models/20AluminumTube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+    }
+
+    DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
+    DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
+
+    column_index=2000;
+
+    //更新中柱規格欄位
+    _column_content.textContent="Ø2 inches aluminum pole";
 
     break;
   }
@@ -345,16 +402,20 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 {
   current_base=[];//移除原outline指定物件
 
+  let name="";
+
   switch(i)
   {
     case 20://20吋底座
 
-    if(scene.getObjectByName("20Base")==null)//載入20吋底座
+    name="20Base";
+
+    if(scene.getObjectByName(name)==null)//載入20吋底座
     {
-      InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,"20Base",null, scene);
+      InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
       //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName("20Base"));}, 500);//1000=1sec}
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("24Base"));
@@ -374,12 +435,14 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     case 24://24吋底座
 
-    if(scene.getObjectByName("24Base")==null)
+    name="24Base";
+
+    if(scene.getObjectByName(name)==null)
     {
-      InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,"24Base",null, scene);
+      InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
       //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName("24Base"));}, 500);//1000=1sec}
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -399,12 +462,14 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     case 40://4腳底座
 
-    if(scene.getObjectByName("4LegBase")==null)//載入4腳底座
+    name="4LegBase";
+
+    if(scene.getObjectByName(name)==null)//載入4腳底座
     {
-      InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,"4LegBase",null, scene);
+      InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
       //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName("4LegBase"));}, 500);//1000=1sec}
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -432,7 +497,7 @@ function CasterManager(i)//移動輪設定功能
   switch(i)
   {
     case 4:
-
+      
     if(base_index==20&&scene.getObjectByName("4inchCasterFor20BaseModule")==null)//4吋輪for20吋底座
     {
       InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor20BaseModule",null, scene);
@@ -660,7 +725,25 @@ function SceneTag(target,lable,offset,targetCam)
   }
 }
 
+function ShowSceneLabelToggle()
+{
+  if(!isLabelOn)
+  {
+    _labelContainer.style.display="block";
+    _ShowLabelToggle.style.cssText = "color: #6bb4f7;";
+    isLabelOn=true;
+  }
+
+  else
+  {
+    _labelContainer.style.display="none";
+    _ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
+    isLabelOn=false;
+  }
+}
+
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
 window.BaseManager = BaseManager;
 window.EditMode = EditMode;
+window.ShowSceneLabelToggle=ShowSceneLabelToggle;

@@ -181,7 +181,7 @@
 				flex-direction: column;
 			}
 			
-			.hud_btn_panel
+			#hud_btn_panel
 			{
 				position: absolute;
 				left: 30%;
@@ -209,7 +209,7 @@
 			{
 				animation: fadeIn_animation;
 				animation-duration: 1s;
-				animation-delay: 3s;
+				animation-delay: 1.5s;
 				animation-iteration-count:1;
 				animation-fill-mode:both;
 				animation-timing-function:linear;
@@ -232,7 +232,7 @@
 					color: rgba(0, 0, 0, 0.15);
 				}
 			}
-			@media screen and (max-width:1400px)
+			@media screen and (max-width:1400px)/*平板*/
 			{
 				.main_title
 				{
@@ -249,9 +249,15 @@
 					left: 6%;
     			 	width: 25%;
     			}
+
+				.hud_btn
+				{
+					margin-top: 18px;
+					margin-bottom: 18px;
+				}
 			}
 
-			@media screen and (max-width:768px)
+			@media screen and (max-width:768px)/*手機*/
 			{
 				body
 				{
@@ -295,8 +301,8 @@
 
 				.main_btn
 				{
-					width: 39px;
-					height: 39px;
+					width: 45px;
+					height: 45px;
 					margin-left: 1.2%;
 					margin-right: 1.2%;
 					border-radius: 50% / 50%;
@@ -341,11 +347,17 @@
     			  background-color: rgba(0, 0, 0, 0.1);
     			}
 
-				.hud_btn_panel
+				#hud_btn_panel
 				{
 					left:87%;
 					top:40%;
 					transform: scale(0.6);
+				}
+
+				.hud_btn
+				{
+					margin-top: 18px;
+					margin-bottom: 18px;
 				}
 
 			}
@@ -374,9 +386,9 @@
 				<div class="label label_fadeIn_anim" id="label_03" onclick="EditMode(3)">3</div>
 				<div class="label label_fadeIn_anim" id="label_04" onclick="EditMode(4)">4</div>
 			</div>
-			<div class="hud_btn_panel">
+			<div id="hud_btn_panel">
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="DefaultCamera()" title="RESET VIEW"></div>
-				<div class="hud_btn fa-solid fa-list fa-2x" onclick="" title="LABEL TOGGLE"></div>
+				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
 				<div class="hud_btn fa-solid fa-download fa-2x" onclick="" title="DOWNLOAD"></div>
 			</div>
 			
