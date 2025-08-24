@@ -41,6 +41,12 @@ let _base_content = document.querySelector('#base_content');
 let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
 
+let current_instrument_mount=[];
+let current_column=[];
+let current_base=[];
+let current_caster=[];
+let current_accessories=[];
+
 let labelTarget_instrumentMount=new THREE.Object3D();
 let labelTarget_column=new THREE.Object3D();
 let labelTarget_base=new THREE.Object3D();
@@ -57,7 +63,7 @@ const scale=2.5;//提高渲染解析度渲染後縮小顯示
 const params = {
 				edgeStrength: 3.0,
 				edgeGlow: 1.5,
-				edgeThickness: 3.0,
+				edgeThickness: 3.6,
 				pulsePeriod: 0,
 				color:'#6bb4f7'
 			};
@@ -236,25 +242,32 @@ function EventListener()
 //
         //console.log(center);
         
-        EditMode(0);
-
+        current_instrument_mount.push(scene.getObjectByName("FixedAnglePanel"));
+        console.log(current_instrument_mount);
         break;
 
         case "ArrowDown":
 
-        EditMode(2);
+        //EditMode(2);
+
+        //addSelectedObject(current_instrument_mount[0]);
+
+        BaseManager(20);
 
         break;
 
         case "ArrowUp":
         
-        EditMode(1);
+        //EditMode(1);
+        BaseManager(24);
 
         break;
 
         case "ArrowLeft":
 
-        EditMode(3);
+        //EditMode(3);
+
+        BaseManager(40);
 
         break;
 
@@ -280,13 +293,18 @@ function DefaultCamera()
 
 function InstrumentMountManager(i)//儀器支撐板設定
 {
+  current_instrument_mount=[];//移除原outline指定物件
+
   switch(i)
   {
     case 0:
-
-    if(scene.getObjectByName("FixedAnglePanel")==null)//4吋輪for20吋底座
+    
+    if(scene.getObjectByName("FixedAnglePanel")==null)//
     {
       InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,"FixedAnglePanel",null, scene);
+      
+      //指定新outline指定物件
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName("FixedAnglePanel"));}, 500);//1000=1sec}
     }
 
     instrumentMount_index=0;
@@ -300,6 +318,8 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
 function ColumnManager(i)
 {
+  current_column=[];//移除原outline指定物件
+
   switch(i)
   {
     case 1520:
@@ -307,6 +327,9 @@ function ColumnManager(i)
     if(scene.getObjectByName("15And20HeighAdjustableTube")==null)//4吋輪for20吋底座
     {
       InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,"15And20HeighAdjustableTube",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_column.push(scene.getObjectByName("15And20HeighAdjustableTube"));}, 500);//1000=1sec}
     }
 
     column_index=1520;
@@ -320,6 +343,8 @@ function ColumnManager(i)
 
 function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 {
+  current_base=[];//移除原outline指定物件
+
   switch(i)
   {
     case 20://20吋底座
@@ -327,6 +352,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     if(scene.getObjectByName("20Base")==null)//載入20吋底座
     {
       InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,"20Base",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_base.push(scene.getObjectByName("20Base"));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("24Base"));
@@ -341,7 +369,7 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     //更新底座規格欄位
     _base_content.textContent="5-Leg Base (20”)";
-    
+
     break;
 
     case 24://24吋底座
@@ -349,6 +377,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     if(scene.getObjectByName("24Base")==null)
     {
       InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,"24Base",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_base.push(scene.getObjectByName("24Base"));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -363,7 +394,7 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     //更新底座規格欄位
     _base_content.textContent="5-Leg Base (24”)";
-    
+
     break;
 
     case 40://4腳底座
@@ -371,6 +402,9 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     if(scene.getObjectByName("4LegBase")==null)//載入4腳底座
     {
       InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,"4LegBase",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_base.push(scene.getObjectByName("4LegBase"));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -385,7 +419,7 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     //更新底座規格欄位
     _base_content.textContent="4-Leg Base";
-    
+
     break;
   }
 }
@@ -393,6 +427,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
 function CasterManager(i)//移動輪設定功能
 {
+  current_caster=[];//移除原outline指定物件
+
   switch(i)
   {
     case 4:
@@ -400,16 +436,25 @@ function CasterManager(i)//移動輪設定功能
     if(base_index==20&&scene.getObjectByName("4inchCasterFor20BaseModule")==null)//4吋輪for20吋底座
     {
       InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor20BaseModule",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor20BaseModule"));}, 500);//1000=1sec}
     }
 
     if(base_index==24&&scene.getObjectByName("4inchCasterFor24BaseModule")==null)//4吋輪for24吋底座
     {
       InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor24BaseModule",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor24BaseModule"));}, 500);//1000=1sec}
     }
 
     if(base_index==40&&scene.getObjectByName("4inchCasterFor4LegBaseModule")==null)//4吋輪for24吋底座
     {
       InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor4LegBaseModule",null, scene);
+
+      //指定新outline指定物件
+      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor4LegBaseModule"));}, 500);//1000=1sec}
     }
 
     caster_index=4;
@@ -496,7 +541,7 @@ function UpdateSceneLabel()
   requestAnimationFrame( UpdateSceneLabel );
   SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
   SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
-  SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-2.5,-5),camera);  
+  SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
   SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,5),camera);  
 }
 
@@ -538,29 +583,44 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     case 1:
 
     CameraManager(1);
-    console.log("YES");
-    addSelectedObject(scene.getObjectByName("FixedAnglePanel") );
-		
+
+    for(let i=0;i<current_instrument_mount.length;i++)
+    {
+      addSelectedObject(current_instrument_mount[i]);
+    }
+    
     break;
 
     case 2:
 
     CameraManager(2);
-    console.log("YES");
+
+    for(let i=0;i<current_column.length;i++)
+    {
+      addSelectedObject(current_column[i]);
+    }
     
     break;
 
     case 3:
 
     CameraManager(3);
-    console.log("YES");
+
+    for(let i=0;i<current_base.length;i++)
+    {
+      addSelectedObject(current_base[i]);
+    }
     
     break;
 
     case 4:
 
     CameraManager(4);
-    console.log("YES");
+
+    for(let i=0;i<current_caster.length;i++)
+    {
+      addSelectedObject(current_caster[i]);
+    }
 
     break;
   }
@@ -572,8 +632,8 @@ function addSelectedObject( object )
 	selectedObjects = [];
 	selectedObjects.push( object );
 
-  setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}
-  setTimeout(() => {outlinePass.selectedObjects = [];}, 1000);//1000=1sec}
+  setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}//oultine效果開始
+  setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
 }
 
 function SceneTag(target,lable,offset,targetCam)  
