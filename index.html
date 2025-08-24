@@ -75,12 +75,12 @@
 			.main_title
 			{
 				position: absolute;
-				left: 50%;
-				top:9%;
-				font-size: 24px;
+				left: 9%;
+				top:18%;
+				font-size: 30px;
 				font-family:Arial, Helvetica, sans-serif;
 				font-weight:lighter;
-				transform: translateX(-50%);
+				transform: translateX(0%);
 				pointer-events: none;
 			}
 
@@ -133,7 +133,7 @@
 			.grid-table 
 			{
 				position: absolute;	
-				top:30%;
+				top:25%;
 				left: 9%;
     		 	display: grid;
     		 	grid-template-columns: 0.1fr 1fr 2fr;
@@ -232,6 +232,24 @@
 					color: rgba(0, 0, 0, 0.15);
 				}
 			}
+			@media screen and (max-width:1400px)
+			{
+				.main_title
+				{
+					left: 50%;
+					top: 9%;
+					font-size: 24px;
+					transform: translateX(-50%);
+				}
+
+				.grid-table 
+				{
+					position: absolute;	
+					top:20%;
+					left: 6%;
+    			 	width: 25%;
+    			}
+			}
 
 			@media screen and (max-width:768px)
 			{
@@ -261,8 +279,10 @@
 
 				.main_title
 				{
+					left: 50%;
 					top: 6%;
 					font-size: 15px;
+					transform: translateX(-50%);
 				}
 
 				.mainBottom_panel
