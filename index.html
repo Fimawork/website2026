@@ -13,7 +13,7 @@
 			{
 				margin: 0;
 				padding:0; 
-				/*overflow: hidden;*/
+				overflow: hidden;
 			}
 			
 
@@ -58,8 +58,17 @@
 
 			#threeContainer
 			{
+				position: absolute;
 				width: 100%;
 				height: 100%;
+			}
+
+			#labelContainer
+			{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
 			}
 
 			.main_title
@@ -145,6 +154,7 @@
 
 			.label 
 			{
+				position: absolute;
 				width: 30px;
 				height: 30px;
 				color: #000000;
@@ -159,7 +169,7 @@
 				display: flex;
 				justify-content: center;
 				flex-direction: column;
-				pointer-events: none;
+				pointer-events: auto;
 			}
 
 			.alignCenter
@@ -175,10 +185,19 @@
 				{
 					background-color: rgba(255, 255, 255, 0.5);
 				}
+
+				.label:hover
+				{
+					background-color: rgba(0, 0, 0, 0.05);
+				}
 			}
 
 			@media screen and (max-width:768px)
 			{
+				body
+				{
+					overflow: scroll;
+				}
 				#backgroundImage
 				{
 					height: 120%;
@@ -274,6 +293,12 @@
 		<div id="backgroundImage"></div> 
 		<div id="frozenGlassPanel">
 			<div id="threeContainer"></div>
+			<div id="labelContainer">
+				<div class="label" id="label_01" onclick="EditMode(1)">1</div>
+				<div class="label" id="label_02" onclick="EditMode(2)">2</div>
+				<div class="label" id="label_03" onclick="EditMode(3)">3</div>
+				<div class="label" id="label_04" onclick="EditMode(4)">4</div>
+			</div>
 		</div>
 
 		<div class="grid-table">
@@ -300,11 +325,11 @@
 		
 
 		<div class="mainBottom_panel">
-			<div class="main_btn" onclick="EditMode(1)">
+			<div class="main_btn" onclick="EditMode(0)">
 				<div class="btn_text">Instrument Mount</div>
 				<i class="fa-solid fa-rotate-right fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="EditMode(2)">
+			<div class="main_btn" onclick="EditMode(1)">
 				<div class="btn_text">Column</div>
 				<i class="fa-solid fa-eye-slash fa-1x"></i>
 			</div>

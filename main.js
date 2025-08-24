@@ -41,9 +41,6 @@ let _base_content = document.querySelector('#base_content');
 let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
 
-///css2d renderer工具
-let labelRenderer;
-
 let labelTarget_instrumentMount=new THREE.Object3D();
 let labelTarget_column=new THREE.Object3D();
 let labelTarget_base=new THREE.Object3D();
@@ -89,13 +86,6 @@ function init()
   //document.body.appendChild( renderer.domElement );
   threeContainer.appendChild( renderer.domElement );
 
-  ///for使用css2d
-  labelRenderer = new CSS2DRenderer();
-	labelRenderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
-	labelRenderer.domElement.style.position = 'absolute';
-	labelRenderer.domElement.style.top = '0px';
-  
-	threeContainer.appendChild( labelRenderer.domElement );
 
   //hdri 環境光源
    new RGBELoader()
@@ -122,7 +112,7 @@ function init()
       () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
 
-      () => new Promise((resolve) => setTimeout(() => { SetupSceneLabel(); resolve(); }, 150)),//LabelTarget
+      () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 150)),//LabelTarget
 		];
 
 		async function SetupDefaultScene() {
@@ -151,11 +141,7 @@ function init()
   posData[4]={ camera_pos:new THREE.Vector3(-0.260,3.485,-3.173), controlsTarget_pos:new THREE.Vector3(0.359,0.400,-0.697)};
 
   //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
-  //controls = new OrbitControls( camera, renderer.domElement );
-
-  ///for使用css2d
-  controls = new OrbitControls( camera, labelRenderer.domElement );
-
+  controls = new OrbitControls( camera, renderer.domElement );
   controls.enablePan = true;//右鍵平移效果
   controls.panSpeed = 0.4;
   controls.enableDamping = true;
@@ -170,6 +156,7 @@ function init()
 	composer = new EffectComposer( renderer );
 
 	const renderPass = new RenderPass( scene, camera );
+  renderPass.clearAlpha=0;
 	composer.addPass( renderPass );
 
 	outlinePass = new OutlinePass( new THREE.Vector2( threeContainer.clientWidth, threeContainer.clientHeight ), scene, camera );
@@ -209,10 +196,7 @@ function onWindowResize()
 {
     camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;//非全螢幕比例設定
 		camera.updateProjectionMatrix();
-    renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
-
-    ///for使用css2d
-    labelRenderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
+    renderer.setSize( threeContainer.clientWidth* scale, threeContainer.clientHeight* scale, false );
 
     composer.setSize( threeContainer.clientWidth* scale, threeContainer.clientHeight* scale, false );
 
@@ -227,13 +211,11 @@ function animate()
   //renderer.render( scene, camera );
   composer.render();//使用postprocessing替代
 
-  ///for使用css2d
-  labelRenderer.render( scene, camera );
-
   UpdateCameraPosition(camera,controls);
 
   RaycastFunction();
 
+ 
   
 
 }
@@ -484,11 +466,7 @@ function RaycastFunction()
           if(current_INTERSECTED!=INTERSECTED)
           {
             current_INTERSECTED=INTERSECTED;
-            console.log(current_INTERSECTED);
-
-            addSelectedObject( current_INTERSECTED );
-						outlinePass.selectedObjects = selectedObjects;
-            
+            //console.log(current_INTERSECTED);
           }
           
         }
@@ -500,42 +478,43 @@ function RaycastFunction()
 	else 
 	{
 		INTERSECTED = null;
-
-    outlinePass.selectedObjects = [];
 	}
 }
 
-function SetupSceneLabel()//綁定預設物件
+function SetupLabelTarget()//綁定預設物件
 {
   
-  InstantiateLabel(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"),new THREE.Vector3(0.75,0,0),'label','1');
+  InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));
 
-  InstantiateLabel(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube"),new THREE.Vector3(0.75,0,0),'label','2');
+  InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube"));
 
-  InstantiateLabel(labelTarget_base,scene.getObjectByName("24Base"),new THREE.Vector3(2,0,0),'label','3');
+  InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base"));
 
-  InstantiateLabel(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule"),new THREE.Vector3(-1.5,-0.5,0),'label','4');
+  InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule"));
 
+  UpdateSceneLabel();
+
+  function UpdateSceneLabel()
+  {
+    requestAnimationFrame( UpdateSceneLabel );
+    SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
+    SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
+    SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-2.5,-5),camera);  
+    SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,5),camera);  
+  }
 
 }
 
-function InstantiateLabel(thisLabelTarget,targetObject,offsetPosition,thisCSS,thisContent)
-{
-  const thisDiv = document.createElement( 'div' );
-	thisDiv.className = thisCSS;
-	thisDiv.textContent = thisContent;
 
-	const sceneLabel = new CSS2DObject( thisDiv );
-	sceneLabel.position.copy(offsetPosition );
-	sceneLabel.center.set( 0.5, 0.5 );
-	//sceneLabel.layers.set( 0);
-  
+
+function InstantiateLabelTarget(thisLabelTarget,targetObject)
+{
+
   const box = new THREE.Box3().setFromObject(targetObject); // 創建包圍盒
   const center = new THREE.Vector3();
   box.getCenter(center); // 計算中心點
 
   thisLabelTarget.position.copy(center);
-  thisLabelTarget.add( sceneLabel );
   scene.add(thisLabelTarget);
 }
 
@@ -550,12 +529,16 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     console.log("YES");
 
+    
+
     break;
 
     case 1:
 
     CameraManager(1);
     console.log("YES");
+    addSelectedObject(scene.getObjectByName("FixedAnglePanel") );
+		
     break;
 
     case 2:
@@ -586,9 +569,34 @@ function addSelectedObject( object )
 {
 	selectedObjects = [];
 	selectedObjects.push( object );
+
+  setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}
+  setTimeout(() => {outlinePass.selectedObjects = [];}, 1000);//1000=1sec}
 }
 
+function SceneTag(target,lable,offset,targetCam)  
+{
+  try 
+  {
+    var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+      var widthHalf = width / 2, heightHalf = height / 2;
+    const worldPosition = new THREE.Vector3();
+    target.getWorldPosition(worldPosition);
+    var pos_3D = worldPosition.clone()
+      //var pos_3D = _target.position.clone();///object.position 取得的是相對座標（即該物體相對於其父物體的座標），而不是世界座標。
 
+      pos_3D.project(targetCam);
+      pos_3D.x = ( pos_3D.x * widthHalf ) + widthHalf;
+      pos_3D.y = - ( pos_3D.y * heightHalf ) + heightHalf;
+
+    lable.style.cssText = `position:absolute;top:${pos_3D.y/height*100+offset.y}%;left:${pos_3D.x/width*100+offset.x}%;`;
+  }
+
+  catch (error) 
+  {
+    console.log(`Error Setting Camera Default Property.${error}`);
+  }
+}
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
