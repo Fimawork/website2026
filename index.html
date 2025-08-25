@@ -199,6 +199,28 @@
 
 			}
 
+			#item_container
+			{
+				position: absolute;	
+				top:30%;
+				right: 9%;
+				width: 24%;
+				height: 60%;
+				gap: 15px 15px;
+    		 	display: flex;
+				flex-wrap:  wrap;
+				align-content:flex-start;
+				overflow-y: auto;
+			}
+
+			.item
+			{
+				width: 20%;
+				aspect-ratio: 1 / 1;
+				border-radius: 6% 6%;
+				background-color: rgba(0, 0, 0, 0.05);
+			}
+
 			@keyframes fadeIn_animation 
 			{
 				0% {opacity: 0;}
@@ -360,6 +382,17 @@
 					margin-bottom: 18px;
 				}
 
+				#item_container
+				{
+					position: absolute;	
+					top:48%;
+					left: 50%;
+					width: 80%;
+					height: 70%;
+					transform: translate(-50%,-50%);
+					display: none;
+				}
+
 			}
 
 		</style>
@@ -443,6 +476,29 @@
 				<div class="btn_text">Accessories</div>
 				<i class="fa-solid fa-camera fa-1x"></i>
 			</div>
+		</div>
+
+		<div id="item_container">
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+			<div class="item"></div>
+
+
 		</div>
 
 		<div class="main_title">Medical Cart Configurator</div>
