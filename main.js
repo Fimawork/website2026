@@ -42,10 +42,36 @@ let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
 
 let _labelContainer = document.querySelector('#labelContainer');
-let _ShowLabelToggle = document.querySelector('#ShowLabelToggle');
+let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
 
 let isLabelOn=true;
 
+let _item_01_btn = document.querySelector('#item_01_btn');
+let _item_02_btn = document.querySelector('#item_02_btn');
+let _item_03_btn = document.querySelector('#item_03_btn');
+let _item_04_btn = document.querySelector('#item_04_btn');
+let _item_05_btn = document.querySelector('#item_05_btn');
+let _item_06_btn = document.querySelector('#item_06_btn');
+let _item_07_btn = document.querySelector('#item_07_btn');
+let _item_08_btn = document.querySelector('#item_08_btn');
+let _item_09_btn = document.querySelector('#item_09_btn');
+let _item_10_btn = document.querySelector('#item_10_btn');
+let _item_11_btn = document.querySelector('#item_11_btn');
+let _item_12_btn = document.querySelector('#item_12_btn');
+let _item_13_btn = document.querySelector('#item_13_btn');
+let _item_14_btn = document.querySelector('#item_14_btn');
+let _item_15_btn = document.querySelector('#item_15_btn');
+let _item_16_btn = document.querySelector('#item_16_btn');
+let _item_17_btn = document.querySelector('#item_17_btn');
+let _item_18_btn = document.querySelector('#item_18_btn');
+let _item_19_btn = document.querySelector('#item_19_btn');
+let _item_20_btn = document.querySelector('#item_20_btn');
+
+let instrument_mount_item_btns=[];
+let column_item_btns=[];
+let base_item_btns=[];
+let caster_item_btns=[];
+let accessory_item_btns=[];
 
 let current_instrument_mount=[];
 let current_column=[];
@@ -598,7 +624,7 @@ const LabelTargets =
   () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); resolve(); }, 200)),
   () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); resolve(); }, 300)),
   () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); resolve(); }, 400)),
-  () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 500)),//Label追蹤3D物件
+  () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
 ];
 
 function UpdateSceneLabel()
@@ -742,8 +768,26 @@ function ShowSceneLabelToggle()
   }
 }
 
+function SetupItemBtnGroups()
+{
+  //let instrument_mount_item_btns=[];
+  //let column_item_btns=[];
+  //let base_item_btns=[];
+  //let caster_item_btns=[];
+  //let accessory_item_btns=[];
+  //.push
+}
+
+
+
+
+
+
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
+window.InstrumentMountManager=InstrumentMountManager;
+window.ColumnManager=ColumnManager;
 window.BaseManager = BaseManager;
+window.CasterManager=CasterManager;
 window.EditMode = EditMode;
 window.ShowSceneLabelToggle=ShowSceneLabelToggle;
