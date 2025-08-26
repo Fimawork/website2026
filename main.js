@@ -170,13 +170,13 @@ function init()
   posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
 
   ///儀器支架
-  posData[1]={ camera_pos:new THREE.Vector3(-0.468,5.010,-0.887), controlsTarget_pos:new THREE.Vector3(1.004,3.972,1.311)};
+  posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
   ///中柱
   posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
   ///底座
-  posData[3]={ camera_pos:new THREE.Vector3(-3.535,2.968,-2.012), controlsTarget_pos:new THREE.Vector3(0.157,0.085,-0.524)};
+  posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
   ///移動輪
-  posData[4]={ camera_pos:new THREE.Vector3(-0.260,3.485,-3.173), controlsTarget_pos:new THREE.Vector3(0.359,0.400,-0.697)};
+  posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
 
   //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
@@ -319,7 +319,7 @@ function DefaultCamera()
   CameraManager(0);
 }
 
-function InstrumentMountManager(i)//儀器支撐板設定
+function InstrumentMountManager(i)//儀器支撐板設定 
 {
   current_instrument_mount=[];//移除原outline指定物件
 
@@ -327,7 +327,7 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
   switch(i)
   {
-    case 0:
+    case 0: //固定支撐板
     
     name="FixedAnglePanel";
     
@@ -339,10 +339,33 @@ function InstrumentMountManager(i)//儀器支撐板設定
       setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
+    DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
+
     instrumentMount_index=0;
 
     //更新支架規格欄位
     _instrument_mount_content.textContent = "Fixed Mounting Plate";
+
+    break;
+
+    case 2: //旋轉滑板支架
+    
+    name="AngleAdjustableWithSlidePanel";
+    
+    if(scene.getObjectByName(name)==null)//
+    {
+      InstGLTFLoader('./models/AngleAdjustableWithSlidePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
+      
+      //指定新outline指定物件
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+    }
+
+    DestroyObject(scene.getObjectByName("FixedAnglePanel"));
+
+    instrumentMount_index=2;
+
+    //更新支架規格欄位
+    _instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
 
     break;
   }
