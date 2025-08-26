@@ -392,7 +392,7 @@ function ColumnManager(i)
     }
 
     DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
-    DestroyObject(scene.getObjectByName("20AluminumTube"));
+    DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
 
     column_index=1500;
 
@@ -414,7 +414,7 @@ function ColumnManager(i)
     }
 
     DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
-    DestroyObject(scene.getObjectByName("20AluminumTube"));
+    DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
 
     column_index=1520;
 
@@ -423,13 +423,13 @@ function ColumnManager(i)
 
     break;
 
-    case 2000:
+    case 1215:
 
-    name="20AluminumTube";
+    name="12And15HeighAdjustableTube";
 
     if(scene.getObjectByName(name)==null)//2吋鋁管
     {
-      InstGLTFLoader('./models/20AluminumTube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
+      InstGLTFLoader('./models/12And15Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
       //指定新outline指定物件
       setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
@@ -438,10 +438,10 @@ function ColumnManager(i)
     DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
     DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
 
-    column_index=2000;
+    column_index=1215;
 
     //更新中柱規格欄位
-    _column_content.textContent="Ø2 inches aluminum pole";
+    _column_content.textContent="Ø1-1/4 inches/Ø1.5 inches pole";
 
     break;
   }
