@@ -308,6 +308,7 @@
 				#threeContainer
 				{
 					height: 85%;
+					padding-bottom: 25%;
 				}
 
 
@@ -391,12 +392,23 @@
 				#item_container
 				{
 					position: absolute;	
-					top:48%;
+					top:83%;
 					left: 50%;
 					width: 80%;
-					height: 70%;
+					height: 5%;
 					transform: translate(-50%,-50%);
-					display: none;
+					overflow-x:auto;
+					overflow-y:hidden;
+					flex-direction: column;/*必須使用才會有scrollbar出現*/
+				}
+
+				.item
+				{
+					width: 12%;
+					aspect-ratio: 1 / 1;
+					border-radius: 6% 6%;
+					background-color: rgba(0, 0, 0, 0.05);
+					overflow: hidden;
 				}
 
 			}
