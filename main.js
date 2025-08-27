@@ -656,7 +656,7 @@ function UpdateSceneLabel()
   SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
   SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
   SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
-  SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,5),camera);  
+  SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera);  
 }
 
 async function SetupLabelTarget()//綁定預設物件
