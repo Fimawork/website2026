@@ -481,9 +481,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     DestroyObject(scene.getObjectByName("24Base"));
     DestroyObject(scene.getObjectByName("4LegBase"));
 
-    //刪除移動輪
-    ResetCasterModule();
-
     base_index=20;
 
     CasterManager(caster_index);//更新移動輪
@@ -507,9 +504,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
     DestroyObject(scene.getObjectByName("20Base"));
     DestroyObject(scene.getObjectByName("4LegBase"));
-
-    //刪除移動輪
-    ResetCasterModule();
 
     base_index=24;
 
@@ -535,8 +529,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     DestroyObject(scene.getObjectByName("20Base"));
     DestroyObject(scene.getObjectByName("24Base"));
 
-    //刪除移動輪
-    ResetCasterModule();
 
     base_index=40;
 
@@ -554,40 +546,82 @@ function CasterManager(i)//移動輪設定功能
 {
   current_caster=[];//移除原outline指定物件
 
+  ResetCasterModule();//刪除目前場景上的移動輪
+
   if(isCameraManagerOn)CameraManager(4);
 
   switch(i)
   {
+    case 3:
+
+    let name_301="3inchCasterFor20BaseModule";
+      
+    if(base_index==20&&scene.getObjectByName(name_301)==null)//4吋輪for20吋底座
+    {
+      InstGLTFLoader('./models/3inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_301,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_301));addSelectedObject(scene.getObjectByName(name_301));}, 1000);//1000=1sec}
+    }
+
+    let name_302="3inchCasterFor24BaseModule";
+
+    if(base_index==24&&scene.getObjectByName(name_302)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/3inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_302,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_302));addSelectedObject(scene.getObjectByName(name_302));}, 1000);//1000=1sec}
+    }
+
+    let name_303="3inchCasterFor4LegBaseModule";
+
+    if(base_index==40&&scene.getObjectByName(name_303)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/3inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_303,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_303));addSelectedObject(scene.getObjectByName(name_303));}, 1000);//1000=1sec}
+
+    }
+
+    caster_index=3;
+
+    //更新移動輪規格欄位
+    _caster_content.textContent="3 Twin-wheel Caster ";
+
+    break;
+
     case 4:
 
-    let name_01="4inchCasterFor20BaseModule";
+    let name_401="4inchCasterFor20BaseModule";
       
-    if(base_index==20&&scene.getObjectByName(name_01)==null)//4吋輪for20吋底座
+    if(base_index==20&&scene.getObjectByName(name_401)==null)//4吋輪for20吋底座
     {
-      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_01,null, scene);
+      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_401,null, scene);
 
       //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_01));addSelectedObject(scene.getObjectByName(name_01));}, 1000);//1000=1sec}
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_401));addSelectedObject(scene.getObjectByName(name_401));}, 1000);//1000=1sec}
     }
 
-    let name_02="4inchCasterFor24BaseModule";
+    let name_402="4inchCasterFor24BaseModule";
 
-    if(base_index==24&&scene.getObjectByName(name_02)==null)//4吋輪for24吋底座
+    if(base_index==24&&scene.getObjectByName(name_402)==null)//4吋輪for24吋底座
     {
-      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_02,null, scene);
+      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_402,null, scene);
 
       //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_02));addSelectedObject(scene.getObjectByName(name_02));}, 1000);//1000=1sec}
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_402));addSelectedObject(scene.getObjectByName(name_402));}, 1000);//1000=1sec}
     }
 
-    let name_03="4inchCasterFor4LegBaseModule";
+    let name_403="4inchCasterFor4LegBaseModule";
 
-    if(base_index==40&&scene.getObjectByName(name_03)==null)//4吋輪for24吋底座
+    if(base_index==40&&scene.getObjectByName(name_403)==null)//4吋輪for24吋底座
     {
-      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_03,null, scene);
+      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_403,null, scene);
 
       //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
-      setTimeout(() => {current_caster.push(scene.getObjectByName(name_03));addSelectedObject(scene.getObjectByName(name_03));}, 1000);//1000=1sec}
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_403));addSelectedObject(scene.getObjectByName(name_403));}, 1000);//1000=1sec}
 
     }
 
@@ -600,8 +634,11 @@ function CasterManager(i)//移動輪設定功能
   }
 }
 
-function ResetCasterModule()
+function ResetCasterModule()//刪除目前場景上的移動輪
 {
+  DestroyObject(scene.getObjectByName("3inchCasterFor20BaseModule"));
+  DestroyObject(scene.getObjectByName("3inchCasterFor24BaseModule"));
+  DestroyObject(scene.getObjectByName("3inchCasterFor4LegBaseModule"));
   DestroyObject(scene.getObjectByName("4inchCasterFor20BaseModule"));
   DestroyObject(scene.getObjectByName("4inchCasterFor24BaseModule"));
   DestroyObject(scene.getObjectByName("4inchCasterFor4LegBaseModule"));
