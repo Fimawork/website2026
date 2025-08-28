@@ -45,6 +45,7 @@ let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
 
 let isLabelOn=true;
+let isCameraManagerOn=false;
 
 let _item_01_btn = document.querySelector('#item_01_btn');
 let _item_02_btn = document.querySelector('#item_02_btn');
@@ -151,6 +152,8 @@ function init()
       
 
       () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 150)),//LabelTarget
+      () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
+      
 		];
 
 		async function SetupDefaultScene() {
@@ -325,6 +328,9 @@ function InstrumentMountManager(i)//儀器支撐板設定
 
   let name="";
 
+  if(isCameraManagerOn)CameraManager(1);
+  
+
   switch(i)
   {
     case 0: //固定支撐板
@@ -335,8 +341,8 @@ function InstrumentMountManager(i)//儀器支撐板設定
     {
       InstGLTFLoader('./models/FixedAnglePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
       
-      //指定新outline指定物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
@@ -356,8 +362,8 @@ function InstrumentMountManager(i)//儀器支撐板設定
     {
       InstGLTFLoader('./models/AngleAdjustableWithSlidePanel.glb',modelPosition,modelRotation,modeScale,name,null, scene);
       
-      //指定新outline指定物件
-      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("FixedAnglePanel"));
@@ -377,6 +383,8 @@ function ColumnManager(i)
 
   let name="";
 
+  if(isCameraManagerOn)CameraManager(2);
+
   switch(i)
   {
     case 1500:
@@ -387,8 +395,8 @@ function ColumnManager(i)
     {
       InstGLTFLoader('./models/15StainlessSteelTube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
@@ -409,8 +417,9 @@ function ColumnManager(i)
     {
       InstGLTFLoader('./models/15And20Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
+
     }
 
     DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
@@ -431,8 +440,8 @@ function ColumnManager(i)
     {
       InstGLTFLoader('./models/12And15Tube.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_column.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
@@ -453,6 +462,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 
   let name="";
 
+  if(isCameraManagerOn)CameraManager(3);
+
   switch(i)
   {
     case 20://20吋底座
@@ -463,8 +474,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     {
       InstGLTFLoader('./models/20Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("24Base"));
@@ -490,8 +501,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     {
       InstGLTFLoader('./models/24Base.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -517,8 +528,8 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
     {
       InstGLTFLoader('./models/4LegBase.glb',modelPosition,modelRotation,modeScale,name,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_base.push(scene.getObjectByName(name));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件
+      setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
     DestroyObject(scene.getObjectByName("20Base"));
@@ -543,32 +554,41 @@ function CasterManager(i)//移動輪設定功能
 {
   current_caster=[];//移除原outline指定物件
 
+  if(isCameraManagerOn)CameraManager(4);
+
   switch(i)
   {
     case 4:
+
+    let name_01="4inchCasterFor20BaseModule";
       
-    if(base_index==20&&scene.getObjectByName("4inchCasterFor20BaseModule")==null)//4吋輪for20吋底座
+    if(base_index==20&&scene.getObjectByName(name_01)==null)//4吋輪for20吋底座
     {
-      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor20BaseModule",null, scene);
+      InstGLTFLoader('./models/4inchCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_01,null, scene);
 
-      //指定新outline指定物件
-      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor20BaseModule"));}, 500);//1000=1sec}
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_01));addSelectedObject(scene.getObjectByName(name_01));}, 1000);//1000=1sec}
     }
 
-    if(base_index==24&&scene.getObjectByName("4inchCasterFor24BaseModule")==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor24BaseModule",null, scene);
+    let name_02="4inchCasterFor24BaseModule";
 
-      //指定新outline指定物件
-      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor24BaseModule"));}, 500);//1000=1sec}
+    if(base_index==24&&scene.getObjectByName(name_02)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/4inchCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_02,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_02));addSelectedObject(scene.getObjectByName(name_02));}, 1000);//1000=1sec}
     }
 
-    if(base_index==40&&scene.getObjectByName("4inchCasterFor4LegBaseModule")==null)//4吋輪for24吋底座
-    {
-      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,"4inchCasterFor4LegBaseModule",null, scene);
+    let name_03="4inchCasterFor4LegBaseModule";
 
-      //指定新outline指定物件
-      setTimeout(() => {current_caster.push(scene.getObjectByName("4inchCasterFor4LegBaseModule"));}, 500);//1000=1sec}
+    if(base_index==40&&scene.getObjectByName(name_03)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/4inchCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_03,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_03));addSelectedObject(scene.getObjectByName(name_03));}, 1000);//1000=1sec}
+
     }
 
     caster_index=4;
