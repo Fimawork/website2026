@@ -206,7 +206,7 @@
 				right: 7.5%;
 				width: 24%;
 				height: 60%;
-				gap: 15px 15px;
+				gap: 15px 18px;
     		 	display: flex;
 				flex-wrap:  wrap;
 				align-content:flex-start;
@@ -218,8 +218,24 @@
 				width: 20%;
 				aspect-ratio: 1 / 1;
 				border-radius: 6% 6%;
-				background-color: rgba(0, 0, 0, 0.05);
+				background-color: rgba(0, 0, 0, 0.9);
+				background-image: url('./images/Sample.jpg');
+				
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+                
+    			background-size: 100% 100%;
 				overflow: hidden;
+			}
+
+			.item_title
+			{
+				font-family: "Roboto", sans-serif;
+				font-size: 10px;
+				font-weight: 700;
+				color: rgba(255, 255, 255, 0);
+				text-align: center;
 			}
 
 			@keyframes fadeIn_animation 
@@ -257,7 +273,12 @@
 
 				.item:hover
 				{
-					background-color:rgba(255, 255, 255, 0.5);
+					opacity: 0.5;
+				}
+
+				.item_title:hover
+				{
+					color: rgb(0, 0, 0);
 				}
 			}
 			@media screen and (max-width:1400px)/*平板*/
@@ -412,6 +433,11 @@
 					overflow: hidden;
 				}
 
+				.item_title
+				{
+					display: none;
+				}
+
 			}
 
 		</style>
@@ -498,26 +524,85 @@
 		</div>
 
 		<div id="item_container">
-			<div class="item" id="item_01_btn"onclick="InstrumentMountManager(0)">Fixed Angle Panel</div>
-			<div class="item" id="item_02_btn"onclick="">Fixed Angle with Slide Panel</div>
-			<div class="item" id="item_03_btn"onclick="InstrumentMountManager(2)">Angle Adjustable with Slide Panel</div>
-			<div class="item" id="item_04_btn"onclick="ColumnManager(1520)">1.5"/2" Height Adjustable Tube</div>
-			<div class="item" id="item_05_btn"onclick="ColumnManager(1215)">1.25"/1.5" Height Adjustable Tube</div>
-			<div class="item" id="item_06_btn"onclick="ColumnManager(1500)">1.5" Stainless Steel Tube</div>
-			<div class="item" id="item_07_btn"onclick="BaseManager(20)">20" Base</div>
-			<div class="item" id="item_08_btn"onclick="BaseManager(24)">24" Base</div>
-			<div class="item" id="item_09_btn"onclick="BaseManager(40)">4 Leg Base</div>
-			<div class="item" id="item_10_btn"onclick="">5" Twin-Caster</div>
-			<div class="item" id="item_11_btn"onclick="">4" Twin-Caster</div>
-			<div class="item" id="item_12_btn"onclick="">3" Twin-Caster</div>
-			<div class="item" id="item_13_btn"onclick="">Basket</div>
-			<div class="item" id="item_14_btn"onclick="">Adapter Holder</div>
-			<div class="item" id="item_15_btn"onclick="">Barcode Scanner Holder</div>
-			<div class="item" id="item_16_btn"onclick="">Cable Management Holder</div>
-			<div class="item" id="item_17_btn"onclick="">Tray</div>
-			<div class="item" id="item_18_btn"onclick="">Handle</div>
-			<div class="item" id="item_19_btn"onclick="">Drawer</div>
-			<div class="item" id="item_20_btn"onclick="">Printer Holder</div>
+			<div class="item" id="item_01_btn"onclick="InstrumentMountManager(0)">
+				<div class="item_title">Fixed Angle Panel</div>
+			</div>
+
+			<div class="item" id="item_02_btn"onclick="">
+				<div class="item_title">Fixed Angle with Slide Panel</div>
+			</div>
+
+			<div class="item" id="item_03_btn"onclick="InstrumentMountManager(2)">
+				<div class="item_title">Angle Adjustable with Slide Panel</div>
+			</div>
+
+			<div class="item" id="item_04_btn"onclick="ColumnManager(1520)">
+				<div class="item_title">1.5"/2" Height Adjustable Tube</div>
+			</div>
+
+			<div class="item" id="item_05_btn"onclick="ColumnManager(1215)">
+				<div class="item_title">1.25"/1.5" Height Adjustable Tube</div>
+			</div>
+
+			<div class="item" id="item_06_btn"onclick="ColumnManager(1500)">
+				<div class="item_title">1.5" Stainless Steel Tube</div>
+			</div>
+
+			<div class="item" id="item_07_btn"onclick="BaseManager(20)">
+				<div class="item_title">20" Base</div>
+			</div>
+
+			<div class="item" id="item_08_btn"onclick="BaseManager(24)">
+				<div class="item_title">24" Base</div>
+			</div>
+
+			<div class="item" id="item_09_btn"onclick="BaseManager(40)">
+				<div class="item_title">4 Leg Base</div>
+			</div>
+
+			<div class="item" id="item_10_btn"onclick="">
+				<div class="item_title">5" Twin-Caster</div>
+			</div>
+
+			<div class="item" id="item_11_btn"onclick="">
+				<div class="item_title">4" Twin-Caster</div>
+			</div>
+
+			<div class="item" id="item_12_btn"onclick="">
+				<div class="item_title">3" Twin-Caster</div>
+			</div>
+
+			<div class="item" id="item_13_btn"onclick="">
+				<div class="item_title">Basket</div>
+			</div>
+
+			<div class="item" id="item_14_btn"onclick="">
+				<div class="item_title">Adapter Holder</div>
+			</div>
+
+			<div class="item" id="item_15_btn"onclick="">
+				<div class="item_title">Barcode Scanner Holder</div>
+			</div>
+
+			<div class="item" id="item_16_btn"onclick="">
+				<div class="item_title">Cable Management Holder</div>
+			</div>
+
+			<div class="item" id="item_17_btn"onclick="">
+				<div class="item_title">Tray</div>
+			</div>
+
+			<div class="item" id="item_18_btn"onclick="">
+				<div class="item_title">Handle</div>
+			</div>
+
+			<div class="item" id="item_19_btn"onclick="">
+				<div class="item_title">Drawer</div>
+			</div>
+
+			<div class="item" id="item_20_btn"onclick="">
+				<div class="item_title">Printer Holder</div>
+			</div>
 		</div>
 
 		<div class="main_title">Medical Cart Configurator</div>
