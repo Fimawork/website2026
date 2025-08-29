@@ -710,10 +710,15 @@ const LabelTargets =
 function UpdateSceneLabel()
 {
   requestAnimationFrame( UpdateSceneLabel );
-  SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
-  SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
-  SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
-  SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera);  
+  //SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
+  //SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
+  //SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
+  //SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera); 
+  
+  SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
+  SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
+  SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
+  SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
 }
 
 async function SetupLabelTarget()//綁定預設物件
@@ -734,6 +739,22 @@ function InstantiateLabelTarget(thisLabelTarget,targetObject)
 
   thisLabelTarget.position.copy(center);
   scene.add(thisLabelTarget);
+}
+
+SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);
+SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);
+SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);
+SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);
+
+function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
+{
+  let thisSceneTag = document.createElement("div");
+	thisSceneTag.setAttribute("id", `label_${index}`);
+	thisSceneTag.setAttribute("class", ccsStyle);
+  thisSceneTag.textContent=`${index}`;
+	thisSceneTag.setAttribute("onclick", thisEvent+`(${index})`);
+  
+	thisSceneTagHolder.append(thisSceneTag);
 }
 
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪
@@ -792,6 +813,14 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     {
       addSelectedObject(current_caster[i]);
     }
+
+    break;
+
+     case 5:
+
+    CameraManager(4);
+
+    console.log("TEST");
 
     break;
   }
