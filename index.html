@@ -225,7 +225,7 @@
 				background-image: url('./images/Sample.jpg');
 				background-size: 100% 100%;
 				display: flex;
-				justify-content: center;
+				/*justify-content: center;*/
 				overflow: visible;
 
 				border-style: solid;
@@ -254,7 +254,7 @@
 			{
 				animation: fadeIn_animation;
 				animation-duration: 1s;
-				animation-delay: 1.5s;
+				animation-delay: 0.5s;
 				animation-iteration-count:1;
 				animation-fill-mode:both;
 				animation-timing-function:linear;
@@ -467,12 +467,7 @@
 		<div id="backgroundImage"></div> 
 		<div id="frozenGlassPanel">
 			<div id="threeContainer"></div>
-			<div id="labelContainer">
-				<!--<div class="label label_fadeIn_anim" id="label_01" onclick="EditMode(1)">1</div>
-				<div class="label label_fadeIn_anim" id="label_02" onclick="EditMode(2)">2</div>
-				<div class="label label_fadeIn_anim" id="label_03" onclick="EditMode(3)">3</div>
-				<div class="label label_fadeIn_anim" id="label_04" onclick="EditMode(4)">4</div>-->
-			</div>
+			<div id="labelContainer"></div>
 			<div id="hud_btn_panel">
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="DefaultCamera()" title="RESET VIEW"></div>
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
@@ -526,7 +521,7 @@
 				<div class="btn_text">Caster</div>
 				<i class="fa-solid fa-camera fa-1x"></i>
 			</div>
-			<div class="main_btn" onclick="EditMode(3)">
+			<div class="main_btn" onclick="EditMode(5)">
 				<div class="btn_text">Accessories</div>
 				<i class="fa-solid fa-camera fa-1x"></i>
 			</div>
@@ -570,7 +565,7 @@
 			</div>
 
 			<div class="item" id="item_10_btn"onclick="">
-				<div class="item_title">5" Twin-Caster</div>
+				<div class="item_title">4" Medical Caster</div>
 			</div>
 
 			<div class="item" id="item_11_btn"onclick="CasterManager(4)">

@@ -68,11 +68,7 @@ let _item_18_btn = document.querySelector('#item_18_btn');
 let _item_19_btn = document.querySelector('#item_19_btn');
 let _item_20_btn = document.querySelector('#item_20_btn');
 
-let instrument_mount_item_btns=[];
-let column_item_btns=[];
-let base_item_btns=[];
-let caster_item_btns=[];
-let accessory_item_btns=[];
+let item_btn_list=[];
 
 let current_instrument_mount=[];
 let current_column=[];
@@ -150,7 +146,7 @@ function init()
       () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
       () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
-
+      () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
       () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
       () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
       
@@ -274,7 +270,7 @@ function EventListener()
 //
         //console.log(center);
         
-         ColumnManager(1520);
+         FilterItems(0); 
         break;
 
         case "ArrowDown":
@@ -283,7 +279,7 @@ function EventListener()
 
         //addSelectedObject(current_instrument_mount[0]);
 
-       ColumnManager(2000);
+       FilterItems(2); 
 
         break;
 
@@ -320,6 +316,7 @@ function EventListener()
 function DefaultCamera()
 {
   CameraManager(0);
+  EditMode(0);
 }
 
 function InstrumentMountManager(i)//儀器支撐板設定 
@@ -700,10 +697,14 @@ function RaycastFunction()
 
 const LabelTargets = 
 [
-	() => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel")); resolve(); }, 200)),
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); resolve(); }, 400)),
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); resolve(); }, 600)),
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); resolve(); }, 800)),
+	() => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
+
   () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
 ];
 
@@ -741,11 +742,6 @@ function InstantiateLabelTarget(thisLabelTarget,targetObject)
   scene.add(thisLabelTarget);
 }
 
-SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);
-SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);
-SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);
-SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);
-
 function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
 {
   let thisSceneTag = document.createElement("div");
@@ -757,7 +753,9 @@ function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
 	thisSceneTagHolder.append(thisSceneTag);
 }
 
-function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪
+
+
+function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
 {
   
   switch(i)
@@ -766,8 +764,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     CameraManager(0);
 
-    console.log("YES");
-
+    FilterItems(0);
     
 
     break;
@@ -780,6 +777,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     {
       addSelectedObject(current_instrument_mount[i]);
     }
+
+    FilterItems(1);
     
     break;
 
@@ -791,6 +790,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     {
       addSelectedObject(current_column[i]);
     }
+
+    FilterItems(2);
     
     break;
 
@@ -802,6 +803,8 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
     {
       addSelectedObject(current_base[i]);
     }
+
+    FilterItems(3);
     
     break;
 
@@ -814,13 +817,14 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
       addSelectedObject(current_caster[i]);
     }
 
+    FilterItems(4);
+
     break;
 
-     case 5:
+    case 5:
 
-    CameraManager(4);
 
-    console.log("TEST");
+    FilterItems(5);
 
     break;
   }
@@ -885,6 +889,146 @@ function SetupItemBtnGroups()
   //let caster_item_btns=[];
   //let accessory_item_btns=[];
   //.push
+}
+
+function SetupBtnList()
+{
+  item_btn_list.push(_item_01_btn);//Fixed Angle Panel
+  item_btn_list.push(_item_02_btn);//Fixed Angle with Slide Panel
+  item_btn_list.push(_item_03_btn);//Angle Adjustable with Slide Panel
+  item_btn_list.push(_item_04_btn);//1.5"/2" Height Adjustable Tube
+  item_btn_list.push(_item_05_btn);//1.25"/1.5" Height Adjustable Tube
+  item_btn_list.push(_item_06_btn);//1.5" Stainless Steel Tube
+  item_btn_list.push(_item_07_btn);//20" Base
+  item_btn_list.push(_item_08_btn);//24" Base
+  item_btn_list.push(_item_09_btn);//4 Leg Base
+  item_btn_list.push(_item_10_btn);//4" Medical Caster
+  item_btn_list.push(_item_11_btn);//4" Twin-Caster
+  item_btn_list.push(_item_12_btn);//3" Twin-Caster
+  item_btn_list.push(_item_13_btn);//Basket
+  item_btn_list.push(_item_14_btn);//Adapter Holder
+  item_btn_list.push(_item_15_btn);//Barcode Scanner Holder
+  item_btn_list.push(_item_16_btn);//Cable Management Holder
+  item_btn_list.push(_item_17_btn);//Tray
+  item_btn_list.push(_item_18_btn);//Handle
+  item_btn_list.push(_item_19_btn);//Drawer
+  item_btn_list.push(_item_20_btn);//Printer Holder
+}
+
+function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
+{
+  switch(type_index)
+  {
+    case 0:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      item_btn_list[i].style.display="block";
+    }
+
+    break;
+
+    case 1:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      if(i<=2)
+      {
+        item_btn_list[i].style.display="block";
+      }
+
+      else
+      {
+        item_btn_list[i].style.display="none";
+      }
+    }
+
+    break;
+
+    case 2:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      if(i<=2)
+      {
+        item_btn_list[i].style.display="none";
+      }
+
+      else if(i<=5)
+      {
+        item_btn_list[i].style.display="block";
+      }
+
+      else
+      {
+        item_btn_list[i].style.display="none";
+      }
+    }
+
+    break;
+
+    case 3:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      if(i<=5)
+      {
+        item_btn_list[i].style.display="none";
+      }
+
+      else if(i<=8)
+      {
+        item_btn_list[i].style.display="block";
+      }
+
+      else
+      {
+        item_btn_list[i].style.display="none";
+      }
+    }
+
+    break;
+
+    case 4:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      if(i<=8)
+      {
+        item_btn_list[i].style.display="none";
+      }
+
+      else if(i<=11)
+      {
+        item_btn_list[i].style.display="block";
+      }
+
+      else
+      {
+        item_btn_list[i].style.display="none";
+      }
+    }
+
+    break;
+
+    case 5:
+
+    for(let i=0;i<item_btn_list.length;i++)
+    {
+      if(i<=11)
+      {
+        item_btn_list[i].style.display="none";
+      }
+
+      else
+      {
+        item_btn_list[i].style.display="block";
+      }
+    }
+
+    break;
+  }
+   
 }
 
 
