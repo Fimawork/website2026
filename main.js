@@ -171,6 +171,45 @@ function init()
 
 		SetupDefaultScene();
 
+
+
+    const LabelTargets = 
+[
+	() => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
+
+  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
+
+  () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
+];
+
+function UpdateSceneLabel()
+{
+  requestAnimationFrame( UpdateSceneLabel );
+  //SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
+  //SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
+  //SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
+  //SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera); 
+  
+  SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
+  SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
+  SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
+  SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
+}
+
+async function SetupLabelTarget()//綁定預設物件
+{
+	for (const task of LabelTargets) 
+  {
+	  await task(); // 確保每個任務依次完成
+	}
+			
+  console.log('All LabelTarget loaded');
+}
+
   
   
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
@@ -736,43 +775,6 @@ function RaycastFunction()
 	}
 }
 
-
-const LabelTargets = 
-[
-	() => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
-
-  () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
-];
-
-function UpdateSceneLabel()
-{
-  requestAnimationFrame( UpdateSceneLabel );
-  //SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
-  //SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
-  //SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
-  //SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera); 
-  
-  SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
-  SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
-  SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
-  SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
-}
-
-async function SetupLabelTarget()//綁定預設物件
-{
-	for (const task of LabelTargets) 
-  {
-	  await task(); // 確保每個任務依次完成
-	}
-			
-  console.log('All LabelTarget loaded');
-}
 
 function InstantiateLabelTarget(thisLabelTarget,targetObject)
 {
