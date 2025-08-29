@@ -70,6 +70,16 @@ let _item_20_btn = document.querySelector('#item_20_btn');
 
 let item_btn_list=[];
 
+let accessory_01_num=0;
+let accessory_02_num=0;
+let accessory_03_num=0;
+let accessory_04_num=0;
+let accessory_05_num=0;
+let accessory_06_num=0;
+let accessory_07_num=0;
+let accessory_08_num=0;
+let accessory_09_num=0;
+
 let current_instrument_mount=[];
 let current_column=[];
 let current_base=[];
@@ -176,6 +186,9 @@ function init()
   posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
   ///移動輪
   posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
+  
+  //配件(增加配件時觸發)
+  posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
 
   //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
@@ -631,6 +644,35 @@ function CasterManager(i)//移動輪設定功能
   }
 }
 
+function AccessoryManager(i)
+{
+  let multiple_item_hight=3;
+
+  switch(i)
+  {
+    case 1://管籃
+    accessory_01_num++;
+    
+    let accessory_01_name="accessory_01_"+`${accessory_01_num}`;
+
+    InstGLTFLoader('./models/accessory_01.glb',modelPosition,modelRotation,modeScale,accessory_01_name,null, scene);
+
+    //指定新outline指定物件，並hightlight該物件
+    setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_01_name));addSelectedObject(scene.getObjectByName(accessory_01_name));}, 500);//1000=1sec}
+    setTimeout(() => {scene.getObjectByName(accessory_01_name);}, 1000);//1000=1sec}
+    
+
+    if(accessory_01_num>1)
+    {
+      setTimeout(() => {scene.getObjectByName(accessory_01_name).position.set(0,multiple_item_hight,0);}, 500);
+      
+      CameraManager(5);
+    }
+    
+    break;
+  }
+}
+
 function ResetCasterModule()//刪除目前場景上的移動輪
 {
   DestroyObject(scene.getObjectByName("3inchCasterFor20BaseModule"));
@@ -1044,3 +1086,4 @@ window.BaseManager = BaseManager;
 window.CasterManager=CasterManager;
 window.EditMode = EditMode;
 window.ShowSceneLabelToggle=ShowSceneLabelToggle;
+window.AccessoryManager=AccessoryManager;
