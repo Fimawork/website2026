@@ -1047,7 +1047,7 @@ function MeasureCartDimension()
   //4.986644500000001-->996.5(高度對照)
 
   const scale=996.5/4.9866445;
-   _dimension_content.textContent=`L ${Math.round(cartDimension.x*scale)}mm x W ${Math.round(cartDimension.z*scale)}mm x H ${Math.round(cartDimension.y*scale)}mm`;
+   _dimension_content.textContent=`W ${Math.round(cartDimension.x*scale)}mm x D ${Math.round(cartDimension.z*scale)}mm x H ${Math.round(cartDimension.y*scale)}mm`;
 
 }
 

@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 		<title>Medical Cart Configurator</title>
+		<link rel="stylesheet" href="./ItemImages.css">
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
 			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
@@ -176,6 +177,12 @@
 				opacity: 0;
 			}
 
+			#label_5
+			{
+				top: 36%;
+				left: 36%;
+			}
+
 			.alignCenter
 			{
 				display: flex;
@@ -234,26 +241,6 @@
 				border-color: rgba(255, 255, 255, 1);
 			}
 
-			.item:nth-child(1)
-			{
-				background-image: url('./images/FixAnglePanel.png');
-			}
-
-			.item:nth-child(9)
-			{
-				background-image: url('./images/4LegBase.png');
-			}
-
-			.item:nth-child(11)
-			{
-				background-image: url('./images/4inchTwinWheelCaster.png');
-			}
-
-			.item:nth-child(12)
-			{
-				background-image: url('./images/3inchTwinWheelCaster.png');
-			}
-
 			.item_title
 			{
 				position: absolute;
@@ -303,7 +290,8 @@
 					border-color: #6bb4f7;
 				}
 			}
-			@media screen and (max-width:1400px)/*平板*/
+
+			@media screen and (max-width:1400px)/*平板(橫向)*/
 			{
 				.main_title
 				{
@@ -326,6 +314,69 @@
 					margin-top: 18px;
 					margin-bottom: 18px;
 				}
+
+				#item_container
+				{
+					right: 6%;
+					width: 27%;
+				}
+
+				.item
+				{
+					width: 18%;
+					aspect-ratio: 1 / 1;
+					border-radius: 6% 6%;
+					background-color: rgba(0, 0, 0, 0.05);
+					background-image: url('./images/Sample.jpg');
+
+				}
+			}
+
+			@media screen and (max-width:900px)/*平板(直向)*/
+			{
+				#threeContainer
+				{
+					height: 80%;
+					padding-bottom: 20%;
+				}
+
+				.mainBottom_panel
+				{
+					display: none;
+            	}
+
+				#hud_btn_panel
+				{
+					position: absolute;
+					left: 6%;
+					top:15%;
+					width: 30px;
+					transform: scale(1);
+				}
+
+				.grid-table 
+				{
+					position: absolute;	
+					top:78%;
+					left: 6%;
+    			 	width: 88%;
+    			}
+
+				#item_container
+				{
+					right: 6%;
+					width: 12%;
+					top:14%;
+				}
+
+				.item
+				{
+					width: 100%;
+					aspect-ratio: 1 / 1;
+					border-radius: 6% 6%;
+					background-color: rgba(0, 0, 0, 0.05);
+					background-image: url('./images/Sample.jpg');
+				}
 			}
 
 			@media screen and (max-width:768px)/*手機*/
@@ -335,23 +386,24 @@
 					overflow-x: hidden;
 					overflow-y: scroll;
 				}
+				
 				#backgroundImage
 				{
-					height: 120%;
+					height: 130%;
 					opacity: 1;
 				}
 
 				#frozenGlassPanel
 				{
 					top:2%;
-					height: 93%;
+					height: 94%;
 					transform: translate(-50%, 0%);
 				}
 
 				#threeContainer
 				{
-					height: 90%;
-					padding-bottom: 25%;
+					height: 87%;
+					padding-bottom: 27%;
 				}
 				
 				
@@ -390,6 +442,11 @@
 				.hud_btn:active
 				{
 					color: rgba(0, 0, 0, 0.3);
+				}
+
+				#label_5
+				{
+					left: 15%;
 				}
 
 				.label:active
@@ -488,7 +545,9 @@
 		<div id="backgroundImage"></div> 
 		<div id="frozenGlassPanel">
 			<div id="threeContainer"></div>
-			<div id="labelContainer"></div>
+			<div id="labelContainer">
+				<div class="label label_fadeIn_anim" id="label_5" onclick="EditMode(5)">5</div>
+			</div>
 			<div id="hud_btn_panel">
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="DefaultCamera()" title="RESET VIEW"></div>
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
