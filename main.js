@@ -42,6 +42,7 @@ let _column_content = document.querySelector('#column_content');
 let _base_content = document.querySelector('#base_content');
 let _caster_content = document.querySelector('#caster_content');
 let _accessory_content = document.querySelector('#accessory_content');
+let _dimension_content= document.querySelector('#dimension_content');
 
 let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
@@ -89,6 +90,9 @@ let current_column=[];
 let current_base=[];
 let current_caster=[];
 let current_accessories=[];
+
+let cartDimension;
+let cartBox;
 
 let labelTarget_instrumentMount=new THREE.Object3D();
 let labelTarget_column=new THREE.Object3D();
@@ -308,18 +312,20 @@ function EventListener()
       {
 
         case "Space":
-      
         
+
         break;
 
         case "ArrowDown":
 
-       
+       //console.log(scene);
+
         break;
 
         case "ArrowUp":
         
         //EditMode(1);
+
         
         break;
 
@@ -432,7 +438,6 @@ function ColumnManager(i)
 
       //指定新outline指定物件，並hightlight該物件
       setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
-
     }
 
     //更新中柱規格欄位
@@ -836,7 +841,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
   
 }
 
-///Outline效果
+///Outline效果&重置尺寸
 function addSelectedObject( object ) 
 {
 	selectedObjects = [];
@@ -844,6 +849,9 @@ function addSelectedObject( object )
 
   setTimeout(() => {outlinePass.selectedObjects = selectedObjects;}, 100);//1000=1sec}//oultine效果開始
   setTimeout(() => {outlinePass.selectedObjects = [];}, 1500);//1000=1sec}//oultine效果結束
+
+  //量測推車尺寸
+  setTimeout(() => {MeasureCartDimension();}, 1600);//1000=1sec}
 }
 
 function SceneTag(target,lable,offset,targetCam)  
@@ -1027,6 +1035,21 @@ function FilterItems(type_index) //編輯模式 0:default , 1:儀器支架 2:中
    
 }
 
+
+function MeasureCartDimension()
+{
+  cartBox= new THREE.Box3().setFromObject(scene);
+  cartDimension= new THREE.Vector3();
+  cartBox.getSize(cartDimension);
+  
+  //console.log(cartDimension);
+
+  //4.986644500000001-->996.5(高度對照)
+
+  const scale=996.5/4.9866445;
+   _dimension_content.textContent=`L ${Math.round(cartDimension.x*scale)}mm x W ${Math.round(cartDimension.z*scale)}mm x H ${Math.round(cartDimension.y*scale)}mm`;
+
+}
 
 
 
