@@ -23,8 +23,10 @@ const modelPosition=new THREE.Vector3(0,0,0);
 const modelRotation=new THREE.Vector3(0,Math.PI, 0);
 const modeScale=0.005;
 
-let instrumentMount_index=0;//預設為固定支撐版
-let column_index=1520;//預設為1.5/2inch可調高度圓管
+let instrumentMount_index=0;//預設為固定支撐版(目前用不到)
+let column_index=1520;//預設為1.5/2inch可調高度圓管(目前用不到)
+
+///使用來觸發底座與移動輪連動
 let base_index=24;//預設為24吋底座
 let caster_index=4;//預設為4吋移動輪
 
@@ -45,6 +47,8 @@ let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
 
 let isLabelOn=true;
+
+//是否啟用鏡頭飛行模式，避免初始零件生成同時觸發飛行功能
 let isCameraManagerOn=false;
 
 let _item_01_btn = document.querySelector('#item_01_btn');
@@ -132,7 +136,7 @@ function init()
   threeContainer.appendChild( renderer.domElement );
 
 
-  //hdri 環境光源
+  ///hdri 環境光源
    new RGBELoader()
 					.setPath( 'textures/hdri/' )
 					.load( 'studio_small_09_2k.hdr', function ( texture ) {
@@ -144,92 +148,83 @@ function init()
 
 	} );
 
-  
-
-  //InstGLTFLoader('./models/MedicalCartAssembly.glb',modelPosition,modelRotation,modeScale,"MedicalCartModel",null, scene);
-  //InstGLTFLoader('./models/BaseAssembly.glb',modelPosition,modelRotation,modeScale,"BaseModule",null, scene);
-
-  ///場景
-
-		const defaultScenes = [
-			() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
-      () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
-      () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
+  ///主要物件
+	const defaultScenes = 
+  [
+		() => new Promise((resolve) => setTimeout(() => { BaseManager(24); resolve(); }, 100)),//底座&移動輪
+    () => new Promise((resolve) => setTimeout(() => { InstrumentMountManager(0); resolve(); }, 110)),//儀器支撐版
+    () => new Promise((resolve) => setTimeout(() => { ColumnManager(1520); resolve(); }, 120)),//中柱
       
-      () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
-      () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
-      () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能
-      
-		];
+    () => new Promise((resolve) => setTimeout(() => { SetupBtnList(); resolve(); }, 400)),//設定Item案例群組
+    () => new Promise((resolve) => setTimeout(() => { SetupLabelTarget(); resolve(); }, 450)),//LabelTarget
+    () => new Promise((resolve) => setTimeout(() => { isCameraManagerOn=true; resolve(); }, 500)),//啟用攝影機飛行功能      
+	];
 
-		async function SetupDefaultScene() {
-			for (const task of defaultScenes) {
-			  await task(); // 確保每個任務依次完成
-			}
-			console.log('All scenes loaded');
-		  }
-
-		SetupDefaultScene();
-
-
-
-    const LabelTargets = 
-[
-	() => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
-
-  () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
-
-  () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
-];
-
-function UpdateSceneLabel()
-{
-  requestAnimationFrame( UpdateSceneLabel );
-  //SceneTag(labelTarget_instrumentMount,document.querySelector('#label_01'),new THREE.Vector2(-5,-2.5),camera);  
-  //SceneTag(labelTarget_column,document.querySelector('#label_02'),new THREE.Vector2(2,-2.5),camera);  
-  //SceneTag(labelTarget_base,document.querySelector('#label_03'),new THREE.Vector2(-10,-10),camera);  
-  //SceneTag(labelTarget_caster,document.querySelector('#label_04'),new THREE.Vector2(10,0),camera); 
-  
-  SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
-  SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
-  SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
-  SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
-}
-
-async function SetupLabelTarget()//綁定預設物件
-{
-	for (const task of LabelTargets) 
+	async function SetupDefaultScene() 
   {
-	  await task(); // 確保每個任務依次完成
+		for (const task of defaultScenes) 
+    {
+			await task(); // 確保每個任務依次完成
+		}
+		
+    console.log('All scenes loaded');
 	}
-			
-  console.log('All LabelTarget loaded');
-}
 
-  
-  
+	SetupDefaultScene();
+
+
+  //依初始零件位置放置SceneLabelTarget 
+  const LabelTargets = 
+  [
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_instrumentMount,scene.getObjectByName    ("FixedAnglePanel"));SetupSenceTag("label label_fadeIn_anim","EditMode",1,_labelContainer);resolve(); }, 200)),
+
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_column,scene.getObjectByName   ("15And20HeighAdjustableTube")); SetupSenceTag("label label_fadeIn_anim","EditMode",2,_labelContainer);resolve(); }, 400)),
+
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_base,scene.getObjectByName("24Base")); SetupSenceTag   ("label label_fadeIn_anim","EditMode",3,_labelContainer);resolve(); }, 600)),
+
+    () => new Promise((resolve) => setTimeout(() => { InstantiateLabelTarget(labelTarget_caster,scene.getObjectByName   ("4inchCasterFor24BaseModule")); SetupSenceTag("label label_fadeIn_anim","EditMode",4,_labelContainer);resolve(); }, 800)),
+
+    () => new Promise((resolve) => setTimeout(() => { UpdateSceneLabel(); resolve(); }, 1000)),//Label追蹤3D物件
+  ];
+
+  function UpdateSceneLabel()
+  {
+    requestAnimationFrame( UpdateSceneLabel );
+    
+    SceneTag(labelTarget_instrumentMount,document.querySelector('#label_1'),new THREE.Vector2(-5,-2.5),camera);  
+    SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
+    SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
+    SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
+  }
+
+  async function SetupLabelTarget()//綁定預設物件
+  {
+    for (const task of LabelTargets) 
+    {
+    	await task(); // 確保每個任務依次完成
+    }
+    
+    console.log('All LabelTarget loaded');
+  }
+
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
   camera.position.copy(CameraDefaultPos);
   posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
 
-  ///儀器支架
+  //儀器支架
   posData[1]={ camera_pos:new THREE.Vector3(-0.244,5.351,-0.791), controlsTarget_pos:new THREE.Vector3(0.301,3.856,1.063)};
-  ///中柱
+  //中柱
   posData[2]={ camera_pos:new THREE.Vector3(-4.642,3.297,2.753), controlsTarget_pos:new THREE.Vector3(0.570,2.752,-0.238)};
-  ///底座
+  //底座
   posData[3]={ camera_pos:new THREE.Vector3(-3.681,3.052,-1.480), controlsTarget_pos:new THREE.Vector3(0.014,0.174,-0.001)};
-  ///移動輪
+  //移動輪
   posData[4]={ camera_pos:new THREE.Vector3(0.494,3.414,-3.141), controlsTarget_pos:new THREE.Vector3(-0.090,0.533,-0.423)};
   
   //配件(增加配件時觸發)
   posData[5]={ camera_pos:new THREE.Vector3(-8.263,6.645,-7.018), controlsTarget_pos:new THREE.Vector3(0.380,3.145,0.451)};
 
-  //利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  ///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   controls = new OrbitControls( camera, renderer.domElement );
   controls.enablePan = true;//右鍵平移效果
   controls.panSpeed = 0.4;
@@ -240,8 +235,7 @@ async function SetupLabelTarget()//綁定預設物件
   controls.zoomSpeed=0.5;
   controls.update();
 
-  // postprocessing
-
+  ///postprocessing
 	composer = new EffectComposer( renderer );
 
 	const renderPass = new RenderPass( scene, camera );
@@ -267,10 +261,11 @@ async function SetupLabelTarget()//綁定預設物件
   ///紀錄相機的初始位置
 	SetDefaultCameraStatus(CameraDefaultPos,ControlsTargetDefaultPos);
 
-
+  ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
-
-  //////EventListener//////
+  window.addEventListener("pointerdown", (event) => {InputEvent();});
+  window.addEventListener("wheel", (event) => {InputEvent();});
+  
 	window.addEventListener('pointermove', (event) => {
     mousePos = { x: event.clientX, y: event.clientY };
 		onPointerMove(event);
@@ -303,7 +298,6 @@ function animate()
   UpdateCameraPosition(camera,controls);
 
   RaycastFunction();
-
 }
 
 function EventListener()
@@ -314,55 +308,31 @@ function EventListener()
       {
 
         case "Space":
+      
         
-
-        //const box = new THREE.Box3().setFromObject(scene.getObjectByName("target_02")); // 創建包圍盒
-        //const center = new THREE.Vector3();
-        //box.getCenter(center); // 計算中心點，此為相對座標
-//
-        //console.log(center);
-        
-         FilterItems(0); 
         break;
 
         case "ArrowDown":
 
-        //EditMode(2);
-
-        //addSelectedObject(current_instrument_mount[0]);
-
-       FilterItems(2); 
-
+       
         break;
 
         case "ArrowUp":
         
         //EditMode(1);
-        ColumnManager(1500);
-
+        
         break;
 
         case "ArrowLeft":
-
-        //EditMode(3);
-
-        BaseManager(40);
 
         break;
 
         case "ArrowRight":
 
-        EditMode(4);
-
         break;
       }
       
     });
-
-  window.addEventListener("pointerdown", (event) => {InputEvent();});
-  window.addEventListener("wheel", (event) => {InputEvent();});
-
-
 }
 
 function DefaultCamera()
@@ -375,11 +345,14 @@ function InstrumentMountManager(i)//儀器支撐板設定
 {
   current_instrument_mount=[];//移除原outline指定物件
 
+  instrumentMount_index=i
+
+  ResetInstrumentModule();//重置儀器支架
+
   let name="";
 
   if(isCameraManagerOn)CameraManager(1);
   
-
   switch(i)
   {
     case 0: //固定支撐板
@@ -393,10 +366,6 @@ function InstrumentMountManager(i)//儀器支撐板設定
       //指定新outline指定物件，並hightlight該物件
       setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
-
-    DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
-
-    instrumentMount_index=0;
 
     //更新支架規格欄位
     _instrument_mount_content.textContent = "Fixed Mounting Plate";
@@ -415,10 +384,6 @@ function InstrumentMountManager(i)//儀器支撐板設定
       setTimeout(() => {current_instrument_mount.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
-    DestroyObject(scene.getObjectByName("FixedAnglePanel"));
-
-    instrumentMount_index=2;
-
     //更新支架規格欄位
     _instrument_mount_content.textContent = "Angle Adjustable With Slide Mounting Plate";
 
@@ -429,6 +394,10 @@ function InstrumentMountManager(i)//儀器支撐板設定
 function ColumnManager(i)
 {
   current_column=[];//移除原outline指定物件
+
+  column_index=i;
+
+  ResetColumnModule()//重置中柱
 
   let name="";
 
@@ -448,11 +417,6 @@ function ColumnManager(i)
       setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
-    DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
-    DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
-
-    column_index=1500;
-
     //更新中柱規格欄位
     _column_content.textContent="Ø1-1/2 inches stainless steel pole";
 
@@ -471,11 +435,6 @@ function ColumnManager(i)
 
     }
 
-    DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
-    DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
-
-    column_index=1520;
-
     //更新中柱規格欄位
     _column_content.textContent="Ø1-1/2 inches/Ø2 inches pole";
 
@@ -493,11 +452,6 @@ function ColumnManager(i)
       setTimeout(() => {current_column.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
-    DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
-    DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
-
-    column_index=1215;
-
     //更新中柱規格欄位
     _column_content.textContent="Ø1-1/4 inches/Ø1.5 inches pole";
 
@@ -508,6 +462,10 @@ function ColumnManager(i)
 function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
 {
   current_base=[];//移除原outline指定物件
+
+  base_index=i;
+
+  ResetBaseModule();//重置底座
 
   let name="";
 
@@ -526,11 +484,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
       //指定新outline指定物件，並hightlight該物件
       setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
-
-    DestroyObject(scene.getObjectByName("24Base"));
-    DestroyObject(scene.getObjectByName("4LegBase"));
-
-    base_index=20;
 
     CasterManager(caster_index);//更新移動輪
 
@@ -551,11 +504,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
       setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
-    DestroyObject(scene.getObjectByName("20Base"));
-    DestroyObject(scene.getObjectByName("4LegBase"));
-
-    base_index=24;
-
     CasterManager(caster_index);//更新移動輪
 
     //更新底座規格欄位
@@ -575,12 +523,6 @@ function BaseManager(i)//底座設定功能, 變數名稱 20Base/24Base/4LegBase
       setTimeout(() => {current_base.push(scene.getObjectByName(name));addSelectedObject(scene.getObjectByName(name));}, 500);//1000=1sec}
     }
 
-    DestroyObject(scene.getObjectByName("20Base"));
-    DestroyObject(scene.getObjectByName("24Base"));
-
-
-    base_index=40;
-
     CasterManager(caster_index);//更新移動輪
 
     //更新底座規格欄位
@@ -596,6 +538,8 @@ function CasterManager(i)//移動輪設定功能
   current_caster=[];//移除原outline指定物件
 
   ResetCasterModule();//刪除目前場景上的移動輪
+
+  caster_index=i;
 
   if(isCameraManagerOn)CameraManager(4);
 
@@ -634,7 +578,7 @@ function CasterManager(i)//移動輪設定功能
 
     }
 
-    caster_index=3;
+    
 
     //更新移動輪規格欄位
     _caster_content.textContent="3 Twin-wheel Caster ";
@@ -671,10 +615,7 @@ function CasterManager(i)//移動輪設定功能
 
       //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
       setTimeout(() => {current_caster.push(scene.getObjectByName(name_403));addSelectedObject(scene.getObjectByName(name_403));}, 1000);//1000=1sec}
-
     }
-
-    caster_index=4;
 
     //更新移動輪規格欄位
     _caster_content.textContent="4 Twin-wheel Caster ";
@@ -698,13 +639,15 @@ function AccessoryManager(i)
 
     //指定新outline指定物件，並hightlight該物件
     setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_01_name));addSelectedObject(scene.getObjectByName(accessory_01_name));}, 500);//1000=1sec}
-    setTimeout(() => {scene.getObjectByName(accessory_01_name);}, 1000);//1000=1sec}
-    
 
-    if(accessory_01_num>1)
+    if(accessory_01_num==1)//第一件為場景預設視角
+    {
+      CameraManager(0);
+    }
+    
+    if(accessory_01_num>1)//第二件以上零件放置在推車上方，鏡頭拉遠
     {
       setTimeout(() => {scene.getObjectByName(accessory_01_name).position.set(0,multiple_item_hight,0);}, 500);
-      
       CameraManager(5);
     }
     
@@ -712,7 +655,27 @@ function AccessoryManager(i)
   }
 }
 
-function ResetCasterModule()//刪除目前場景上的移動輪
+function ResetInstrumentModule()//重置儀器支架
+{
+  DestroyObject(scene.getObjectByName("AngleAdjustableWithSlidePanel"));
+  DestroyObject(scene.getObjectByName("FixedAnglePanel"));
+}
+
+function ResetColumnModule()//重置中柱
+{
+  DestroyObject(scene.getObjectByName("15And20HeighAdjustableTube"));
+  DestroyObject(scene.getObjectByName("12And15HeighAdjustableTube"));
+  DestroyObject(scene.getObjectByName("15StainlessSteelTube"));
+}
+
+function ResetBaseModule()//重置底座
+{
+  DestroyObject(scene.getObjectByName("24Base"));
+  DestroyObject(scene.getObjectByName("20Base"));
+  DestroyObject(scene.getObjectByName("4LegBase"));
+}
+
+function ResetCasterModule()//重置移動輪
 {
   DestroyObject(scene.getObjectByName("3inchCasterFor20BaseModule"));
   DestroyObject(scene.getObjectByName("3inchCasterFor24BaseModule"));
@@ -797,8 +760,6 @@ function SetupSenceTag(ccsStyle,thisEvent,index,thisSceneTagHolder)
 	thisSceneTagHolder.append(thisSceneTag);
 }
 
-
-
 function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座 4:移動輪 5:配件
 {
   
@@ -875,6 +836,7 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
   
 }
 
+///Outline效果
 function addSelectedObject( object ) 
 {
 	selectedObjects = [];
@@ -889,7 +851,7 @@ function SceneTag(target,lable,offset,targetCam)
   try 
   {
     var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-      var widthHalf = width / 2, heightHalf = height / 2;
+    var widthHalf = width / 2, heightHalf = height / 2;
     const worldPosition = new THREE.Vector3();
     target.getWorldPosition(worldPosition);
     var pos_3D = worldPosition.clone()
@@ -923,16 +885,6 @@ function ShowSceneLabelToggle()
     _ShowLabelToggle.style.cssText = "color: rgba(0, 0, 0, 0.45);";
     isLabelOn=false;
   }
-}
-
-function SetupItemBtnGroups()
-{
-  //let instrument_mount_item_btns=[];
-  //let column_item_btns=[];
-  //let base_item_btns=[];
-  //let caster_item_btns=[];
-  //let accessory_item_btns=[];
-  //.push
 }
 
 function SetupBtnList()
