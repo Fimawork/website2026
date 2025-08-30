@@ -223,7 +223,8 @@
 				border-radius: 6% 6%;
 				background-color: rgba(0, 0, 0, 0.05);
 				background-image: url('./images/Sample.jpg');
-				background-size: 100% 100%;
+				background-size: auto 100%; 
+				background-position: center;
 				display: flex;
 				/*justify-content: center;*/
 				overflow: visible;
@@ -231,6 +232,26 @@
 				border-style: solid;
 				border-width: 1.5px;
 				border-color: rgba(255, 255, 255, 1);
+			}
+
+			.item:nth-child(1)
+			{
+				background-image: url('./images/FixAnglePanel.png');
+			}
+
+			.item:nth-child(9)
+			{
+				background-image: url('./images/4LegBase.png');
+			}
+
+			.item:nth-child(11)
+			{
+				background-image: url('./images/4inchTwinWheelCaster.png');
+			}
+
+			.item:nth-child(12)
+			{
+				background-image: url('./images/3inchTwinWheelCaster.png');
 			}
 
 			.item_title
