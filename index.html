@@ -132,6 +132,12 @@
 				display: none;
 			}
 
+			j
+			{
+				align-self: center;
+				color: rgba(0, 0, 0, 0.5);
+			}
+
 			.grid-table 
 			{
 				position: absolute;	
@@ -175,12 +181,6 @@
 				flex-direction: column;
 				pointer-events: auto;
 				opacity: 0;
-			}
-
-			#label_5
-			{
-				top: 36%;
-				left: 36%;
 			}
 
 			.alignCenter
@@ -252,6 +252,70 @@
 				text-align: center;
 			}
 
+			#SelectedItemController
+			{
+				position: absolute;
+				top: 75%;
+				left: 15%;
+				width: 15%;
+				aspect-ratio: 1 / 1;
+				display: flex;
+				justify-content: center;
+				flex-direction: column;
+				transform: translate(-50%,-50%);
+			}
+
+			#SelectedItemWindow
+			{
+				align-self: center;
+				width: 50%;
+				height: 50%;
+				background-color: rgba(0, 0, 0, 0.05);
+				background-image: url('./images/4LegBase.png');
+				background-size: auto 100%; 
+				background-position: center;
+				border-radius: 50% / 50%;
+				overflow: hidden;
+			}
+
+			.ControllerBtn
+			{
+				position: absolute;
+				width: 20%;
+				height: 20%;
+				transform: translate(-50%,-50%);
+				display: flex;
+				justify-content: center;
+				opacity: 0.5;
+			}
+
+			.ControllerBtn:nth-child(1)
+			{
+				top: 50%;
+				left: 15%;
+			}
+
+			.ControllerBtn:nth-child(2)
+			{
+				top: 50%;
+				right: -5%;
+			}
+
+			.ControllerBtn:nth-child(3)
+			{
+				top: 15%;
+				left: 50%;
+			}
+
+			.ControllerBtn:nth-child(4)
+			{
+				bottom: -5%;
+				left: 50%;
+			}
+
+		
+
+
 			@keyframes fadeIn_animation 
 			{
 				0% {opacity: 0;}
@@ -289,6 +353,12 @@
 				{
 					border-color: #6bb4f7;
 				}
+
+				.ControllerBtn:hover
+				{
+					opacity: 1;
+				}
+
 			}
 
 			@media screen and (max-width:1400px)/*平板(橫向)*/
@@ -444,11 +514,6 @@
 					color: rgba(0, 0, 0, 0.3);
 				}
 
-				#label_5
-				{
-					left: 15%;
-				}
-
 				.label:active
 				{
 					background-color: rgba(0, 0, 0, 0.05);
@@ -552,6 +617,23 @@
 				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="DefaultCamera()" title="RESET VIEW"></div>
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
 				<div class="hud_btn fa-solid fa-download fa-2x" onclick="" title="DOWNLOAD"></div>
+			</div>
+			<div id="SelectedItemController">
+				<div id="SelectedItemWindow">
+				<div class="ControllerBtn" onclick="MoveModel(`LEFT`)">
+					<j class="fa-solid fa-angles-left fa-2x"></i>
+				</div>
+				<div class="ControllerBtn" onclick="MoveModel(`RIGHT`)">
+					<j class="fa-solid fa-angles-right fa-2x"></i>
+				</div>
+				<div class="ControllerBtn" onclick="MoveModel(`UP`)">
+					<j class="fa-solid fa-angles-up fa-2x"></i>
+				</div>
+				<div class="ControllerBtn" onclick="MoveModel(`DOWN`)">
+					<j class="fa-solid fa-angles-down fa-2x"></i>
+				</div>
+				</div>
+				
 			</div>
 			
 		</div>

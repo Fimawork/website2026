@@ -199,6 +199,7 @@ function init()
     SceneTag(labelTarget_column,document.querySelector('#label_2'),new THREE.Vector2(2,-2.5),camera);  
     SceneTag(labelTarget_base,document.querySelector('#label_3'),new THREE.Vector2(-10,-10),camera);  
     SceneTag(labelTarget_caster,document.querySelector('#label_4'),new THREE.Vector2(10,0),camera); 
+    SceneTag(labelTarget_accessory,document.querySelector('#label_5'),new THREE.Vector2(0,0),camera); 
   }
 
   async function SetupLabelTarget()//綁定預設物件
@@ -210,6 +211,11 @@ function init()
     
     console.log('All LabelTarget loaded');
   }
+
+  labelTarget_accessory.position.set(1.7,3,0);
+  scene.add(labelTarget_accessory);
+
+  
 
   const CameraDefaultPos=new THREE.Vector3(-4.848,5.501,-4.925);
   const ControlsTargetDefaultPos=new THREE.Vector3(-0.131,2.274,-0.023);
@@ -312,7 +318,7 @@ function EventListener()
       {
 
         case "Space":
-        
+        MoveModelOFF();
 
         break;
 
@@ -633,6 +639,8 @@ function AccessoryManager(i)
 {
   let multiple_item_hight=3;
 
+  MoveModelOFF();
+
   switch(i)
   {
     case 1://管籃
@@ -644,6 +652,9 @@ function AccessoryManager(i)
 
     //指定新outline指定物件，並hightlight該物件
     setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_01_name));addSelectedObject(scene.getObjectByName(accessory_01_name));}, 500);//1000=1sec}
+
+    //啟用模型移動功能
+    setTimeout(() => {current_INTERSECTED=scene.getObjectByName(accessory_01_name);}, 600);//1000=1sec}
 
     if(accessory_01_num==1)//第一件為場景預設視角
     {
@@ -725,11 +736,11 @@ function RaycastFunction()
         {
           INTERSECTED=object;
           
-          if(current_INTERSECTED!=INTERSECTED)
-          {
-            current_INTERSECTED=INTERSECTED;
-            //console.log(current_INTERSECTED);
-          }
+          //if(current_INTERSECTED!=INTERSECTED)
+          //{
+          //  current_INTERSECTED=INTERSECTED;
+          //  console.log(current_INTERSECTED);
+          //}
           
         }
 			
@@ -740,6 +751,12 @@ function RaycastFunction()
 	else 
 	{
 		INTERSECTED = null;
+
+    //if(current_INTERSECTED!=INTERSECTED)
+    //{
+    //  current_INTERSECTED=INTERSECTED;
+    //  //console.log(current_INTERSECTED);
+    //}
 	}
 }
 
@@ -1051,7 +1068,36 @@ function MeasureCartDimension()
 
 }
 
+function MoveModel(action)
+{
+  if(current_INTERSECTED!=null)
+  {
+    if(action==="UP")
+    {
+      current_INTERSECTED.position.y+=0.5;
+    }
 
+    if(action==="DOWN")
+    {
+      current_INTERSECTED.position.y-=0.5;
+    }
+
+    if(action==="RIGHT")
+    {
+      current_INTERSECTED.rotation.y+=Math.PI*0.5;
+    }
+
+    if(action==="LEFT")
+    {
+      current_INTERSECTED.rotation.y-=Math.PI*0.5;
+    }
+  }
+}
+
+function MoveModelOFF()
+{
+  current_INTERSECTED=null;
+}
 
 
 
@@ -1064,3 +1110,5 @@ window.CasterManager=CasterManager;
 window.EditMode = EditMode;
 window.ShowSceneLabelToggle=ShowSceneLabelToggle;
 window.AccessoryManager=AccessoryManager;
+window.MoveModel=MoveModel;
+window.MoveModelOFF=MoveModelOFF;
