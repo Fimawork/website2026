@@ -700,7 +700,7 @@ function AccessoryManager(i)
   }
 
   //放置在推車上方
-  setTimeout(() => {scene.getObjectByName(item_name).position.set(0,instantiate_item_hight,0);}, 300);
+  setTimeout(() => {scene.getObjectByName(item_name).position.set(0,instantiate_item_hight,0);}, 400);
 
   //指定新outline指定物件，並hightlight該物件
   setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 500);//1000=1sec}
@@ -1149,7 +1149,8 @@ function MoveModelOFF()
     scene.remove(current_INTERSECTED);
   }
   
-  current_INTERSECTED=null;
+  setTimeout(() => {current_INTERSECTED=null;}, 100);//1000=1sec}
+  
   _SelectedItemController.style.display="none";
 
   CameraManager(0);
