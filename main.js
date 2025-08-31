@@ -47,6 +47,8 @@ let _dimension_content= document.querySelector('#dimension_content');
 let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
 
+
+
 let isLabelOn=true;
 
 //是否啟用鏡頭飛行模式，避免初始零件生成同時觸發飛行功能
@@ -114,6 +116,14 @@ const params = {
 				pulsePeriod: 0,
 				color:'#6bb4f7'
 			};
+
+//操作面板
+let _SelectedItemController= document.querySelector('#SelectedItemController'); 
+let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
+
+let offsetX = 0;
+let offsetY = 0;
+let isDragging = false;
 
 init();
 animate();
@@ -344,7 +354,30 @@ function EventListener()
         break;
       }
       
-    });
+  });
+
+_SelectedItemController.addEventListener("pointerdown", function(e) {
+    isDragging = true;
+    offsetX = e.clientX - _SelectedItemController.offsetLeft;
+    offsetY = e.clientY -_SelectedItemController.offsetTop;
+  });
+
+document.addEventListener("mousemove", function(e) {
+  if (isDragging) 
+  {
+    _SelectedItemController.style.left = (e.clientX - offsetX) + "px";
+    _SelectedItemController.style.top = (e.clientY - offsetY) + "px";
+  }
+});
+
+document.addEventListener("pointerup", function() {
+  isDragging = false;
+});
+}
+
+function ControlPanelDragEvent()
+{
+  
 }
 
 function DefaultCamera()
@@ -637,38 +670,43 @@ function CasterManager(i)//移動輪設定功能
 
 function AccessoryManager(i)
 {
-  let multiple_item_hight=3;
+  let instantiate_item_hight=3;
+
+  let item_name="";
 
   MoveModelOFF();
+
+  CameraManager(5);
 
   switch(i)
   {
     case 1://管籃
     accessory_01_num++;
     
-    let accessory_01_name="accessory_01_"+`${accessory_01_num}`;
+    item_name="accessory_01_"+`${accessory_01_num}`;
 
-    InstGLTFLoader('./models/accessory_01.glb',modelPosition,modelRotation,modeScale,accessory_01_name,null, scene);
+    InstGLTFLoader('./models/accessory_01.glb',modelPosition,modelRotation,modeScale,item_name,null, scene);
 
-    //指定新outline指定物件，並hightlight該物件
-    setTimeout(() => {current_accessories.push(scene.getObjectByName(accessory_01_name));addSelectedObject(scene.getObjectByName(accessory_01_name));}, 500);//1000=1sec}
+    break;
 
-    //啟用模型移動功能
-    setTimeout(() => {current_INTERSECTED=scene.getObjectByName(accessory_01_name);}, 600);//1000=1sec}
-
-    if(accessory_01_num==1)//第一件為場景預設視角
-    {
-      CameraManager(0);
-    }
+    case 2://變壓器架
+    accessory_02_num++;
     
-    if(accessory_01_num>1)//第二件以上零件放置在推車上方，鏡頭拉遠
-    {
-      setTimeout(() => {scene.getObjectByName(accessory_01_name).position.set(0,multiple_item_hight,0);}, 500);
-      CameraManager(5);
-    }
-    
+    item_name="accessory_02_"+`${accessory_02_num}`;
+
+    InstGLTFLoader('./models/accessory_02.glb',modelPosition,modelRotation,modeScale,item_name,null, scene);
+
     break;
   }
+
+  //放置在推車上方
+  setTimeout(() => {scene.getObjectByName(item_name).position.set(0,instantiate_item_hight,0);}, 300);
+
+  //指定新outline指定物件，並hightlight該物件
+  setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 500);//1000=1sec}
+   
+  //啟用模型移動功能
+  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name),i);}, 600);//1000=1sec} 
 }
 
 function ResetInstrumentModule()//重置儀器支架
@@ -791,8 +829,9 @@ function EditMode(i) //編輯模式 0:default , 1:儀器支架 2:中柱 3:底座
 
     CameraManager(0);
 
-    FilterItems(0);
-    
+    FilterItems(0);//還原篩選狀態
+
+    MoveModelOFF();//關閉配件操作面板
 
     break;
 
@@ -1092,11 +1131,43 @@ function MoveModel(action)
       current_INTERSECTED.rotation.y-=Math.PI*0.5;
     }
   }
+
+  console.log(current_INTERSECTED.position.y);
+}
+
+function MoveModelON(target,index)
+{
+  current_INTERSECTED=target;
+  _SelectedItemController.style.display="block";
+  _SelectedItemWindow.style.backgroundImage=SetMoveModelImage(index);
 }
 
 function MoveModelOFF()
 {
+  if(current_INTERSECTED!=null&&current_INTERSECTED.position.y>=1)
+  {
+    scene.remove(current_INTERSECTED);
+  }
+  
   current_INTERSECTED=null;
+  _SelectedItemController.style.display="none";
+
+  CameraManager(0);
+}
+function SetMoveModelImage(index)
+{
+  switch(index)
+  {
+    case 1:
+    return "url('./images/Basket.png')";
+
+    case 2:
+    return "url('./images/AdapterHolder.png')";
+  }
+}
+
+function add(a, b) {
+  return a + b;
 }
 
 

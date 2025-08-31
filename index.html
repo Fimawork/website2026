@@ -132,11 +132,7 @@
 				display: none;
 			}
 
-			j
-			{
-				align-self: center;
-				color: rgba(0, 0, 0, 0.5);
-			}
+			
 
 			.grid-table 
 			{
@@ -255,65 +251,110 @@
 			#SelectedItemController
 			{
 				position: absolute;
-				top: 75%;
-				left: 15%;
-				width: 15%;
+				top: 36%;
+				right: 28%;
+				width: 10%;
 				aspect-ratio: 1 / 1;
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
 				transform: translate(-50%,-50%);
+				cursor: move;
+				display: none;
 			}
 
 			#SelectedItemWindow
 			{
-				align-self: center;
-				width: 50%;
-				height: 50%;
+				position: relative;
+				left: 50%;
+				top: 50%;
+				width: 100%;
+				height: 100%;
 				background-color: rgba(0, 0, 0, 0.05);
-				background-image: url('./images/4LegBase.png');
-				background-size: auto 100%; 
+				background-image: none;/*無物件則設定為none*/
+				background-size: auto 66%; 
 				background-position: center;
-				border-radius: 50% / 50%;
-				overflow: hidden;
+				background-repeat: no-repeat;
+				border-radius: 50% / 50%;	
+				transform: translate(-50%,-50%);
+			}
+
+			.window_border
+			{
+				border-style: groove;
+				border-width: 2px;
+				border-color: rgba(10, 151, 207,0.5);
 			}
 
 			.ControllerBtn
 			{
 				position: absolute;
+				display: flex;
+				justify-content: center;
 				width: 20%;
 				height: 20%;
 				transform: translate(-50%,-50%);
-				display: flex;
-				justify-content: center;
-				opacity: 0.5;
+				opacity: 0.6;
 			}
 
 			.ControllerBtn:nth-child(1)
 			{
 				top: 50%;
-				left: 15%;
+				left: 10%;
 			}
 
 			.ControllerBtn:nth-child(2)
 			{
 				top: 50%;
-				right: -5%;
+				right: -10%;
 			}
 
 			.ControllerBtn:nth-child(3)
 			{
-				top: 15%;
-				left: 50%;
+				top: 10%;
+				left: 48%;
 			}
 
 			.ControllerBtn:nth-child(4)
 			{
-				bottom: -5%;
+				bottom: -10%;
 				left: 50%;
 			}
 
-		
+			.ControllerBtn:nth-child(5)
+			{
+				width: 12%;
+				height: 12%;
+				top: 5%;
+				right: -8%;
+				border-style: solid;
+				border-width: 1px;
+				border-color: #6bb4f7;
+
+			}
+
+			j
+			{
+				align-self: center;
+				color: #0070a3;
+			}
+
+			
+			
+			@keyframes blinking_animation 
+			{
+				0% {border-color: rgba(10, 151, 207,0.75);}
+				20% {border-color: rgba(10, 207, 174, 0.75);}
+				40%{border-color: rgba(107, 231, 134, 0.75);}
+				60% {border-color: #aedf2677;}
+				80% {border-color: rgba(10, 207, 92, 0.75);}
+				100%{border-color: rgba(10, 151, 207,0.75);}
+			}
+
+			.window_blinking_anim
+			{
+				animation: blinking_animation; 
+				animation-duration: 1s;
+				animation-iteration-count: infinite;
+				animation-timing-function:ease-in-out;
+			}
 
 
 			@keyframes fadeIn_animation 
@@ -356,7 +397,7 @@
 
 				.ControllerBtn:hover
 				{
-					opacity: 1;
+					opacity: 0.1;
 				}
 
 			}
@@ -398,7 +439,18 @@
 					border-radius: 6% 6%;
 					background-color: rgba(0, 0, 0, 0.05);
 					background-image: url('./images/Sample.jpg');
+				}
 
+				#SelectedItemController
+				{
+					top: 66%;
+					left: 15%;
+					width: 18%;
+				}
+
+				.ControllerBtn:active
+				{
+					opacity: 0.1;
 				}
 			}
 
@@ -446,6 +498,18 @@
 					border-radius: 6% 6%;
 					background-color: rgba(0, 0, 0, 0.05);
 					background-image: url('./images/Sample.jpg');
+				}
+
+				#SelectedItemController
+				{
+					top: 75%;
+					left: 15%;
+					width: 50%;
+				}
+
+				.ControllerBtn:active
+				{
+					opacity: 0.1;
 				}
 			}
 
@@ -590,6 +654,22 @@
 					display: none;
 				}
 
+				#SelectedItemController
+				{
+					top: 66%;
+					left: 66%;
+					width: 50%;
+				}
+
+				#SelectedItemWindow
+				{
+					background-color: rgba(0, 0, 0, 0.15);
+				}
+
+				.ControllerBtn:active
+				{
+					opacity: 0.1;
+				}
 			}
 
 		</style>
@@ -618,19 +698,22 @@
 				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
 				<div class="hud_btn fa-solid fa-download fa-2x" onclick="" title="DOWNLOAD"></div>
 			</div>
-			<div id="SelectedItemController">
-				<div id="SelectedItemWindow">
-				<div class="ControllerBtn" onclick="MoveModel(`LEFT`)">
-					<j class="fa-solid fa-angles-left fa-2x"></i>
+			<div id="SelectedItemController"  draggable="true">
+				<div id="SelectedItemWindow" class="window_border window_blinking_anim">
+				<div class="ControllerBtn" onclick="MoveModel(`LEFT`)" title="Turn Clockwise">
+					<j class="fa-solid fa-angle-left fa-1x"></i>
 				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`RIGHT`)">
-					<j class="fa-solid fa-angles-right fa-2x"></i>
+				<div class="ControllerBtn" onclick="MoveModel(`RIGHT`)" title="Turn Counterclockwise">
+					<j class="fa-solid fa-angle-right fa-1x"></i>
 				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`UP`)">
-					<j class="fa-solid fa-angles-up fa-2x"></i>
+				<div class="ControllerBtn" onclick="MoveModel(`UP`)" title="Move Up">
+					<j class="fa-solid fa-angle-up fa-1x"></i>
 				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`DOWN`)">
-					<j class="fa-solid fa-angles-down fa-2x"></i>
+				<div class="ControllerBtn" onclick="MoveModel(`DOWN`)" title="Move Down">
+					<j class="fa-solid fa-angle-down fa-1x"></i>
+				</div>
+				<div class="ControllerBtn" onclick="MoveModelOFF()" title="Close Control Panel">
+					<j class="fa-solid fa-xmark fa-1x"></i>
 				</div>
 				</div>
 				
@@ -746,7 +829,7 @@
 				<div class="item_title">Basket</div>
 			</div>
 
-			<div class="item" id="item_14_btn"onclick="">
+			<div class="item" id="item_14_btn"onclick="AccessoryManager(2)">
 				<div class="item_title">Adapter Holder</div>
 			</div>
 
