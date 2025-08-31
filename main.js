@@ -47,6 +47,7 @@ let _dimension_content= document.querySelector('#dimension_content');
 let _labelContainer = document.querySelector('#labelContainer');
 let _ShowLabelToggle = document.querySelector('#ShowLabelToggle'); 
 
+let current_accessory_list=[];
 
 
 let isLabelOn=true;
@@ -119,11 +120,7 @@ const params = {
 
 //操作面板
 let _SelectedItemController= document.querySelector('#SelectedItemController'); 
-let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
-
-let offsetX = 0;
-let offsetY = 0;
-let isDragging = false;
+//let _SelectedItemWindow= document.querySelector('#SelectedItemWindow'); 
 
 init();
 animate();
@@ -318,6 +315,7 @@ function animate()
   UpdateCameraPosition(camera,controls);
 
   RaycastFunction();
+
 }
 
 function EventListener()
@@ -356,28 +354,19 @@ function EventListener()
       
   });
 
-_SelectedItemController.addEventListener("pointerdown", function(e) {
-    isDragging = true;
-    offsetX = e.clientX - _SelectedItemController.offsetLeft;
-    offsetY = e.clientY -_SelectedItemController.offsetTop;
+  ///滑鼠點擊accessory可啟用模型移動面板
+  window.addEventListener("pointerdown", function(e) {
+    if(INTERSECTED!=null)
+    {
+      if(INTERSECTED.name.includes("accessory"))
+      {
+        MoveModelON(INTERSECTED);
+        addSelectedObject(INTERSECTED);
+      }
+    }
   });
 
-document.addEventListener("mousemove", function(e) {
-  if (isDragging) 
-  {
-    _SelectedItemController.style.left = (e.clientX - offsetX) + "px";
-    _SelectedItemController.style.top = (e.clientY - offsetY) + "px";
-  }
-});
 
-document.addEventListener("pointerup", function() {
-  isDragging = false;
-});
-}
-
-function ControlPanelDragEvent()
-{
-  
 }
 
 function DefaultCamera()
@@ -670,11 +659,11 @@ function CasterManager(i)//移動輪設定功能
 
 function AccessoryManager(i)
 {
-  let instantiate_item_hight=3;
+  let instantiate_item_hight=0;
 
   let item_name="";
 
-  MoveModelOFF();
+  MoveModelOFF();//重置模型移動面板
 
   CameraManager(5);
 
@@ -705,8 +694,8 @@ function AccessoryManager(i)
   //指定新outline指定物件，並hightlight該物件
   setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 500);//1000=1sec}
    
-  //啟用模型移動功能
-  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name),i);}, 600);//1000=1sec} 
+  //啟用模型移動面板
+  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
 }
 
 function ResetInstrumentModule()//重置儀器支架
@@ -777,9 +766,9 @@ function RaycastFunction()
           //if(current_INTERSECTED!=INTERSECTED)
           //{
           //  current_INTERSECTED=INTERSECTED;
-          //  console.log(current_INTERSECTED);
+            //console.log(INTERSECTED.name);
           //}
-          
+          //console.log(INTERSECTED);
         }
 			
       } );
@@ -1130,16 +1119,21 @@ function MoveModel(action)
     {
       current_INTERSECTED.rotation.y-=Math.PI*0.5;
     }
+
+    UpdateMoveModelPanelPos(current_INTERSECTED);
   }
 
-  console.log(current_INTERSECTED.position.y);
 }
 
-function MoveModelON(target,index)
+function MoveModelON(target)
 {
   current_INTERSECTED=target;
-  _SelectedItemController.style.display="block";
-  _SelectedItemWindow.style.backgroundImage=SetMoveModelImage(index);
+  UpdateMoveModelPanelPos(target)  
+
+  if(isLabelOn)
+  {
+    ShowSceneLabelToggle();
+  }
 }
 
 function MoveModelOFF()
@@ -1153,25 +1147,81 @@ function MoveModelOFF()
   
   _SelectedItemController.style.display="none";
 
-  CameraManager(0);
-}
-function SetMoveModelImage(index)
-{
-  switch(index)
+  if(!isLabelOn)
   {
-    case 1:
-    return "url('./images/Basket.png')";
+    ShowSceneLabelToggle();
+  }
 
-    case 2:
-    return "url('./images/AdapterHolder.png')";
+  //更新配件規格欄位
+  UpdateAccessorySpecification();
+
+  //量測推車尺寸
+  MeasureCartDimension();
+}
+
+function UpdateMoveModelPanelPos(target)  
+{
+  const box= new THREE.Box3().setFromObject(target);
+  const center= new THREE.Vector3();
+  box.getCenter(center);
+
+  var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+  var widthHalf = width / 2, heightHalf = height / 2;
+
+  center.project(camera);
+  center.x = ( center.x * widthHalf ) + widthHalf;
+  center.y = - ( (center.y) * heightHalf ) + heightHalf;
+
+  _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+}
+
+function DeleteAccessory()
+{
+  scene.remove(current_INTERSECTED);
+
+  _SelectedItemController.style.display="none";
+
+
+  if(!isLabelOn)
+  {
+    ShowSceneLabelToggle();
+  }
+
+  //量測推車尺寸
+  MeasureCartDimension();
+}
+
+function UpdateAccessorySpecification()
+{
+  current_accessory_list=[];
+
+  for(let i=0;i<scene.children.length;i++)
+  {
+    current_accessory_list.push(SetAccessoryName(scene.children[i]));
+  }
+
+  const uniqueItem = [...new Set(current_accessory_list)];
+
+  _accessory_content.textContent=uniqueItem;
+}
+
+function SetAccessoryName(target)
+{
+  if(target.name.includes("accessory_01_"))
+  {
+    return "Tubular Utility Basket";
+  }
+
+  if(target.name.includes("accessory_02_"))
+  {
+    return "Universal Adapter Holder";
+  }
+
+  else
+  {
+    return "";
   }
 }
-
-function add(a, b) {
-  return a + b;
-}
-
-
 
 ///將函數掛載到全域範圍
 window.DefaultCamera = DefaultCamera;
@@ -1184,3 +1234,4 @@ window.ShowSceneLabelToggle=ShowSceneLabelToggle;
 window.AccessoryManager=AccessoryManager;
 window.MoveModel=MoveModel;
 window.MoveModelOFF=MoveModelOFF;
+window.DeleteAccessory=DeleteAccessory;
