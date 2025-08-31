@@ -23,6 +23,11 @@
 	background-image: url('./images/4LegBase.png');
 }
 
+.item:nth-child(10)
+{
+	background-image: url('./images/3inchMedicalCaster.png');
+}
+
 .item:nth-child(11)
 {
 	background-image: url('./images/4inchTwinWheelCaster.png');

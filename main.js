@@ -654,6 +654,46 @@ function CasterManager(i)//移動輪設定功能
     _caster_content.textContent="4 Twin-wheel Caster ";
 
     break;
+
+    case 5:
+
+    let name_501="3incMedicalCasterFor20BaseModule";
+      
+    if(base_index==20&&scene.getObjectByName(name_501)==null)//4吋輪for20吋底座
+    {
+      InstGLTFLoader('./models/3inchMedicalCasterFor20Base.glb',modelPosition,modelRotation,modeScale,name_501,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_501));addSelectedObject(scene.getObjectByName(name_501));}, 1000);//1000=1sec}
+    }
+
+    let name_502="3inchMedicalCasterFor24BaseModule";
+
+    if(base_index==24&&scene.getObjectByName(name_502)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/3inchMedicalCasterFor24Base.glb',modelPosition,modelRotation,modeScale,name_502,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_502));addSelectedObject(scene.getObjectByName(name_502));}, 1000);//1000=1sec}
+    }
+
+    let name_503="3inchMedicalCasterFor4LegBaseModule";
+
+    if(base_index==40&&scene.getObjectByName(name_503)==null)//4吋輪for24吋底座
+    {
+      InstGLTFLoader('./models/3inchMedicalCasterFor4LegBase.glb',modelPosition,modelRotation,modeScale,name_503,null, scene);
+
+      //指定新outline指定物件，並hightlight該物件(與底座有0.5秒時間差)
+      setTimeout(() => {current_caster.push(scene.getObjectByName(name_503));addSelectedObject(scene.getObjectByName(name_503));}, 1000);//1000=1sec}
+
+    }
+
+    
+
+    //更新移動輪規格欄位
+    _caster_content.textContent="3 Medical Caster ";
+
+    break;
   }
 }
 
@@ -726,6 +766,9 @@ function ResetCasterModule()//重置移動輪
   DestroyObject(scene.getObjectByName("4inchCasterFor20BaseModule"));
   DestroyObject(scene.getObjectByName("4inchCasterFor24BaseModule"));
   DestroyObject(scene.getObjectByName("4inchCasterFor4LegBaseModule"));
+  DestroyObject(scene.getObjectByName("3incMedicalCasterFor20BaseModule"));
+  DestroyObject(scene.getObjectByName("3inchMedicalCasterFor24BaseModule"));
+  DestroyObject(scene.getObjectByName("3inchMedicalCasterFor4LegBaseModule"));
 }
 
 function DestroyObject(target)
