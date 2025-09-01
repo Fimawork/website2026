@@ -280,14 +280,20 @@ function init()
 
   ///EventListener
   window.addEventListener( 'resize', onWindowResize );  
-  window.addEventListener("pointerdown", (event) => {InputEvent();});
+  window.addEventListener("pointerdown", (event) => {
+    InputEvent();
+     mousePos = { x: event.clientX, y: event.clientY };
+		onPointerMove(event);//改以點擊作為Raycast判斷的時間點，改善觸控螢幕誤判狀況
+  });
   window.addEventListener("wheel", (event) => {InputEvent();});
   
-	window.addEventListener('pointermove', (event) => {
-    mousePos = { x: event.clientX, y: event.clientY };
-		onPointerMove(event);
-    //console.log(INTERSECTED);
-  });
+//window.addEventListener('pointermove', (event) => {
+//  mousePos = { x: event.clientX, y: event.clientY };
+//	onPointerMove(event);
+//  //console.log(INTERSECTED);
+//});
+
+
 
 }
 
@@ -699,7 +705,7 @@ function CasterManager(i)//移動輪設定功能
 
 function AccessoryManager(i)
 {
-  let instantiate_item_hight=0;
+  let instantiate_item_hight=3;
 
   let item_name="";
 
@@ -714,7 +720,7 @@ function AccessoryManager(i)
     
     item_name="accessory_01_"+`${accessory_01_num}`;
 
-    InstGLTFLoader('./models/accessory_01.glb',modelPosition,modelRotation,modeScale,item_name,null, scene);
+    InstGLTFLoader('./models/accessory_01.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
 
@@ -723,7 +729,7 @@ function AccessoryManager(i)
     
     item_name="accessory_02_"+`${accessory_02_num}`;
 
-    InstGLTFLoader('./models/accessory_02.glb',modelPosition,modelRotation,modeScale,item_name,null, scene);
+    InstGLTFLoader('./models/accessory_02.glb',new THREE.Vector3(modelPosition.x,modelPosition.y+instantiate_item_hight,modelPosition.z),modelRotation,modeScale,item_name,null, scene);
 
     break;
   }
