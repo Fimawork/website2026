@@ -366,8 +366,12 @@ function EventListener()
     {
       if(INTERSECTED.name.includes("accessory"))
       {
-        MoveModelON(INTERSECTED);
-        addSelectedObject(INTERSECTED);
+        if(current_INTERSECTED==null)//避免A物件編輯時，點選到B物件
+        {
+          MoveModelON(INTERSECTED);
+          addSelectedObject(INTERSECTED);
+        }
+        
       }
     }
   });
@@ -705,7 +709,7 @@ function CasterManager(i)//移動輪設定功能
 
 function AccessoryManager(i)
 {
-  let instantiate_item_hight=3;
+  let instantiate_item_hight=2;
 
   let item_name="";
 
@@ -1214,8 +1218,13 @@ function UpdateMoveModelPanelPos(target)
   const center= new THREE.Vector3();
   box.getCenter(center);
 
-  var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+  const rect = threeContainer.getBoundingClientRect();
+
+  //var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+   var width = rect.width, height = rect.height;
   var widthHalf = width / 2, heightHalf = height / 2;
+
+    
 
   center.project(camera);
   center.x = ( center.x * widthHalf ) + widthHalf;
