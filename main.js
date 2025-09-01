@@ -1220,8 +1220,8 @@ function UpdateMoveModelPanelPos(target)
 
   const rect = threeContainer.getBoundingClientRect();
 
-  //var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
-   var width = rect.width, height = rect.height;
+  var width = threeContainer.clientWidth, height = threeContainer.clientHeight;
+   //var width = rect.width, height = rect.height;
   var widthHalf = width / 2, heightHalf = height / 2;
 
     
@@ -1229,8 +1229,10 @@ function UpdateMoveModelPanelPos(target)
   center.project(camera);
   center.x = ( center.x * widthHalf ) + widthHalf;
   center.y = - ( (center.y) * heightHalf ) + heightHalf;
-
+  
   _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
+
+  setTimeout(() => {_SelectedItemController.style.display="block";}, 500);//1000=1sec}//避免沒正確執行
 }
 
 function DeleteAccessory()
