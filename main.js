@@ -1214,6 +1214,8 @@ function MoveModelOFF()
 
 function UpdateMoveModelPanelPos(target)  
 {
+  try 
+	{
   const box= new THREE.Box3().setFromObject(target);
   const center= new THREE.Vector3();
   box.getCenter(center);
@@ -1232,7 +1234,12 @@ function UpdateMoveModelPanelPos(target)
   
   _SelectedItemController.style.cssText = `position:absolute;top:${center.y/height*100}%;left:${center.x/width*100}%;display:block;`;
 
-  setTimeout(() => {_SelectedItemController.style.display="block";}, 500);//1000=1sec}//避免沒正確執行
+  }
+
+  catch (error) 
+	{
+		console.log(`Error Setting Camera Default Property.${error}`);
+	}
 }
 
 function DeleteAccessory()
