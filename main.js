@@ -738,14 +738,11 @@ function AccessoryManager(i)
     break;
   }
 
-  //放置在推車上方
-  setTimeout(() => {scene.getObjectByName(item_name).position.set(0,instantiate_item_hight,0);}, 400);
-
-  //指定新outline指定物件，並hightlight該物件
-  setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 500);//1000=1sec}
+  //指定新outline指定物件
+  setTimeout(() => {current_accessories.push(scene.getObjectByName(item_name));}, 500);//1000=1sec}
    
-  //啟用模型移動面板
-  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
+  //啟用模型移動面板，並hightlight該物件
+  setTimeout(() => {MoveModelON(scene.getObjectByName(item_name));addSelectedObject(scene.getObjectByName(item_name));}, 600);//1000=1sec} 
 }
 
 function ResetInstrumentModule()//重置儀器支架
