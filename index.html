@@ -4,8 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>Medical Cart Configurator</title>
-		<link rel="stylesheet" href="./ItemImages.css">
+		<title>fimawork 2025</title>
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
 			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
@@ -15,47 +14,14 @@
 				margin: 0;
 				padding:0; 
 				overflow: hidden;
+				background-color: rgba(52, 50, 50, 1);
 			}
 			
-
 			canvas
 			{
 				width: 100%;
    				height: 100%;
 			}
-
-			#backgroundImage
-			{
-				position: absolute;
-				left: 0%;
-				top:0%;
-				width: 100%;
-				height: 100%;
-				background: no-repeat 100% 100% url("https://images.pexels.com/photos/434337/pexels-photo-434337.jpeg");
-				z-index: -2;
-			}
-
-			#frozenGlassPanel
-			{
-				position: absolute;
-				left: 50%;
-				top:50%;
-				width: 90%;
-				height: 90%;
-				background: rgba(255, 255, 255, 0.2);
-    			backdrop-filter: blur(15px);
-    			-webkit-backdrop-filter: blur(15px);
-				border-radius: 24px;
-				border: 1px solid rgba(255, 255, 255, 0.3);
-				box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-				z-index: -1;
-				transform: translate(-50%, -50%);
-
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-			
 
 			#threeContainer
 			{
@@ -64,612 +30,70 @@
 				height: 100%;
 			}
 
-			#labelContainer
-			{
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				pointer-events: none;
-				overflow: hidden;
-			}
-
-			.main_title
-			{
-				position: absolute;
-				left: 9%;
-				top:18%;
-				font-size: 30px;
-				font-family:Arial, Helvetica, sans-serif;
-				font-weight:lighter;
-				transform: translateX(0%);
-				pointer-events: none;
-			}
-
-			.mainBottom_panel
-			{
-				position: absolute;
-				right: 9%;
-				top:18%;
-                width: 24%;
-                height: 4%;
-                display: flex;
-                justify-content:center; 
-                z-index: 9;
-            }
-
-			.main_btn
-			{
-                position: relative;
-                width: 20%;
-                height: 100%;
-				background-color: rgba(255, 255, 255, 0);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				margin-left: 1%;
-				margin-right: 1%;
-				border-radius: 15% / 50%;
-				pointer-events: auto;
-            }
-
-			.btn_text
-			{
-				position: absolute;
-                right: 0px;
-                left: 0px;
-				text-align: center;
-				font-family: "Roboto", sans-serif;
-                font-size: 12px;
-				font-weight: 300;
-                color: rgba(0, 0, 0, 0.9);
-				display: block;
-			}
-
-			
-
-			i{
-				color: rgba(255, 255, 255, 0);
-				display: none;
-			}
-
-			
-
-			.grid-table 
-			{
-				position: absolute;	
-				top:25%;
-				left: 9%;
-    		 	display: grid;
-    		 	grid-template-columns: 0.1fr 1fr 2fr;
-    		 	gap: 0px;
-    		 	width: 21%;
-    		 	background-color: rgba(255, 255, 255, 0);
-    		}
-
-    		.cell {
-    		  background-color: rgba(0, 0, 0, 0.05);
-    		  padding: 6px;
-    		  text-align: left;
-			  font-family: "Roboto", sans-serif;
-			  font-weight: 300;
-              font-size: 12px;
-			  line-height:150%;
-              color: rgba(0, 0, 0, 0.9);
-    		  border: 1px solid rgba(255, 255, 255, 0.15);
-    		}
-
-			.label 
-			{
-				position: absolute;
-				width: 30px;
-				height: 30px;
-				color: #000000;
-				font-family: sans-serif;
-				padding: 2px;
-				background: rgba(255, 255, 255, 0.45);
-				border-radius: 50% / 50%;
-				border-style: solid;
-  				border-width: 1px;
-
-				text-align: center;
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-				pointer-events: auto;
-				opacity: 0;
-			}
-
-			.alignCenter
-			{
-				display: flex;
-				justify-content: center;
-				flex-direction: column;
-			}
-			
-			#hud_btn_panel
-			{
-				position: absolute;
-				left: 30%;
-				top:15%;
-				width: 30px;
-				transform: scale(0.75);
-			}
-
-			.hud_btn
-			{
-				width: 30px;
-				height: 30px;
-				color: rgba(0, 0, 0, 0.45);
-				margin-bottom: 18px;
-
-			}
-
-			#item_container
-			{
-				position: absolute;	
-				top:24%;
-				right: 7.5%;
-				width: 24%;
-				height: 60%;
-				gap: 48px 18px;
-    		 	display: flex;
-				flex-wrap:  wrap;
-				align-content:flex-start;
-				overflow-y: auto;
-			}
-
-			.item
-			{
-				position: relative;
-				width: 20%;
-				aspect-ratio: 1 / 1;
-				border-radius: 6% 6%;
-				background-color: rgba(0, 0, 0, 0.05);
-				background-image: url('./images/Sample.jpg');
-				background-size: auto 100%; 
-				background-position: center;
-				display: flex;
-				/*justify-content: center;*/
-				overflow: visible;
-
-				border-style: solid;
-				border-width: 1.5px;
-				border-color: rgba(255, 255, 255, 1);
-			}
-
-			.item_title
-			{
-				position: absolute;
-				top:105%;
-				font-family: "Roboto", sans-serif;
-				font-size: 10px;
-				font-weight: 500;
-				color: rgba(90, 90, 90, 1);
-				text-align: center;
-			}
-
-			#SelectedItemController
-			{
-				position: absolute;
-				top: 36%;
-				right: 28%;
-				width: 21%;
-				aspect-ratio: 1 / 1;
-				transform: translate(-50%,-50%);
-				cursor: move;
-				display: none;
-			}
-
-			#SelectedItemWindow
-			{
-				position: relative;
-				left: 50%;
-				top: 50%;
-				width: 100%;
-				height: 100%;
-				border-radius: 50% / 50%;	
-				transform: translate(-50%,-50%);
-			}
-
-			.window_border
-			{
-				border-style: groove;
-				border-width: 2px;
-				border-color: rgba(10, 151, 207,0.5);
-			}
-
-			.ControllerBtn
-			{
-				position: absolute;
-				display: flex;
-				justify-content: center;
-				width: 20%;
-				height: 20%;
-				transform: translate(-50%,-50%);
-				opacity: 0.3;
-			}
-
-			.ControllerBtn:nth-child(1)
-			{
-				top: 50%;
-				left: 10%;
-			}
-
-			.ControllerBtn:nth-child(2)
-			{
-				top: 50%;
-				right: -10%;
-			}
-
-			.ControllerBtn:nth-child(3)
-			{
-				top: 10%;
-				left: 48%;
-			}
-
-			.ControllerBtn:nth-child(4)
-			{
-				bottom: -10%;
-				left: 50%;
-			}
-
-			.ControllerBtn:nth-child(5)
-			{
-				width: 12%;
-				height: 12%;
-				top: 5%;
-				right: -8%;
-			}
-
-			.ControllerBtn:nth-child(6)
-			{
-				width: 12%;
-				height: 12%;
-				bottom: -5%;
-				right: -8%;
-			}
-
-			j
-			{
-				align-self: center;
-				color: #0070a3;
-			}
-
-			
-			
-			@keyframes blinking_animation 
-			{
-				0% {border-color: rgba(10, 151, 207,0.75);}
-				20% {border-color: rgba(10, 207, 174, 0.75);}
-				40%{border-color: rgba(107, 231, 134, 0.75);}
-				60% {border-color: #aedf2677;}
-				80% {border-color: rgba(10, 207, 92, 0.75);}
-				100%{border-color: rgba(10, 151, 207,0.75);}
-			}
-
-			.window_blinking_anim
-			{
-				animation: blinking_animation; 
-				animation-duration: 1s;
-				animation-iteration-count: infinite;
-				animation-timing-function:ease-in-out;
-			}
-
-
-			@keyframes fadeIn_animation 
-			{
-				0% {opacity: 0;}
-				100%{opacity: 1;}
-			}
-
-			.label_fadeIn_anim
-			{
-				animation: fadeIn_animation;
-				animation-duration: 1s;
-				animation-delay: 0.5s;
-				animation-iteration-count:1;
-				animation-fill-mode:both;
-				animation-timing-function:linear;
-			}
-
-			@media (hover: hover) 
-			{
-			  	.main_btn:hover
-				{
-					background-color: rgba(255, 255, 255, 0.5);
-				}
-
-				.label:hover
-				{
-					background-color: rgba(0, 0, 0, 0.05);
-				}
-
-				.hud_btn:hover
-				{
-					color: rgba(0, 0, 0, 0.15);
-				}
-
-				.item:hover
-				{
-					border-color: #6bb4f7;
-				}
-
-				.ControllerBtn:hover
-				{
-					opacity: 0.6;
-				}
-
-			}
-
-			@media screen and (max-width:1400px)/*平板(橫向)*/
-			{
-				.main_title
-				{
-					left: 50%;
-					top: 9%;
-					font-size: 24px;
-					transform: translateX(-50%);
-				}
-
-				.grid-table 
-				{
-					position: absolute;	
-					top:20%;
-					left: 6%;
-    			 	width: 25%;
-    			}
-
-				.hud_btn
-				{
-					margin-top: 18px;
-					margin-bottom: 18px;
-				}
-
-				#item_container
-				{
-					right: 6%;
-					width: 27%;
-				}
-
-				.item
-				{
-					width: 18%;
-					aspect-ratio: 1 / 1;
-					border-radius: 6% 6%;
-					background-color: rgba(0, 0, 0, 0.05);
-					background-image: url('./images/Sample.jpg');
-				}
-
-				#SelectedItemController
-				{
-					top: 80%;
-					left: 15%;
-					width: 24%;
-					transform: translate(-50%,-20%);/*修正Safari解析度誤差*/
-				}
-
-				.ControllerBtn:active
-				{
-					opacity: 0.1;
-				}
-			}
-
-			@media screen and (max-width:900px)/*平板(直向)*/
-			{
-				#threeContainer
-				{
-					height: 80%;
-					padding-bottom: 20%;
-				}
-
-				.mainBottom_panel
-				{
-					display: none;
-            	}
-
-				#hud_btn_panel
-				{
-					position: absolute;
-					left: 6%;
-					top:15%;
-					width: 30px;
-					transform: scale(1);
-				}
-
-				.grid-table 
-				{
-					position: absolute;	
-					top:78%;
-					left: 6%;
-    			 	width: 88%;
-    			}
-
-				#item_container
-				{
-					right: 6%;
-					width: 12%;
-					top:14%;
-				}
-
-				.item
-				{
-					width: 100%;
-					aspect-ratio: 1 / 1;
-					border-radius: 6% 6%;
-					background-color: rgba(0, 0, 0, 0.05);
-					background-image: url('./images/Sample.jpg');
-				}
-
-				#SelectedItemController
-				{
-					top:70%;
-					left: 15%;
-					width: 24%;
-					transform: translate(-50%,-20%);/*修正Safari解析度誤差*/
-				}
-
-				.ControllerBtn:active
-				{
-					opacity: 0.6;
-				}
-			}
-
-			@media screen and (max-width:768px)/*手機*/
-			{
-				body
-				{
-					overflow-x: hidden;
-					overflow-y: scroll;
-				}
-				
-				#backgroundImage
-				{
-					height: 130%;
-					opacity: 1;
-				}
-
-				#frozenGlassPanel
-				{
-					top:2%;
-					height: 94%;
-					transform: translate(-50%, 0%);
-				}
-
-				#threeContainer
-				{
-					height: 87%;
-					padding-bottom: 27%;
-				}
-				
-				
-				.main_title
-				{
-					left: 50%;
-					top: 6%;
-					font-size: 15px;
-					transform: translateX(-50%);
-				}
-
-				.mainBottom_panel
-				{
-					width: 100%;
-					left: 50%;
-					top:80%;
-					transform: translate(-50%,-50%);
-					display: none;
-            	}
-
-				.main_btn
-				{
-					width: 45px;
-					height: 45px;
-					margin-left: 1.2%;
-					margin-right: 1.2%;
-					border-radius: 50% / 50%;
-            	}
-				
-
-				.main_btn:active
-				{
-					background-color: rgba(255, 255, 255, 0.5);
-				}
-
-				.hud_btn:active
-				{
-					color: rgba(0, 0, 0, 0.3);
-				}
-
-				.label:active
-				{
-					background-color: rgba(0, 0, 0, 0.05);
-				}
-
-				.btn_text
-				{
-					display: none;
-				}
-
-				i{
-					color: rgba(0, 0, 0, 0.6);
-					display: block;
-				}
-
-				.grid-table 
-				{
-					position: absolute;	
-					top:98%;
-					left: 5%;
-    			 	width: 90%;
-    			}
-
-				.cell 
-				{
-    			  background-color: rgba(0, 0, 0, 0.1);
-    			}
-
-				#hud_btn_panel
-				{
-					left:88%;
-					top:30%;
-					transform: scale(0.6);
-				}
-
-				.hud_btn
-				{
-					margin-top: 18px;
-					margin-bottom: 18px;
-				}
-
-				#item_container
-				{
-					position: absolute;	
-					top:86%;
-					left: 50%;
-					width: 80%;
-					height: 15%;
-					transform: translate(-50%,-50%);
-					overflow-x:auto;
-					overflow-y:hidden;
-					flex-direction: column;/*必須使用才會有scrollbar出現*/
-				}
-
-				.item
-				{
-					width: 24%;
-					aspect-ratio: 1 / 1;
-					border-radius: 25% 25%;
-					background-color: rgba(0, 0, 0, 0.05);
-					overflow: visible;
-				}
-
-				.item_title
-				{
-					position: absolute;
-					top: 105%;
-					font-size: 10px;
-					color: rgba(0, 0, 0, 0.75);
-				}
-
-				.item_image
-				{
-					display: none;
-				}
-
-				#SelectedItemController
-				{
-					top: 20%;
-					left: 72%;
-					width: 50%;
-					transform: translate(-50%,-20%);/*修正Safari解析度誤差*/
-				}
-
-				.ControllerBtn:active
-				{
-					opacity: 0.6;
-				}
-			}
-
 		</style>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+			uniform float time;
+	
+			uniform float fogDensity;
+			uniform vec3 fogColor;
+	
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+	
+			varying vec2 vUv;
+	
+			void main( void ) {
+	
+				vec2 position = - 1.0 + 2.0 * vUv;
+	
+				vec4 noise = texture2D( texture1, vUv );
+				vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+				vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+	
+				T1.x += noise.x * 2.0;
+				T1.y += noise.y * 2.0;
+				T2.x -= noise.y * 0.2;
+				T2.y += noise.z * 0.2;
+	
+				float p = texture2D( texture1, T1 * 2.0 ).a;
+	
+				vec4 color = texture2D( texture2, T2 * 2.0 );
+				vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+	
+				if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+				if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
+				if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
+	
+				gl_FragColor = temp;
+	
+				float depth = gl_FragCoord.z / gl_FragCoord.w;
+				const float LOG2 = 1.442695;
+				float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+				fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+	
+				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+	
+			}
+	
+		</script>
+	
+		<script id="vertexShader" type="x-shader/x-vertex">
+	
+			uniform vec2 uvScale;
+			varying vec2 vUv;
+	
+			void main()
+			{
+	
+				vUv = uvScale * uv;
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+	
+			}
+	
+		</script>
 
 		<script type="importmap">
 			{
@@ -683,184 +107,180 @@
 	</head>
 	
 	<body>  
-		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
-		<div id="backgroundImage"></div> 
-		<div id="frozenGlassPanel">
-			<div id="threeContainer"></div>
-			<div id="labelContainer">
-				<div class="label label_fadeIn_anim" id="label_5" onclick="EditMode(5)">5</div>
-			</div>
-			<div id="hud_btn_panel">
-				<div class="hud_btn fa-solid fa-rotate-right fa-2x" onclick="DefaultCamera()" title="RESET VIEW"></div>
-				<div class="hud_btn fa-solid fa-list fa-2x" style=" color:#6bb4f7" id="ShowLabelToggle"onclick="ShowSceneLabelToggle()" title="LABEL TOGGLE"></div>
-				<div class="hud_btn fa-solid fa-download fa-2x" onclick="" title="DOWNLOAD"></div>
-			</div>
-			<div id="SelectedItemController"  draggable="true">
-				<div id="SelectedItemWindow" class="window_border window_blinking_anim">
-				<div class="ControllerBtn" onclick="MoveModel(`LEFT`)" title="Turn Clockwise">
-					<j class="fa-solid fa-rotate-right fa-2x"></i>
-				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`RIGHT`)" title="Turn Counterclockwise">
-					<j class="fa-solid fa-rotate-left fa-2x"></i>
-				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`UP`)" title="Move Up">
-					<j class="fa-solid fa-angle-up fa-2x"></i>
-				</div>
-				<div class="ControllerBtn" onclick="MoveModel(`DOWN`)" title="Move Down">
-					<j class="fa-solid fa-angle-down fa-2x"></i>
-				</div>
-				<div class="ControllerBtn" onclick="MoveModelOFF()" title="Confirm">
-					<j class="fa-solid fa-check fa-2x"></i>
-				</div>
-				<div class="ControllerBtn" onclick="DeleteAccessory()" title="Delete">
-					<j class="fa-solid fa-trash fa-2x"></i>
-				</div>
-				</div>
-				
-			</div>
-			
+		<div id="threeContainer">
+			<div id='title3DContainer'></div>
 		</div>
+		<script type="module">
+		import * as THREE from 'three';
 
-		<div class="grid-table">
-			<div class="cell alignCenter">1</div>
-			<div class="cell alignCenter">Instrument Mount</div>
-			<div class="cell" id="instrument_mount_content">Description</div>
+		import Stats from 'three/addons/libs/stats.module.js';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+		import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+	
 
-			<div class="cell alignCenter">2</div>
-			<div class="cell alignCenter">Column</div>
-			<div class="cell" id="column_content">Description</div>
+let camera, scene, renderer, stats;
+const frustumSize = 20;
 
-			<div class="cell alignCenter">3</div>
-			<div class="cell alignCenter">Base</div>
-			<div class="cell" id="base_content">Description</div>
+const textureLoader = new THREE.TextureLoader();
 
-			<div class="cell alignCenter">4</div>
-			<div class="cell alignCenter">Caster</div>
-			<div class="cell" id="caster_content">Description</div>
+const cloudTexture = textureLoader.load( 'images/Fiber 1.png' );
+const lavaTexture = textureLoader.load( 'images/cloud.png' );
 
-			<div class="cell alignCenter">5</div>
-			<div class="cell alignCenter">Accessories</div>
-			<div class="cell" id="accessory_content">Description, Description, Description, Description, Description, Description, Description</div>
+lavaTexture.colorSpace = THREE.SRGBColorSpace;
 
-			<div class="cell alignCenter">6</div>
-			<div class="cell alignCenter">Dimensions</div>
-			<div class="cell" id="dimension_content">L 1000mm x W 560mm x H 1500mm</div>
-		</div>
+cloudTexture.wrapS = cloudTexture.wrapT = THREE.RepeatWrapping;
+lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
+
+let uniforms = {
+
+
+'time': { value: 1.0 },
+'uvScale': { value: new THREE.Vector2( 1.2,1.2 ) },
+'texture1': { value: cloudTexture },
+'texture2': { value: lavaTexture }
+
+
+};
+
+
+let ScanEffect_shader = new THREE.ShaderMaterial( {
+side: THREE.DoubleSide,
+	transparent: true,
+	opacity:0.3,
+	blending: THREE.AdditiveBlending,
+uniforms: uniforms,
+vertexShader: document.getElementById( 'vertexShader' ).textContent,
+fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+
+} );
+
+let deltaTime=0;
+
+const clock = new THREE.Clock();
+
+let mixer;
+
+init();
+animate();
+
+
+function init() {
+
+
+	const container = document.createElement( 'div' );
+	document.body.appendChild( container );
+
+	//camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 2000 );
+	const aspect = window.innerWidth / window.innerHeight;
+  	
+
+	camera = new THREE.OrthographicCamera(
+    frustumSize * aspect / -2, // left
+    frustumSize * aspect / 2,  // right
+    frustumSize / 2,           // top
+    frustumSize / -2,          // bottom
+    0.1,                       // near
+    1000                       // far
+  	);
+
+  	camera.position.set(0, 0, 5);
+  	camera.lookAt(0,0,0);
+
+	scene = new THREE.Scene();
+
+
+
+	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled = true;
+	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+	renderer.toneMappingExposure = 1;
+	
+
+	document.body.appendChild(renderer.domElement);
+
+	///hdri 環境光源
+	new RGBELoader()
+	.setPath( 'textures/hdri/' )
+	.load( 'studio_small_09_2k.hdr', function ( texture ) {
+
+		texture.mapping = THREE.EquirectangularReflectionMapping;
+		scene.environment = texture;
+
+	} );
+
+
+	const loader_title = new GLTFLoader();
+	loader_title.load( './models/logo.glb', function ( gltf ) {
+
+		const model = gltf.scene;
+		model.position.set(0,0,0);
+		model.rotation.set(Math.PI,Math.PI, Math.PI);
+		model.scale.set(0.75,0.75,0.75);
+
+		model.traverse( function ( object ) {
+
+			if ( object.isMesh )
+			{
+				object.material=ScanEffect_shader;
+			}
+
+		});
+
+		scene.add( model );
 		
+	});
 
-		<div class="mainBottom_panel">
-			<div class="main_btn" onclick="EditMode(0)">
-				<div class="btn_text">ALL</div>
-				<i class="fa-solid fa-rotate-right fa-1x"></i>
-			</div>
 
-			<div class="main_btn" onclick="EditMode(1)">
-				<div class="btn_text">Instrument Mount</div>
-				<i class="fa-solid fa-rotate-right fa-1x"></i>
-			</div>
-			<div class="main_btn" onclick="EditMode(2)">
-				<div class="btn_text">Column</div>
-				<i class="fa-solid fa-eye-slash fa-1x"></i>
-			</div>
-			<div class="main_btn" onclick="EditMode(3)">
-				<div class="btn_text">Base</div>
-				<i class="fa-solid fa-list fa-1x"></i>
-			</div>
-			<div class="main_btn" onclick="EditMode(4)">
-				<div class="btn_text">Caster</div>
-				<i class="fa-solid fa-camera fa-1x"></i>
-			</div>
-			<div class="main_btn" onclick="EditMode(5)">
-				<div class="btn_text">Accessories</div>
-				<i class="fa-solid fa-camera fa-1x"></i>
-			</div>
-		</div>
+	container.appendChild( renderer.domElement );
 
-		<div id="item_container">
-			<div class="item" id="item_01_btn"onclick="InstrumentMountManager(0)">
-				<div class="item_title">Fixed Angle Panel</div>
-			</div>
 
-			<div class="item" id="item_02_btn"onclick="">
-				<div class="item_title">Fixed Angle with Slide Panel</div>
-			</div>
+	window.addEventListener( 'resize', onWindowResize );
 
-			<div class="item" id="item_03_btn"onclick="InstrumentMountManager(2)">
-				<div class="item_title">Angle Adjustable with Slide Panel</div>
-			</div>
+	// stats
+	stats = new Stats();
+	//container.appendChild( stats.dom );
+	
+}
 
-			<div class="item" id="item_04_btn"onclick="ColumnManager(1520)">
-				<div class="item_title">1.5"/2" Height Adjustable Tube</div>
-			</div>
+function onWindowResize() {
 
-			<div class="item" id="item_05_btn"onclick="ColumnManager(1215)">
-				<div class="item_title">1.25"/1.5" Height Adjustable Tube</div>
-			</div>
+	const aspect = window.innerWidth / window.innerHeight;
+    camera.left = -frustumSize * aspect / 2;
+    camera.right = frustumSize * aspect / 2;
+    camera.top = frustumSize / 2;
+    camera.bottom = -frustumSize / 2;
+    camera.updateProjectionMatrix();
 
-			<div class="item" id="item_06_btn"onclick="ColumnManager(1500)">
-				<div class="item_title">1.5" Stainless Steel Tube</div>
-			</div>
+	renderer.setSize( window.innerWidth, window.innerHeight );
 
-			<div class="item" id="item_07_btn"onclick="BaseManager(20)">
-				<div class="item_title">20" Base</div>
-			</div>
+}
 
-			<div class="item" id="item_08_btn"onclick="BaseManager(24)">
-				<div class="item_title">24" Base</div>
-			</div>
 
-			<div class="item" id="item_09_btn"onclick="BaseManager(40)">
-				<div class="item_title">4 Leg Base</div>
-			</div>
+//類似Unity的Update()功能
+function animate() {
 
-			<div class="item" id="item_10_btn"onclick="CasterManager(5)">
-				<div class="item_title">3" Medical Caster</div>
-			</div>
+	requestAnimationFrame( animate );
 
-			<div class="item" id="item_11_btn"onclick="CasterManager(4)">
-				<div class="item_title">4" Twin-Caster</div>
-			</div>
+	const delta = clock.getDelta();
 
-			<div class="item" id="item_12_btn"onclick="CasterManager(3)">
-				<div class="item_title">3" Twin-Caster</div>
-			</div>
+	if ( mixer ) mixer.update( delta );
 
-			<div class="item" id="item_13_btn"onclick="AccessoryManager(1)">
-				<div class="item_title">Basket</div>
-			</div>
+	renderer.render( scene, camera );
 
-			<div class="item" id="item_14_btn"onclick="AccessoryManager(2)">
-				<div class="item_title">Adapter Holder</div>
-			</div>
+	stats.update();
 
-			<div class="item" id="item_15_btn"onclick="">
-				<div class="item_title">Barcode Scanner Holder</div>
-			</div>
+	deltaTime=delta*0.3;
 
-			<div class="item" id="item_16_btn"onclick="">
-				<div class="item_title">Cable Management Holder</div>
-			</div>
 
-			<div class="item" id="item_17_btn"onclick="">
-				<div class="item_title">Tray</div>
-			</div>
+	uniforms[ 'time' ].value -=  delta*3;
+	
+}
 
-			<div class="item" id="item_18_btn"onclick="">
-				<div class="item_title">Handle</div>
-			</div>
-
-			<div class="item" id="item_19_btn"onclick="">
-				<div class="item_title">Drawer</div>
-			</div>
-
-			<div class="item" id="item_20_btn"onclick="">
-				<div class="item_title">Printer Holder</div>
-			</div>
-		</div>
-
-		<div class="main_title">Medical Cart Configurator</div>
-		<script type="module" src="main.js"></script>
-
+		</script>
     </body>
 
 </html>
