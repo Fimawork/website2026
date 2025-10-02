@@ -1,0 +1,74 @@
+
+			
+.header
+{
+	position: absolute;
+    right: 0px;
+    left: 0px;
+    top: 60%;
+    text-align: center;
+    font-family:"Inter", sans-serif;
+	font-weight:400;
+    font-size: 45px;
+    color: rgba(255, 255, 255, 1);
+}
+
+#p01
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#p02
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#p03
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#p04
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#p05
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#p06
+{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+
+@keyframes page_fadeOut_effect 
+{
+	0% {top:0%;filter: blur(0px);}
+    5% {top:0%;filter: blur(0px);}
+	100%{top:-100%;filter: blur(6px);}
+}
+
+.fadeOut_anim
+{
+	animation: page_fadeOut_effect;
+    animation-delay: 1s;
+	animation-duration: 2s;
+    animation-iteration-count:1;
+	animation-timing-function:cubic-bezier(0.01, 0.67, 0.74, 0.75);
+	animation-fill-mode: forwards;
+}

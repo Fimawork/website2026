@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 		<title>fimawork</title>
+		<link rel="stylesheet" type="text/css" href="./Main.css">
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
 			@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -24,31 +25,145 @@
    				height: 100%;
 			}
 
-			.header
-			{
-				position: absolute;
-                right: 0px;
-                left: 0px;
-                top: 60%;
-                text-align: center;
-                font-family:"Inter", sans-serif;
-				font-weight:400;
-                font-size: 45px;
-                color: rgba(255, 255, 255, 1);
-			}
-
-			#p01
-			{
-				position: absolute;
-				width: 100%;
-				height: 100%;
-			}
-
 		</style>
-
+	<!--p01首頁 p02關於我 p03痛點 p04價值 p05合作方式 p06結尾-->
+	<!--動畫在各分頁內製作-->
 	<body>	
-		<iframe id="p01" src="./p01.html" frameborder="0"></iframe>
-		<div id="title_01" class="header">3D Website Designer</div>
+		<iframe id="p01" src="./p01.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
+		<iframe id="p02" src="./p02.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<iframe id="p03" src="./p03.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<iframe id="p04" src="./p04.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<iframe id="p05" src="./p05.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<iframe id="p06" src="./p06.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
     </body>
+	<script>
+
+		let _p01 = document.querySelector('#p01');
+		let _p02 = document.querySelector('#p02');
+		let _p03 = document.querySelector('#p03');
+		let _p04 = document.querySelector('#p04');
+		let _p05 = document.querySelector('#p05');
+		let _p06 = document.querySelector('#p06');
+
+		let index=1;
+
+  		document.addEventListener("keydown",function (event) {
+
+      		switch (event.code) 
+      		{
+				case "Escape":
+        		case "Home":
+        		console.log("首頁");
+
+				index=1;
+
+        		break;
+
+        		case "ArrowDown":
+				case "PageDown":
+				case "Enter":
+
+				console.log("下一頁");
+				//_p01.classList.add("fadeOut_anim");
+				index++;
+
+        		break;
+
+        		case "ArrowUp":
+				case "PageUp":
+				
+				
+        		console.log("上一頁");
+
+				index--;
+
+				
+        		break;
+
+      		}
+
+			if(index<1)index=1;
+			if(index>6)index=6;
+
+			console.log(index);
+
+			PageSwitch(index);
+  		});
+
+		document.addEventListener("pointerdown", function (e) {
+
+
+		
+		});
+
+		function PageSwitch(i)
+		{
+
+			
+
+			switch (i) 
+      		{
+				case 1:
+					_p01.style.display="block";
+					_p02.style.display="none";
+					_p03.style.display="none";
+					_p04.style.display="none";
+					_p05.style.display="none";
+					_p06.style.display="none";
+				break;
+
+				case 2:
+					_p01.style.display="none";
+					_p02.style.display="block";
+					_p03.style.display="none";
+					_p04.style.display="none";
+					_p05.style.display="none";
+					_p06.style.display="none";
+
+					console.log("YES");
+				break;
+
+				case 3:
+					_p01.style.display="none";
+					_p02.style.display="none";
+					_p03.style.display="block";
+					_p04.style.display="none";
+					_p05.style.display="none";
+					_p06.style.display="none";
+				break;
+
+				case 4:
+					_p01.style.display="none";
+					_p02.style.display="none";
+					_p03.style.display="none";
+					_p04.style.display="block";
+					_p05.style.display="none";
+					_p06.style.display="none";
+				break;
+
+				case 5:
+					_p01.style.display="none";
+					_p02.style.display="none";
+					_p03.style.display="none";
+					_p04.style.display="none";
+					_p05.style.display="block";
+					_p06.style.display="none";
+				break;
+
+				case 6:
+					_p01.style.display="none";
+					_p02.style.display="none";
+					_p03.style.display="none";
+					_p04.style.display="none";
+					_p05.style.display="none";
+					_p06.style.display="block";
+				break;
+
+			}
+		}
+	
+
+	
+	</script>
 
 </html>
