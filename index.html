@@ -4,11 +4,12 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>fimawork 2025</title>
+		<title>fimawork</title>
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
+			@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
-			
+
 			body
 			{
 				margin: 0;
@@ -23,7 +24,20 @@
    				height: 100%;
 			}
 
-			#threeContainer
+			.header
+			{
+				position: absolute;
+                right: 0px;
+                left: 0px;
+                top: 60%;
+                text-align: center;
+                font-family:"Inter", sans-serif;
+				font-weight:400;
+                font-size: 45px;
+                color: rgba(255, 255, 255, 1);
+			}
+
+			#p01
 			{
 				position: absolute;
 				width: 100%;
@@ -32,255 +46,9 @@
 
 		</style>
 
-		<script id="fragmentShader" type="x-shader/x-fragment">
-
-			uniform float time;
-	
-			uniform float fogDensity;
-			uniform vec3 fogColor;
-	
-			uniform sampler2D texture1;
-			uniform sampler2D texture2;
-	
-			varying vec2 vUv;
-	
-			void main( void ) {
-	
-				vec2 position = - 1.0 + 2.0 * vUv;
-	
-				vec4 noise = texture2D( texture1, vUv );
-				vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
-				vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
-	
-				T1.x += noise.x * 2.0;
-				T1.y += noise.y * 2.0;
-				T2.x -= noise.y * 0.2;
-				T2.y += noise.z * 0.2;
-	
-				float p = texture2D( texture1, T1 * 2.0 ).a;
-	
-				vec4 color = texture2D( texture2, T2 * 2.0 );
-				vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
-	
-				if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
-				if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
-				if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
-	
-				gl_FragColor = temp;
-	
-				float depth = gl_FragCoord.z / gl_FragCoord.w;
-				const float LOG2 = 1.442695;
-				float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
-				fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
-	
-				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
-	
-			}
-	
-		</script>
-	
-		<script id="vertexShader" type="x-shader/x-vertex">
-	
-			uniform vec2 uvScale;
-			varying vec2 vUv;
-	
-			void main()
-			{
-	
-				vUv = uvScale * uv;
-				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-				gl_Position = projectionMatrix * mvPosition;
-	
-			}
-	
-		</script>
-
-		<script type="importmap">
-			{
-			  "imports": {
-				"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
-			  }
-			}
-		</script>
-
-	</head>
-	
-	<body>  
-		<div id="threeContainer">
-			<div id='title3DContainer'></div>
-		</div>
-		<script type="module">
-		import * as THREE from 'three';
-
-		import Stats from 'three/addons/libs/stats.module.js';
-		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-		import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-	
-
-let camera, scene, renderer, stats;
-const frustumSize = 20;
-
-const textureLoader = new THREE.TextureLoader();
-
-const cloudTexture = textureLoader.load( 'images/Fiber 1.png' );
-const lavaTexture = textureLoader.load( 'images/cloud.png' );
-
-lavaTexture.colorSpace = THREE.SRGBColorSpace;
-
-cloudTexture.wrapS = cloudTexture.wrapT = THREE.RepeatWrapping;
-lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
-
-let uniforms = {
-
-
-'time': { value: 1.0 },
-'uvScale': { value: new THREE.Vector2( 1.2,1.2 ) },
-'texture1': { value: cloudTexture },
-'texture2': { value: lavaTexture }
-
-
-};
-
-
-let ScanEffect_shader = new THREE.ShaderMaterial( {
-side: THREE.DoubleSide,
-	transparent: true,
-	opacity:0.3,
-	blending: THREE.AdditiveBlending,
-uniforms: uniforms,
-vertexShader: document.getElementById( 'vertexShader' ).textContent,
-fragmentShader: document.getElementById( 'fragmentShader' ).textContent
-
-} );
-
-let deltaTime=0;
-
-const clock = new THREE.Clock();
-
-let mixer;
-
-init();
-animate();
-
-
-function init() {
-
-
-	const container = document.createElement( 'div' );
-	document.body.appendChild( container );
-
-	//camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 2000 );
-	const aspect = window.innerWidth / window.innerHeight;
-  	
-
-	camera = new THREE.OrthographicCamera(
-    frustumSize * aspect / -2, // left
-    frustumSize * aspect / 2,  // right
-    frustumSize / 2,           // top
-    frustumSize / -2,          // bottom
-    0.1,                       // near
-    1000                       // far
-  	);
-
-  	camera.position.set(0, 0, 5);
-  	camera.lookAt(0,0,0);
-
-	scene = new THREE.Scene();
-
-
-
-	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
-	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.shadowMap.enabled = true;
-	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
-	renderer.toneMapping = THREE.ACESFilmicToneMapping;
-	renderer.toneMappingExposure = 1;
-	
-
-	document.body.appendChild(renderer.domElement);
-
-	///hdri 環境光源
-	new RGBELoader()
-	.setPath( 'textures/hdri/' )
-	.load( 'studio_small_09_2k.hdr', function ( texture ) {
-
-		texture.mapping = THREE.EquirectangularReflectionMapping;
-		scene.environment = texture;
-
-	} );
-
-
-	const loader_title = new GLTFLoader();
-	loader_title.load( './models/logo.glb', function ( gltf ) {
-
-		const model = gltf.scene;
-		model.position.set(0,0,0);
-		model.rotation.set(Math.PI,Math.PI, Math.PI);
-		model.scale.set(0.75,0.75,0.75);
-
-		model.traverse( function ( object ) {
-
-			if ( object.isMesh )
-			{
-				object.material=ScanEffect_shader;
-			}
-
-		});
-
-		scene.add( model );
-		
-	});
-
-
-	container.appendChild( renderer.domElement );
-
-
-	window.addEventListener( 'resize', onWindowResize );
-
-	// stats
-	stats = new Stats();
-	//container.appendChild( stats.dom );
-	
-}
-
-function onWindowResize() {
-
-	const aspect = window.innerWidth / window.innerHeight;
-    camera.left = -frustumSize * aspect / 2;
-    camera.right = frustumSize * aspect / 2;
-    camera.top = frustumSize / 2;
-    camera.bottom = -frustumSize / 2;
-    camera.updateProjectionMatrix();
-
-	renderer.setSize( window.innerWidth, window.innerHeight );
-
-}
-
-
-//類似Unity的Update()功能
-function animate() {
-
-	requestAnimationFrame( animate );
-
-	const delta = clock.getDelta();
-
-	if ( mixer ) mixer.update( delta );
-
-	renderer.render( scene, camera );
-
-	stats.update();
-
-	deltaTime=delta*0.3;
-
-
-	uniforms[ 'time' ].value -=  delta*3;
-	
-}
-
-		</script>
+	<body>	
+		<iframe id="p01" src="./p01.html" frameborder="0"></iframe>
+		<div id="title_01" class="header">3D Website Designer</div>
     </body>
 
 </html>
