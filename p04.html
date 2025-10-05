@@ -36,6 +36,7 @@
 				pointer-events: none;
 				z-index: 3;
 			}
+			
 
 		</style>
 
@@ -87,6 +88,8 @@
 			const ControlsTargetDefaultPos=new THREE.Vector3(-28.779,15.943,29.482);
 
 			let scene_group= new THREE.Object3D();
+
+			let isShowStart;
 
 			init();
 			animate();
@@ -167,7 +170,7 @@
 
 				scene_group.add(css3dObject)
 				
-				scene_group.position.set(-5,0,0);
+				scene_group.position.set(-5,-20,0);
 				scene.add(scene_group);
 				
     			//把3D渲染效果加入網頁視窗中
@@ -210,6 +213,16 @@
 
 				renderer.render( scene, camera );
 				renderer_css3d.render( scene, camera );
+
+				if(!isShowStart&&Math.abs(scene_group.position.y)>0.01)//絕對值
+				{
+					scene_group.position.y = THREE.MathUtils.lerp(scene_group.position.y,0,0.025);
+				}
+			
+				if(Math.abs(scene_group.position.y)<=0.1)
+				{
+					isShowStart=true;
+				}
 			}
 		
 		</script>
