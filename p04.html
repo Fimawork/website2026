@@ -22,6 +22,19 @@
 			{
 				width: 100%;
    				height: 100%;
+				background: #616161;
+			}
+
+			.vignette 
+			{
+  				position: fixed;
+  				top: 0;
+  				left: 0;
+  				width: 100%;
+  				height: 100%;
+  				box-shadow: 0 0 210px rgba(0,0,0,0.9) inset;
+				pointer-events: none;
+				z-index: 3;
 			}
 
 		</style>
@@ -40,11 +53,164 @@
 	</head>
 	
 	<body>  
-		<div class="header">P04</div>
+		
+		<div class="vignette"></div>
+		<div id="p04_content_holder">
 
-		<script type="module">
+			<div class="title">深度協作</div>
+			<div class="content">從源頭全方位增加企業的競爭力;不僅是提供企業創新設計的服務與諮詢，而是整合產品策略規劃、造型設計、機構設計、商業設計。</div>
+
+			<div class="title">效率作業</div>
+			<div class="content">超越界限，跳離現有框架，重新定義事物和事物之間的關係。找出事物間的相關性，相反特質，將既有的元素打破，拆解，增刪後，重新組合，呈現新風貌、新功能、新意圖。</div>
+
+			<div class="title">零距離溝通</div>
+			<div class="content">高效專案執行團隊，趨避繁瑣設計理論，專注實務應用，這正是我們擅長的！</div>
+		</div>
 		
 
+		<script type="module">
+
+			import * as THREE from 'three';
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+			import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+			import {CameraManager,UpdateCameraPosition,CameraDefaultPos, Camera_Inspector,InstGLTFLoader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+
+			let scene, camera, renderer, stats, mixer, clock;
+			let controls;
+			let renderer_css3d;
+
+			const modelPosition=new THREE.Vector3(0,0,0);
+			const modelRotation=new THREE.Vector3(0,Math.PI, 0);
+			const modeScale=10;
+
+			const ControlsTargetDefaultPos=new THREE.Vector3(-28.779,15.943,29.482);
+
+			let scene_group= new THREE.Object3D();
+
+			init();
+			animate();
+			//Camera_Inspector(camera,controls);
+
+			function init()
+			{
+				const container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				//renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+				renderer.shadowMap.enabled = true;
+				renderer.toneMapping = THREE.ACESFilmicToneMapping;
+				renderer.toneMappingExposure = 0.09;
+
+				scene = new THREE.Scene();
+
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.set(-10.449,16.422,40.808);
+				camera.lookAt(ControlsTargetDefaultPos);
+
+				
+
+				
+				InstGLTFLoader('./models/computer_classroom.glb',modelPosition,modelRotation,modeScale,"room",scene_group, scene);
+
+				///hdri 環境光源
+				new RGBELoader()
+					.setPath( 'textures/hdri/' )
+					.load( 'satara_night_no_lamps_1k.hdr', function ( texture ) {
+						
+					texture.mapping = THREE.EquirectangularReflectionMapping;
+						
+					scene.background = texture;
+					scene.environment = texture;
+						
+				} );
+
+				const sphere = new THREE.SphereGeometry( 0.5, 16, 8 );
+
+				// lights
+
+				const pointLight = new THREE.PointLight( 0xffffff, 180 );
+				pointLight.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
+				pointLight.position.set(-23,16.1,35.85);
+				scene_group.add( pointLight );
+
+				const dirLight = new THREE.DirectionalLight( 0x333333, 39 );
+				dirLight.position.set( 0, 15, 0 );
+				dirLight.castShadow = true;
+
+				scene_group.add(dirLight);
+
+					///css3d
+
+				const videoClip = document.createElement( 'video' );
+				videoClip.style.width = '1920px';
+				videoClip.style.height = '1071px';
+				videoClip.style.backgroundColor = '#000';
+				videoClip.src = './videos/F0041_3DCarouselBannerDemo_20250923.mp4';
+				videoClip.autoplay=true;
+				videoClip.loop=true;
+				videoClip.muted=true;
+				videoClip.style.opacity=0.95;
+
+				videoClip.play();
+
+				const css3dObject = new CSS3DObject( videoClip );
+
+				const s = 0.0055;
+				css3dObject.position.set(-23,16.1,35.85);
+				css3dObject.rotation.y=0.5*Math.PI;
+				css3dObject.scale.set(s,s,s);
+
+				scene_group.add(css3dObject)
+				
+				scene_group.position.set(-5,0,0);
+				scene.add(scene_group);
+				
+    			//把3D渲染效果加入網頁視窗中
+				container.appendChild( renderer.domElement );
+
+				renderer_css3d = new CSS3DRenderer();
+				renderer_css3d.domElement.style.position = 'absolute';
+				renderer_css3d.domElement.style.top = '0px';
+				renderer_css3d.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer_css3d.domElement );
+
+				
+
+				//controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
+  				//controls.enablePan = true;//右鍵平移效果
+  				//controls.panSpeed = 0.4;
+  				//controls.enableDamping = true;
+  				//controls.dampingFactor =0.05;
+  				//controls.maxDistance = 500;
+  				//controls.target.copy( ControlsTargetDefaultPos );
+  				//controls.zoomSpeed=0.5;
+  				//controls.update();
+
+				window.addEventListener( 'resize', onWindowResize );
+			}
+
+			function onWindowResize() 
+			{
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer_css3d.setSize( window.innerWidth, window.innerHeight );
+			}
+		
+			function animate()
+			{
+				requestAnimationFrame( animate );
+				//controls.update();
+
+				renderer.render( scene, camera );
+				renderer_css3d.render( scene, camera );
+			}
 		
 		</script>
     </body>

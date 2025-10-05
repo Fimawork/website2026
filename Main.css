@@ -11,6 +11,18 @@
 	font-weight:400;
     font-size: 45px;
     color: rgba(255, 255, 255, 1);
+	z-index: 99;
+}
+
+.title
+{
+	position: absolute;
+    text-align: center;
+    font-family:"Inter", sans-serif;
+	font-weight:400;
+    font-size: 45px;
+    color: rgba(255, 255, 255, 1);
+	z-index: 9;
 }
 
 #p01
@@ -54,6 +66,40 @@
 	width: 100%;
 	height: 100%;
 }
+
+#p04_content_holder
+{
+	position: absolute;
+	width: 36%;
+	height: 60%;
+	left: 57%;
+	top: 18%;
+	padding: 1%;
+	z-index: 9;
+}
+
+.title
+{
+	position: relative;
+    text-align: left;
+    font-family:"Inter", sans-serif;
+	font-weight:400;
+    font-size: 39px;
+    color: rgba(255, 255, 255, 1);
+	margin-bottom: 6px;
+}
+
+.content
+{
+	position: relative;
+    text-align: left;
+    font-family:"Inter", sans-serif;
+	font-weight:300;
+    font-size: 21px;
+    color: rgba(255, 255, 255, 1);
+	margin-bottom: 75px;
+}
+
 
 
 @keyframes page_fadeOut_effect 
