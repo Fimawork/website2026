@@ -29,10 +29,10 @@
 	<!--p01首頁 p02關於我 p03痛點 p04價值(with Demo影片) p05合作方式 p06結尾-->
 	<!--動畫在各分頁內製作-->
 	<body>	
-		<iframe id="p01" src="./p01.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<iframe id="p01" src="./p01.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
 		<iframe id="p02" src="./p02.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p03" src="./p03.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
-		<iframe id="p04" src="./p04.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
+		<iframe id="p04" src="./p04.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p05" src="./p05.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p06" src="./p06.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
     </body>
@@ -44,6 +44,8 @@
 		let _p04 = document.querySelector('#p04');
 		let _p05 = document.querySelector('#p05');
 		let _p06 = document.querySelector('#p06');
+
+		
 
 		let index=1;
 
@@ -130,6 +132,8 @@
 					_p04.style.display="none";
 					_p05.style.display="none";
 					_p06.style.display="none";
+
+					_p03.contentWindow.opening_anim();
 				break;
 
 				case 4:
@@ -139,6 +143,8 @@
 					_p04.style.display="block";
 					_p05.style.display="none";
 					_p06.style.display="none";
+
+					_p04.contentWindow.opening_anim();
 				break;
 
 				case 5:

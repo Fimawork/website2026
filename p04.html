@@ -82,8 +82,11 @@
 			let renderer_css3d;
 
 			const modelPosition=new THREE.Vector3(0,0,0);
+			const laptopPosition=new THREE.Vector3(-20,6,42);
 			const modelRotation=new THREE.Vector3(0,Math.PI, 0);
+			const laptopRotation=new THREE.Vector3(0,Math.PI/180*150, 0);
 			const modeScale=10;
+			const laptopScale=2.2;
 
 			const ControlsTargetDefaultPos=new THREE.Vector3(-28.779,15.943,29.482);
 
@@ -94,6 +97,8 @@
 			init();
 			animate();
 			//Camera_Inspector(camera,controls);
+
+			//opening_anim();
 
 			function init()
 			{
@@ -106,7 +111,7 @@
 				//renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
 				renderer.shadowMap.enabled = true;
 				renderer.toneMapping = THREE.ACESFilmicToneMapping;
-				renderer.toneMappingExposure = 0.09;
+				renderer.toneMappingExposure = 0.09; //0.09
 
 				scene = new THREE.Scene();
 
@@ -119,6 +124,7 @@
 
 				
 				InstGLTFLoader('./models/computer_classroom.glb',modelPosition,modelRotation,modeScale,"room",scene_group, scene);
+				InstGLTFLoader('./models/asus_rog_strix_scar_17_2023_g733_gaming_laptop.glb',laptopPosition,laptopRotation,laptopScale,"laptop",scene_group, scene);
 
 				///hdri 環境光源
 				new RGBELoader()
@@ -139,7 +145,12 @@
 				const pointLight = new THREE.PointLight( 0xffffff, 180 );
 				pointLight.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
 				pointLight.position.set(-23,16.1,35.85);
-				scene_group.add( pointLight );
+
+				const pointLight_02 = new THREE.PointLight( 0xffffff, 180 );
+				pointLight_02.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
+				pointLight_02.position.set(-21.7,14.1,45.2);
+
+				scene_group.add( pointLight ).add( pointLight_02 );
 
 				const dirLight = new THREE.DirectionalLight( 0x333333, 39 );
 				dirLight.position.set( 0, 15, 0 );
@@ -168,7 +179,28 @@
 				css3dObject.rotation.y=0.5*Math.PI;
 				css3dObject.scale.set(s,s,s);
 
-				scene_group.add(css3dObject)
+				const videoClip_02 = document.createElement( 'video' );
+				videoClip_02.style.width = '1920px';
+				videoClip_02.style.height = '1071px';
+				videoClip_02.style.backgroundColor = '#000';
+				videoClip_02.src = './videos/F0041_3DCarouselBannerDemo_20250923.mp4';
+				videoClip_02.autoplay=true;
+				videoClip_02.loop=true;
+				videoClip_02.muted=true;
+				videoClip_02.style.opacity=1;
+
+				videoClip_02.play();
+
+				const css3dObject_02 = new CSS3DObject( videoClip_02 );
+
+				const s_02 = 0.0039;
+				css3dObject_02.position.set(-21.7,14.1,45.2);
+				css3dObject_02.rotation.x=Math.PI/180*12;
+				css3dObject_02.rotation.y=Math.PI/180*150;
+				css3dObject_02.rotation.z=Math.PI/180*-6.5;
+				css3dObject_02.scale.set(s_02,s_02,s_02);
+
+				scene_group.add(css3dObject).add(css3dObject_02);
 				
 				scene_group.position.set(-5,-20,0);
 				scene.add(scene_group);
@@ -184,15 +216,15 @@
 
 				
 
-				//controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
-  				//controls.enablePan = true;//右鍵平移效果
-  				//controls.panSpeed = 0.4;
-  				//controls.enableDamping = true;
-  				//controls.dampingFactor =0.05;
-  				//controls.maxDistance = 500;
-  				//controls.target.copy( ControlsTargetDefaultPos );
-  				//controls.zoomSpeed=0.5;
-  				//controls.update();
+			//	controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
+  			//	controls.enablePan = true;//右鍵平移效果
+  			//	controls.panSpeed = 0.4;
+  			//	controls.enableDamping = true;
+  			//	controls.dampingFactor =0.05;
+  			//	controls.maxDistance = 500;
+  			//	controls.target.copy( ControlsTargetDefaultPos );
+  			//	controls.zoomSpeed=0.5;
+  			//	controls.update();
 
 				window.addEventListener( 'resize', onWindowResize );
 			}
@@ -209,21 +241,29 @@
 			function animate()
 			{
 				requestAnimationFrame( animate );
-				//controls.update();
+			//	controls.update();
 
 				renderer.render( scene, camera );
 				renderer_css3d.render( scene, camera );
 
-				if(!isShowStart&&Math.abs(scene_group.position.y)>0.01)//絕對值
+				if(isShowStart&&Math.abs(scene_group.position.y)>0.01)//絕對值
 				{
 					scene_group.position.y = THREE.MathUtils.lerp(scene_group.position.y,0,0.025);
 				}
 			
 				if(Math.abs(scene_group.position.y)<=0.1)
 				{
-					isShowStart=true;
+					isShowStart=false;
 				}
 			}
+
+			function opening_anim()
+			{
+				scene_group.position.set(-5,-20,0);
+				isShowStart=true;
+			}
+
+			window.opening_anim=opening_anim;
 		
 		</script>
     </body>
