@@ -5,8 +5,8 @@
 	position: absolute;
 	left: 2%;
 	bottom: 2%;
-	width: 180px;
-	height: 45px;
+	width: 174px;
+	height: 42px;
 	border-radius: 22.5px 22.5px;
 	background: rgba(255, 255, 255, 0.75);
 }	
@@ -14,10 +14,10 @@
 .setting_btn
 {
 	position: absolute;
-	top: 22.5px;
+	top: 21px;
 	right: -10px;
-	width: 36px;
-	height: 36px;
+	width: 33px;
+	height: 33px;
 	border-radius: 50% 50%;
 	background: rgba(255, 255, 255, 1);
 	transform: translate(-50%,-50%);
@@ -35,7 +35,7 @@
 {
 	position: absolute;
 	top: 22.5px;
-	left: 25px;
+	left: 22px;
 	width: 36px;
 	height: 36px;
 	border-radius: 50% 50%;
@@ -66,9 +66,9 @@
 {
 	position: absolute;
 	top: 21px;
-	left: 67.5px;
+	left: 64px;
 	width: 45px;
-	height: 36px;
+	height: 33px;
 	border-radius: 18px 18px;
 	background: rgba(255, 255, 255, 1);
 	transform: translate(-50%,-50%);
@@ -81,7 +81,7 @@
 	text-align: center;
     font-family:"Inter", sans-serif;
 	font-weight:400;
-    font-size: 24px;
+    font-size: 21px;
 	color: rgba(60, 60, 60,1);
 }
 
@@ -131,7 +131,7 @@ i
 {
 	position: absolute;
 	right: 3%;
-	bottom:1%;
+	bottom:-2%;
 	width: 120px;
 	height: 120px;
 	background-image: url('./images/fimawork_logo_white.png');
@@ -158,46 +158,32 @@ i
 	animation-timing-function:linear;
 }
 
-#p01
+#title3D
 {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
-#p02
+#content
 {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
-#p03
+#p02_content_holder
 {
 	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#p04
-{
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#p05
-{
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#p06
-{
-	position: absolute;
-	width: 100%;
-	height: 100%;
+	display: flex;
+	width: 66%;
+	height: 50%;
+	left: 50%;
+	top: 50%;
+	padding: 1%;
+	z-index: 9;
+	transform: translate(-50%,-50%);
+	padding-top:9% ;
 }
 
 #p04_content_holder
@@ -212,6 +198,13 @@ i
 	z-index: 9;
 	transform: translate(-50%,-50%);
 	padding-top:9% ;
+}
+
+.p02_content
+{
+	margin: auto;
+	height: 100%;
+	width: 50%;
 }
 
 .p04_content
