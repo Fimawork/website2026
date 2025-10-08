@@ -58,14 +58,21 @@
 		<div class="vignette"></div>
 		<div id="p04_content_holder">
 
-			<div class="title">深度協作</div>
-			<div class="content">從源頭全方位增加企業的競爭力;不僅是提供企業創新設計的服務與諮詢，而是整合產品策略規劃、造型設計、機構設計、商業設計。</div>
-
-			<div class="title">效率作業</div>
-			<div class="content">超越界限，跳離現有框架，重新定義事物和事物之間的關係。找出事物間的相關性，相反特質，將既有的元素打破，拆解，增刪後，重新組合，呈現新風貌、新功能、新意圖。</div>
-
-			<div class="title">零距離溝通</div>
-			<div class="content">高效專案執行團隊，趨避繁瑣設計理論，專注實務應用，這正是我們擅長的！</div>
+			<div class="p04_content">
+				<div class="title" id="title_01">深度協作</div>
+				<div class="paragraph" id="paragraph_01">從源頭全方位增加企業的競爭力;不僅是提供企業創新設計的服務與諮詢，而是整合產品策略規劃、造型設計、機構設計、商業設計。</div>
+			</div>
+			
+			<div class="p04_content">
+				<div class="title" id="title_02">效率作業</div>
+				<div class="paragraph" id="paragraph_02">超越界限，跳離現有框架，重新定義事物和事物之間的關係。找出事物間的相關性，相反特質，將既有的元素打破，拆解，增刪後，重新組合，呈現新風貌、新功能、新意圖。</div>
+			</div>
+			
+			<div class="p04_content">
+				<div class="title" id="title_03">零距離溝通</div>
+				<div class="paragraph" id="paragraph_03">高效專案執行團隊，趨避繁瑣設計理論，專注實務應用，這正是我們擅長的！</div>
+			</div>
+			
 		</div>
 		
 
@@ -76,6 +83,8 @@
 			import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 			import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 			import {CameraManager,UpdateCameraPosition,CameraDefaultPos, Camera_Inspector,InstGLTFLoader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+
+			import {Wording_P04} from './wordings.js';
 
 			let scene, camera, renderer, stats, mixer, clock;
 			let controls;
@@ -94,11 +103,14 @@
 
 			let isShowStart;
 
+			const target_pos=new THREE.Vector3(-5,0,3);
+
 			init();
 			animate();
 			//Camera_Inspector(camera,controls);
 
 			//opening_anim();
+			SetupWording();
 
 			function init()
 			{
@@ -111,7 +123,7 @@
 				//renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
 				renderer.shadowMap.enabled = true;
 				renderer.toneMapping = THREE.ACESFilmicToneMapping;
-				renderer.toneMappingExposure = 0.09; //0.09
+				renderer.toneMappingExposure = 0.1;
 
 				scene = new THREE.Scene();
 
@@ -120,10 +132,8 @@
 				camera.position.set(-10.449,16.422,40.808);
 				camera.lookAt(ControlsTargetDefaultPos);
 
-				
-
-				
-				InstGLTFLoader('./models/computer_classroom.glb',modelPosition,modelRotation,modeScale,"room",scene_group, scene);
+			
+				InstGLTFLoader('./models/computer_classroom_diy.glb',modelPosition,modelRotation,modeScale,"room",scene_group, scene);
 				InstGLTFLoader('./models/asus_rog_strix_scar_17_2023_g733_gaming_laptop.glb',laptopPosition,laptopRotation,laptopScale,"laptop",scene_group, scene);
 
 				///hdri 環境光源
@@ -143,12 +153,12 @@
 				// lights
 
 				const pointLight = new THREE.PointLight( 0xffffff, 180 );
-				pointLight.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
+				//pointLight.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
 				pointLight.position.set(-23,16.1,35.85);
 
 				const pointLight_02 = new THREE.PointLight( 0xffffff, 180 );
-				pointLight_02.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
-				pointLight_02.position.set(-21.7,14.1,45.2);
+				//pointLight_02.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffffff } ) ) );
+				pointLight_02.position.set(-21.7,14.1,45);
 
 				scene_group.add( pointLight ).add( pointLight_02 );
 
@@ -158,13 +168,13 @@
 
 				scene_group.add(dirLight);
 
-					///css3d
+				///css3d
 
 				const videoClip = document.createElement( 'video' );
 				videoClip.style.width = '1920px';
 				videoClip.style.height = '1071px';
 				videoClip.style.backgroundColor = '#000';
-				videoClip.src = './videos/F0041_3DCarouselBannerDemo_20250923.mp4';
+				videoClip.src = './videos/F0034_20240808.mp4';
 				videoClip.autoplay=true;
 				videoClip.loop=true;
 				videoClip.muted=true;
@@ -179,19 +189,14 @@
 				css3dObject.rotation.y=0.5*Math.PI;
 				css3dObject.scale.set(s,s,s);
 
-				const videoClip_02 = document.createElement( 'video' );
-				videoClip_02.style.width = '1920px';
-				videoClip_02.style.height = '1071px';
-				videoClip_02.style.backgroundColor = '#000';
-				videoClip_02.src = './videos/F0041_3DCarouselBannerDemo_20250923.mp4';
-				videoClip_02.autoplay=true;
-				videoClip_02.loop=true;
-				videoClip_02.muted=true;
-				videoClip_02.style.opacity=1;
+				const codingImg = document.createElement( 'div' );
+				codingImg.style.width = '1920px';
+				codingImg.style.height = '1071px';
+				codingImg.style.backgroundImage = 'url(./images/coding.png)';
+				codingImg.style.backgroundSize="cover"; 
+				codingImg.style.opacity=0.9;
 
-				videoClip_02.play();
-
-				const css3dObject_02 = new CSS3DObject( videoClip_02 );
+				const css3dObject_02 = new CSS3DObject( codingImg );
 
 				const s_02 = 0.0039;
 				css3dObject_02.position.set(-21.7,14.1,45.2);
@@ -202,7 +207,7 @@
 
 				scene_group.add(css3dObject).add(css3dObject_02);
 				
-				scene_group.position.set(-5,-20,0);
+				scene_group.position.copy(target_pos);
 				scene.add(scene_group);
 				
     			//把3D渲染效果加入網頁視窗中
@@ -216,15 +221,15 @@
 
 				
 
-			//	controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
-  			//	controls.enablePan = true;//右鍵平移效果
-  			//	controls.panSpeed = 0.4;
-  			//	controls.enableDamping = true;
-  			//	controls.dampingFactor =0.05;
-  			//	controls.maxDistance = 500;
-  			//	controls.target.copy( ControlsTargetDefaultPos );
-  			//	controls.zoomSpeed=0.5;
-  			//	controls.update();
+				//controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
+  				//controls.enablePan = true;//右鍵平移效果
+  				//controls.panSpeed = 0.4;
+  				//controls.enableDamping = true;
+  				//controls.dampingFactor =0.05;
+  				//controls.maxDistance = 500;
+  				//controls.target.copy( ControlsTargetDefaultPos );
+  				//controls.zoomSpeed=0.5;
+  				//controls.update();
 
 				window.addEventListener( 'resize', onWindowResize );
 			}
@@ -241,7 +246,7 @@
 			function animate()
 			{
 				requestAnimationFrame( animate );
-			//	controls.update();
+				//controls.update();
 
 				renderer.render( scene, camera );
 				renderer_css3d.render( scene, camera );
@@ -259,8 +264,18 @@
 
 			function opening_anim()
 			{
-				scene_group.position.set(-5,-20,0);
+				scene_group.position.set(target_pos.x,-20,target_pos.z);
 				isShowStart=true;
+			}
+
+			function SetupWording()
+			{
+				document.querySelector('#title_01').textContent=Wording_P04.title_01;
+				document.querySelector('#paragraph_01').textContent=Wording_P04.paragraph_01;
+				document.querySelector('#title_02').textContent=Wording_P04.title_02;
+				document.querySelector('#paragraph_02').textContent=Wording_P04.paragraph_02;
+				document.querySelector('#title_03').textContent=Wording_P04.title_03;
+				document.querySelector('#paragraph_03').textContent=Wording_P04.paragraph_03;
 			}
 
 			window.opening_anim=opening_anim;

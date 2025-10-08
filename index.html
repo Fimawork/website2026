@@ -26,15 +26,35 @@
 			}
 
 		</style>
-	<!--p01首頁 p02關於我 p03痛點 p04價值(with Demo影片) p05合作方式 p06結尾-->
+	<!--p01首頁 p02關於我 p03痛點 p04價值 p05 Demo影片 p06合作方式 -->
 	<!--動畫在各分頁內製作-->
 	<body>	
+		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
+		<div id="heading" class="header">3D Website Designer</div>
 		<iframe id="p01" src="./p01.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
 		<iframe id="p02" src="./p02.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p03" src="./p03.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p04" src="./p04.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p05" src="./p05.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
 		<iframe id="p06" src="./p06.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
+		<div id="logo" class="logo_explode_effect_anim" style="display: none;"></div>
+		<div class="mainBtn_panel">
+			<div class="arrow_btn" onclick="PageUp()">
+				<i class="fa-solid fa-angle-left fa-2x"></i>
+			</div>
+			
+			<div class="arrow_btn" onclick="PageDown()">
+				<i class="fa-solid fa-angle-right fa-2x"></i>
+			</div>
+
+			<div class="num_panel">
+				<div id="index_num">1</div>
+			</div>
+			
+			<div class="setting_btn">
+				<i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
+			</div>
+		</div>
     </body>
 	<script>
 
@@ -44,8 +64,11 @@
 		let _p04 = document.querySelector('#p04');
 		let _p05 = document.querySelector('#p05');
 		let _p06 = document.querySelector('#p06');
+		let _logo = document.querySelector('#logo');
 
-		
+		let _heading = document.querySelector('#heading');
+
+		let _index_num = document.querySelector('#index_num');
 
 		let index=1;
 
@@ -101,8 +124,6 @@
 		function PageSwitch(i)
 		{
 
-			
-
 			switch (i) 
       		{
 				case 1:
@@ -112,6 +133,13 @@
 					_p04.style.display="none";
 					_p05.style.display="none";
 					_p06.style.display="none";
+
+					_logo.style.display="none";
+
+					_heading.classList.remove("heading_up_anim");
+
+					_heading.textContent="3D Website Designer";
+					
 				break;
 
 				case 2:
@@ -122,7 +150,12 @@
 					_p05.style.display="none";
 					_p06.style.display="none";
 
-					console.log("YES");
+					_logo.style.display="block";
+
+					_heading.classList.add("heading_up_anim");
+
+					setTimeout(() => { _heading.textContent="關於我";}, 500);//1000=1sec}
+	
 				break;
 
 				case 3:
@@ -133,7 +166,10 @@
 					_p05.style.display="none";
 					_p06.style.display="none";
 
-					_p03.contentWindow.opening_anim();
+					_logo.style.display="block";
+
+					setTimeout(() => { _heading.textContent="痛點";}, 250);//1000=1sec}
+	
 				break;
 
 				case 4:
@@ -143,6 +179,10 @@
 					_p04.style.display="block";
 					_p05.style.display="none";
 					_p06.style.display="none";
+
+					_logo.style.display="block";
+
+					setTimeout(() => { _heading.textContent="價值";}, 250);//1000=1sec}
 
 					_p04.contentWindow.opening_anim();
 				break;
@@ -154,6 +194,11 @@
 					_p04.style.display="none";
 					_p05.style.display="block";
 					_p06.style.display="none";
+
+					_logo.style.display="block";
+
+					setTimeout(() => { _heading.textContent="合作方式";}, 250);//1000=1sec}
+
 				break;
 
 				case 6:
@@ -163,9 +208,30 @@
 					_p04.style.display="none";
 					_p05.style.display="none";
 					_p06.style.display="block";
+
+					_logo.style.display="block";
+
+					setTimeout(() => { _heading.textContent="Demo";}, 250);//1000=1sec}
+
 				break;
 
 			}
+
+			_index_num.textContent=`${index}`;
+		}
+
+		function PageDown()
+		{
+			index++;
+			if(index>6)index=6;
+			PageSwitch(index);
+		}
+
+		function PageUp()
+		{
+			index--;
+			if(index<1)index=1;
+			PageSwitch(index);
 		}
 	
 
