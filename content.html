@@ -82,9 +82,9 @@
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 			import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-			import {CameraManager,UpdateCameraPosition,CameraDefaultPos, Camera_Inspector,InstGLTFLoader} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
+			import {CameraManager,UpdateCameraPosition,Camera_Inspector,InstGLTFLoader,posData} from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools/fx_functions.js';
 
-			import {Wording_P04} from './wordings.js';
+			import {Wording_P02,Wording_P03,Wording_P04,Wording_P05} from './wordings.js';
 
 			let scene, camera, renderer, stats, mixer, clock;
 			let controls;
@@ -97,6 +97,7 @@
 			const modeScale=10;
 			const laptopScale=2.2;
 
+			const CameraDefaultPos=new THREE.Vector3(-10.449,16.422,40.808);
 			const ControlsTargetDefaultPos=new THREE.Vector3(-28.779,15.943,29.482);
 
 			let scene_group= new THREE.Object3D();
@@ -129,8 +130,13 @@
 
 
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2000 );
-				camera.position.set(-10.449,16.422,40.808);
+				camera.position.copy(CameraDefaultPos);
 				camera.lookAt(ControlsTargetDefaultPos);
+
+				//預設視角
+				posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+				//播放demo視角
+				posData[1]={ camera_pos:new THREE.Vector3(-19.915,16.194,38.709), controlsTarget_pos:new THREE.Vector3(-29.436,15.785,38.628)};
 
 			
 				InstGLTFLoader('./models/computer_classroom_diy.glb',modelPosition,modelRotation,modeScale,"room",scene_group, scene);
@@ -218,18 +224,16 @@
 				renderer_css3d.domElement.style.top = '0px';
 				renderer_css3d.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer_css3d.domElement );
-
 				
-
-				//controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
-  				//controls.enablePan = true;//右鍵平移效果
-  				//controls.panSpeed = 0.4;
-  				//controls.enableDamping = true;
-  				//controls.dampingFactor =0.05;
-  				//controls.maxDistance = 500;
-  				//controls.target.copy( ControlsTargetDefaultPos );
-  				//controls.zoomSpeed=0.5;
-  				//controls.update();
+				controls = new OrbitControls( camera, renderer_css3d.domElement );//有css2drederer或css3drender時
+  				controls.enablePan = true;//右鍵平移效果
+  				controls.panSpeed = 0.4;
+  				controls.enableDamping = true;
+  				controls.dampingFactor =0.05;
+  				controls.maxDistance = 500;
+  				controls.target.copy( ControlsTargetDefaultPos );
+  				controls.zoomSpeed=0.5;
+  				controls.update();
 
 				window.addEventListener( 'resize', onWindowResize );
 			}
@@ -246,7 +250,7 @@
 			function animate()
 			{
 				requestAnimationFrame( animate );
-				//controls.update();
+				controls.update();
 
 				renderer.render( scene, camera );
 				renderer_css3d.render( scene, camera );
@@ -260,6 +264,8 @@
 				{
 					isShowStart=false;
 				}
+
+				UpdateCameraPosition(camera,controls);
 			}
 
 			function opening_anim()
@@ -268,17 +274,48 @@
 				isShowStart=true;
 			}
 
-			function SetupWording()
+			function SetupWording(i)
 			{
-				document.querySelector('#title_01').textContent=Wording_P04.title_01;
-				document.querySelector('#paragraph_01').textContent=Wording_P04.paragraph_01;
-				document.querySelector('#title_02').textContent=Wording_P04.title_02;
-				document.querySelector('#paragraph_02').textContent=Wording_P04.paragraph_02;
-				document.querySelector('#title_03').textContent=Wording_P04.title_03;
-				document.querySelector('#paragraph_03').textContent=Wording_P04.paragraph_03;
+                switch(i)
+                {
+                    case 2:
+                        document.querySelector('#title_01').textContent=Wording_P02.title_01;
+				        document.querySelector('#paragraph_01').textContent=Wording_P02.paragraph_01;
+				        document.querySelector('#title_02').textContent=Wording_P02.title_02;
+				        document.querySelector('#paragraph_02').textContent=Wording_P02.paragraph_02;
+				        document.querySelector('#title_03').textContent=Wording_P02.title_03;
+				        document.querySelector('#paragraph_03').textContent=Wording_P02.paragraph_03;
+                    break;
+
+                    case 3:
+
+                    break;
+
+                    case 4:
+                        document.querySelector('#title_01').textContent=Wording_P04.title_01;
+				        document.querySelector('#paragraph_01').textContent=Wording_P04.paragraph_01;
+				        document.querySelector('#title_02').textContent=Wording_P04.title_02;
+				        document.querySelector('#paragraph_02').textContent=Wording_P04.paragraph_02;
+				        document.querySelector('#title_03').textContent=Wording_P04.title_03;
+				        document.querySelector('#paragraph_03').textContent=Wording_P04.paragraph_03;
+                    
+                    break;
+
+                    case 5:
+
+                    break;
+                }
+				
+			}
+
+			function ModeSwitch(i)
+			{
+				CameraManager(i);
 			}
 
 			window.opening_anim=opening_anim;
+            window.SetupWording=SetupWording;
+			window.ModeSwitch=ModeSwitch;
 		
 		</script>
     </body>

@@ -8,16 +8,26 @@ export const Wording_P01 =
 
 export const Wording_P02 = 
 {
-    texture_img:'./textures/yan-ots-UuBR5kbvt4Y-unsplash.jpg',
+    title_01:"",
+    paragraph_01:"",
 
-    opacity:1
+    title_02:"OUR SERVICES",
+    paragraph_02:"將近三十年的產業經歷與能量累積，具備市場諮詢、品牌企劃行銷、創新材質運用與技術資源應用的全方位整合設計服務公司，提供完整性的品牌設計諮詢及設計專案服務；以市場策略為發展核心，結合設計力及後端技術。",
+
+    title_03:"",
+    paragraph_03:""
 };
 
 export const Wording_P03 = 
 {
-    texture_img:'./textures/yan-ots-UuBR5kbvt4Y-unsplash.jpg',
+    title_01:"",
+    paragraph_01:"",
 
-    opacity:1
+    title_02:"OUR SERVICES",
+    paragraph_02:"將近三十年的產業經歷與能量累積，具備市場諮詢、品牌企劃行銷、創新材質運用與技術資源應用的全方位整合設計服務公司，提供完整性的品牌設計諮詢及設計專案服務；以市場策略為發展核心，結合設計力及後端技術。",
+
+    title_03:"",
+    paragraph_03:""
 };
 
 export const Wording_P04 = 

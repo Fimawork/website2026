@@ -139,14 +139,16 @@
 					_heading.classList.add("heading_up_anim");
 
 					setTimeout(() => { _heading.textContent="關於我";}, 500);//1000=1sec}
-	
+					_content.contentWindow.SetupWording(2);
+					_content.contentWindow.ModeSwitch(0);
 				break;
 
 				case 3:
 
 
 					setTimeout(() => { _heading.textContent="痛點";}, 250);//1000=1sec}
-	
+					_content.contentWindow.SetupWording(3);
+					_content.contentWindow.ModeSwitch(0);
 				break;
 
 				case 4:
@@ -154,8 +156,8 @@
 
 
 					setTimeout(() => { _heading.textContent="價值";}, 250);//1000=1sec}
-
-					
+					_content.contentWindow.SetupWording(4);
+					_content.contentWindow.ModeSwitch(0);
 				break;
 
 				case 5:
@@ -163,7 +165,8 @@
 
 
 					setTimeout(() => { _heading.textContent="合作方式";}, 250);//1000=1sec}
-
+					_content.contentWindow.SetupWording(5);
+					_content.contentWindow.ModeSwitch(1);
 				break;
 
 				case 6:
@@ -171,7 +174,7 @@
 
 
 					setTimeout(() => { _heading.textContent="Demo";}, 250);//1000=1sec}
-
+					_content.contentWindow.ModeSwitch(0);
 				break;
 
 			}
