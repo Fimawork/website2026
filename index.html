@@ -3,8 +3,10 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta name="description" content="我是fimawork，專注於3D網頁介面與使用者體驗的設計工作室。"/>
+		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>fimawork</title>
+		<title>fimawork | 3D網頁設計、3D Website</title>
 		<link rel="stylesheet" type="text/css" href="./Main.css">
 		<style type="text/css">
 			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
@@ -26,178 +28,15 @@
 			}
 
 		</style>
-	<!--p01首頁 p02關於我 p03痛點 p04價值 p05 Demo影片 p06合作方式 -->
-	<!--動畫在各分頁內製作-->
 	<body>	
+		
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
 		<div id="heading" class="header">3D Website Designer</div>
 		<iframe id="title3D" src="./title3D.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
-		<iframe id="content" src="./content.html" frameborder="0" style="pointer-events: none;display: none;"></iframe>
-
-		<div id="logo" class="logo_explode_effect_anim" style="display: none;"></div>
-		<div class="mainBtn_panel">
-			<div class="arrow_btn" onclick="PageUp()">
-				<i class="fa-solid fa-angle-left fa-2x"></i>
-			</div>
-			
-			<div class="arrow_btn" onclick="PageDown()">
-				<i class="fa-solid fa-angle-right fa-2x"></i>
-			</div>
-
-			<div class="num_panel">
-				<div id="index_num">1</div>
-			</div>
-			
-			<div class="setting_btn">
-				<i class="fa-solid fa-ellipsis-vertical fa-2x"></i>
-			</div>
-		</div>
-    </body>
-	<script>
-
-		let _title3D = document.querySelector('#title3D');
-		let _content = document.querySelector('#content');
-
-		let _logo = document.querySelector('#logo');
-
-		let _heading = document.querySelector('#heading');
-
-		let _index_num = document.querySelector('#index_num');
-
-		let index=1;
-
-  		document.addEventListener("keydown",function (event) {
-
-      		switch (event.code) 
-      		{
-				case "Escape":
-        		case "Home":
-        		console.log("首頁");
-
-				index=1;
-
-        		break;
-
-        		case "ArrowDown":
-				case "PageDown":
-				case "Enter":
-
-				console.log("下一頁");
-				//_p01.classList.add("fadeOut_anim");
-				index++;
-
-        		break;
-
-        		case "ArrowUp":
-				case "PageUp":
-				
-				
-        		console.log("上一頁");
-
-				index--;
-
-				
-        		break;
-
-      		}
-
-			if(index<1)index=1;
-			if(index>6)index=6;
-
-			console.log(index);
-
-			PageSwitch(index);
-  		});
-
-		document.addEventListener("pointerdown", function (e) {
-
-
 		
-		});
-
-		function PageSwitch(i)
-		{
-
-			switch (i) 
-      		{
-				case 1:
-					_title3D.style.display="block";
-					_content.style.display="none";
-
-					_logo.style.display="none";
-					_heading.classList.remove("heading_up_anim");
-
-					_heading.textContent="3D Website Designer";				
-				break;
-
-				case 2:
-					_title3D.style.display="none";
-					_content.style.display="block";
-					_content.contentWindow.opening_anim();
-
-					_logo.style.display="block";
-					_heading.classList.add("heading_up_anim");
-
-					setTimeout(() => { _heading.textContent="關於我";}, 500);//1000=1sec}
-					_content.contentWindow.SetupWording(2);
-					_content.contentWindow.ModeSwitch(0);
-				break;
-
-				case 3:
-
-
-					setTimeout(() => { _heading.textContent="痛點";}, 250);//1000=1sec}
-					_content.contentWindow.SetupWording(3);
-					_content.contentWindow.ModeSwitch(0);
-				break;
-
-				case 4:
-
-
-
-					setTimeout(() => { _heading.textContent="價值";}, 250);//1000=1sec}
-					_content.contentWindow.SetupWording(4);
-					_content.contentWindow.ModeSwitch(0);
-				break;
-
-				case 5:
-
-
-
-					setTimeout(() => { _heading.textContent="合作方式";}, 250);//1000=1sec}
-					_content.contentWindow.SetupWording(5);
-					_content.contentWindow.ModeSwitch(1);
-				break;
-
-				case 6:
-	
-
-
-					setTimeout(() => { _heading.textContent="Demo";}, 250);//1000=1sec}
-					_content.contentWindow.ModeSwitch(0);
-				break;
-
-			}
-
-			_index_num.textContent=`${index}`;
-		}
-
-		function PageDown()
-		{
-			index++;
-			if(index>6)index=6;
-			PageSwitch(index);
-		}
-
-		function PageUp()
-		{
-			index--;
-			if(index<1)index=1;
-			PageSwitch(index);
-		}
-	
-
-	
+    </body>
+	<script type="module">
+		
 	</script>
 
 </html>
