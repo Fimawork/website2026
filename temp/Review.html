@@ -1,0 +1,1023 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>F0023_v4</title>
+		
+
+		<style>
+
+			@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" );
+			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
+			
+			body{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+			}
+			
+
+			canvas{
+				width: 100%;
+   				height: 100%;
+			}
+
+			.btn_container{
+				position:absolute;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				
+				
+			}
+			.btn_Panel{
+				position: relative;
+				margin: auto;
+				padding-bottom: 180px;
+				height: 50%;
+				width:60%;
+				display: flex;
+				justify-content: center;
+		
+			}
+
+			.btn_next{
+				position:absolute;
+				right: 0px;
+				width: 24%;
+				height: 100%;
+				pointer-events: fill;
+				cursor:pointer;
+			}
+
+			.btn_enter{
+				position:absolute;
+				width:30%;
+				height: 100%;
+				pointer-events: fill;
+				cursor:pointer;
+			}
+
+			
+			.btn_prev{
+				position:absolute;
+				left: 0px;
+				width:24%;
+				height: 100%;
+				pointer-events: fill;
+				cursor:pointer;
+			}
+
+			.btn_info{
+				position:absolute;
+				right: 60px;
+				bottom: 30px;
+				display: flex;
+				justify-content: right;
+				width: 60%;
+				
+			}
+
+			
+			i{
+				
+				padding: 0 6px 0;
+				color:#FFF;
+	  			opacity: 60%;
+			}
+
+			.bottom_container{
+				position: absolute;
+				bottom: 15px;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+			}
+
+			.bottom_box
+			{
+				position: relative;
+				font-family: "Roboto", sans-serif;
+				color: rgba(255, 255, 255, 0.6); 
+			}
+             
+		</style>
+
+        
+        
+	</head>
+	<body>   
+	<div class="btn_container">
+		<div class = "btn_Panel">
+			<div class="btn_next" onclick="ManuRotate(1)" ></div>
+			<div class="btn_enter" onclick="OpenWindows()"onmouseenter="HUD_SpeedUP()" onmouseleave="HUD_Default()"></div>
+			<div class="btn_prev" onclick="ManuRotate(-1)" ></div>
+		</div>
+	</div>
+
+	<script src="./js/three.js"></script> 
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "./build/three.module.js",				
+				"three/addons/": "./jsm/"             
+			}
+		}
+
+		
+		
+	</script>
+
+	
+	
+	<script type="module">
+
+		import * as THREE from 'three';
+
+		import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+
+		///Post Processing///
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+		import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+		import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+		import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+		
+
+		//////Post Processing/////
+
+		let camera, scene, renderer, stats;
+		let HUD = new THREE.Object3D();
+
+		let HUD_A = new THREE.Object3D();
+		let HUD_B = new THREE.Object3D();
+		let HUD_C = new THREE.Object3D();
+		let HUD_D = new THREE.Object3D();
+		let HUD_E = new THREE.Object3D();
+
+        init();
+        animate();
+		
+
+function init() {
+
+    
+    
+	const container = document.createElement( 'div' );
+	document.body.appendChild( container );
+
+	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera.position.copy(CameraPos);
+	camera.lookAt(0,0,0);
+
+	scene = new THREE.Scene();
+	
+	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled = true;
+	//renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+	
+	let ambientLight = new THREE.AmbientLight(0xE1DDD2, 1);
+
+	let hemiLight = new THREE.HemisphereLight( 0xE5E5DE, 0x000000, 0.9 ); //(上半球顏色,下半球顏色,強度)
+	hemiLight.position.set( 0, 0, 0 );
+
+	//scene.add(ambientLight).add(hemiLight);
+	
+		
+	
+
+    const divisionAngle = Math.PI/6;
+	
+	//第1張圖
+	const map_01 = new THREE.TextureLoader().load(load_image_01);
+	image_01 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_01}) );
+	image_01.position.copy(ImagePos);
+	image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_01.center.set( 0.5, 0.5 );
+	
+	imageGroup_01.add(image_01);
+
+
+	//第2張圖
+	const map_02 = new THREE.TextureLoader().load(load_image_02 );
+	image_02 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_02}) );
+	image_02.position.copy( ImagePos );
+	image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_02.center.set( 0.5, 0.5 );
+
+	imageGroup_02.add(image_02);
+
+
+	//第3張圖
+	const map_03 = new THREE.TextureLoader().load(load_image_03);
+	image_03 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_03}) );
+	image_03.position.copy( ImagePos );
+	image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_03.center.set( 0.5, 0.5 );
+
+	imageGroup_03.add(image_03);
+
+
+	//第4張圖
+	const map_04 = new THREE.TextureLoader().load(load_image_04);
+	image_04 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_04}) );
+	image_04.position.copy( ImagePos );
+	image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_04.center.set( 0.5, 0.5 );
+
+	imageGroup_04.add(image_04);
+
+
+	//第5張圖
+	const map_05 = new THREE.TextureLoader().load(load_image_05);
+	image_05 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_05}) );
+	image_05.position.copy( ImagePos );
+	image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_05.center.set( 0.5, 0.5 );
+
+	imageGroup_05.add(image_05);
+
+
+	//第6張圖
+	const map_06 = new THREE.TextureLoader().load(load_image_06);
+	image_06 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_06}) );
+	image_06.position.copy( ImagePos );
+	image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_06.center.set( 0.5, 0.5 );
+
+	imageGroup_06.add(image_06);
+
+
+	//第7張圖
+	const map_07 = new THREE.TextureLoader().load(load_image_07);
+	image_07 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_07}) );
+	image_07.position.copy( ImagePos );
+	image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_07.center.set( 0.5, 0.5 );
+
+	imageGroup_07.add(image_07);
+
+
+	//第8張圖
+	const map_08 = new THREE.TextureLoader().load(load_image_08);
+	image_08 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_08}) );
+	image_08.position.copy( ImagePos );
+	image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_08.center.set( 0.5, 0.5 );
+
+	imageGroup_08.add(image_08);
+
+
+	//第9張圖
+	const map_09 = new THREE.TextureLoader().load(load_image_09);
+	image_09 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_09}) );
+	image_09.position.copy( ImagePos );
+	image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_09.center.set( 0.5, 0.5 );
+
+
+	imageGroup_09.add(image_09);
+
+
+	//第10張圖
+	const map_10 = new THREE.TextureLoader().load(load_image_10);
+	image_10 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_10}) );
+	image_10.position.copy( ImagePos );
+	image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_10.center.set( 0.5, 0.5 );
+
+	imageGroup_10.add(image_10);
+
+
+	//第11張圖
+	const map_11 = new THREE.TextureLoader().load(load_image_11);
+	image_11 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_11}) );
+	image_11.position.copy( ImagePos );
+	image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_11.center.set( 0.5, 0.5 );
+
+	imageGroup_11.add(image_11);
+
+
+	//第12張圖
+	const map_12 = new THREE.TextureLoader().load(load_image_12);
+	image_12 = new THREE.Sprite( new THREE.SpriteMaterial({ map: map_12}) );
+	image_12.position.copy( ImagePos );
+	image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+	image_12.center.set( 0.5, 0.5 );
+
+	
+
+	imageGroup_12.add(image_12);
+
+
+
+	imageGroup_02.rotation.y=divisionAngle;
+	imageGroup_03.rotation.y=divisionAngle*2;
+	imageGroup_04.rotation.y=divisionAngle*3;
+	imageGroup_05.rotation.y=divisionAngle*4;
+	imageGroup_06.rotation.y=divisionAngle*5;
+	imageGroup_07.rotation.y=divisionAngle*6;
+	imageGroup_08.rotation.y=divisionAngle*7;
+	imageGroup_09.rotation.y=divisionAngle*8;
+	imageGroup_10.rotation.y=divisionAngle*9;
+	imageGroup_11.rotation.y=divisionAngle*10;
+	imageGroup_12.rotation.y=divisionAngle*11;
+
+	rotationManu.add(imageGroup_01).add(imageGroup_02).add(imageGroup_03).add(imageGroup_04).add(imageGroup_05).add(imageGroup_06).add(imageGroup_07).add(imageGroup_08).add(imageGroup_09).add(imageGroup_10).add(imageGroup_11).add(imageGroup_12);
+
+	scene.add(rotationManu).add(rotationTarget);
+
+
+	///載入模型底下的HUD圖片///
+	
+	const loader_HUD_A = new TIFFLoader();
+
+	const geometry_HUD_A = new THREE.PlaneGeometry();
+
+	loader_HUD_A.load( './images/HUD_A_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_A = new THREE.MeshBasicMaterial( { map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:1 ,depthWrite: false } );
+
+		const mesh_HUD_A = new THREE.Mesh( geometry_HUD_A, material_HUD_A );
+		const img_scale =51;
+
+		mesh_HUD_A.position.set( 0, -34.5, 0 );
+		mesh_HUD_A.scale.set(img_scale,img_scale,1);
+		mesh_HUD_A.rotation.x=-Math.PI/2;
+		HUD_A.add(mesh_HUD_A);
+
+		setTimeout(() => {scene.add( HUD_A );}, 500);//10分鐘更新一次
+
+		//scene.add( HUD_A );
+
+	} );
+
+	const loader_HUD_B = new TIFFLoader();
+
+	const geometry_HUD_B = new THREE.PlaneGeometry();
+
+	loader_HUD_B.load( './images/HUD_B_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_B = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.36,depthWrite: false } );
+
+		const mesh_HUD_B = new THREE.Mesh( geometry_HUD_B, material_HUD_B );
+		const img_scale =48;
+
+		mesh_HUD_B.position.set( 0, -34.4, 0 );
+		mesh_HUD_B.scale.set(img_scale,img_scale,1);
+		mesh_HUD_B.rotation.x=-Math.PI/2;
+		HUD_B.add(mesh_HUD_B);
+
+		setTimeout(() => {scene.add( HUD_B );}, 800);
+
+		//scene.add( HUD_B );
+
+	} );
+
+	const loader_HUD_C = new TIFFLoader();
+
+	const geometry_HUD_C = new THREE.PlaneGeometry();
+
+	loader_HUD_C.load( './images/HUD_C_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_C = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.9,depthWrite: false } );
+
+		const mesh_HUD_C = new THREE.Mesh( geometry_HUD_C, material_HUD_C );
+		const img_scale =48;
+
+		mesh_HUD_C.position.set( 0, -34.3, 0 );
+		mesh_HUD_C.scale.set(img_scale,img_scale,1);
+		mesh_HUD_C.rotation.x=-Math.PI/2;
+		HUD_C.add(mesh_HUD_C);
+
+		setTimeout(() => {scene.add( HUD_C );}, 1100);
+
+		//scene.add( HUD_C );
+
+	} );
+
+	const loader_HUD_D = new TIFFLoader();
+
+	const geometry_HUD_D = new THREE.PlaneGeometry();
+
+	loader_HUD_D.load( './images/HUD_D_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_D = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.45,depthWrite: false } );
+
+		const mesh_HUD_D = new THREE.Mesh( geometry_HUD_D, material_HUD_D );
+		const img_scale =60;
+
+		mesh_HUD_D.position.set( 0, -34.2, 0 );
+		mesh_HUD_D.scale.set(img_scale,img_scale,1);
+		mesh_HUD_D.rotation.x=-Math.PI/2;
+		HUD_D.add(mesh_HUD_D);
+
+		setTimeout(() => {scene.add( HUD_D );}, 1400);
+
+		//scene.add( HUD_D );
+
+	} );
+
+	const loader_HUD_E = new TIFFLoader();
+
+	const geometry_HUD_E = new THREE.PlaneGeometry();
+
+	loader_HUD_E.load( './images/HUD_E_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_E = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.45,depthWrite: false } );
+
+		const mesh_HUD_E = new THREE.Mesh( geometry_HUD_E, material_HUD_E );
+		const img_scale =60;
+
+		mesh_HUD_E.position.set( 0, -34.1, 0 );
+		mesh_HUD_E.scale.set(img_scale,img_scale,1);
+		mesh_HUD_E.rotation.x=-Math.PI/2;
+		HUD_E.add(mesh_HUD_E);
+
+		setTimeout(() => {scene.add( HUD_E );}, 1700);
+		//scene.add( HUD_E );
+
+	} );
+
+	/////////////////////////
+
+
+
+	window.addEventListener( 'resize', onWindowResize );
+
+
+    //把3D渲染效果加入網頁視窗中
+	container.appendChild( renderer.domElement );
+ 
+	
+}
+
+function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+
+
+
+//類似Unity的Update()功能
+function animate() {
+
+	requestAnimationFrame( animate );
+	
+
+	renderer.render( scene, camera );
+
+	
+    const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+
+	UpdateRotationManu();
+
+
+	
+	if(manuIndex<1)
+	{
+		manuIndex+=12;
+	}
+
+	if (manuIndex>12)
+	{
+		manuIndex-=12;
+	}
+
+	if(IsHUDRise)
+	{
+		if(HUD_E.position.y<4)
+		{
+			HUD_E.position.y+=0.1;
+		}
+
+		if(HUD_D.position.y<3.5)
+		{
+			HUD_D.position.y+=0.075;
+		}
+
+		if(HUD_C.position.y<3)
+		{
+			HUD_C.position.y+=0.05;
+		}
+
+		if(HUD_B.position.y<2.4)
+		{
+			HUD_B.position.y+=0.015;
+		}
+
+	}
+
+	if(!IsHUDRise)
+	{
+		if(HUD_E.position.y>0.4)
+		{
+			HUD_E.position.y-=0.042;
+		}
+
+		if(HUD_D.position.y>0.3)
+		{
+			HUD_D.position.y-=0.05;
+		}
+
+		if(HUD_C.position.y>0.2)
+		{
+			HUD_C.position.y-=0.075;
+		}
+
+		if(HUD_B.position.y>0.1)
+		{
+			HUD_B.position.y-=0.1;
+		}
+
+	}
+
+	HUD_A.rotation.y +=0.036*HUD_rpm;
+	HUD_B.rotation.y -=0.005*HUD_rpm;
+	HUD_C.rotation.y +=0.02*HUD_rpm;
+	HUD_D.rotation.y -=0.0001*HUD_rpm;
+	HUD_E.rotation.y +=0.001*HUD_rpm;
+	
+	//console.log(image_01.position.z);
+	HighLightEffect();
+}
+
+	</script>
+
+
+	<script>
+
+let mixer;
+
+let rotationManu = new THREE.Object3D();
+let rotationTarget = new THREE.Object3D();
+let HUD_rpm=1;
+let IsBtnHovered = false;
+
+let image_01, image_02, image_03, image_04, image_05, image_06, image_07, image_08, image_09, image_10, image_11, image_12;
+
+let imageGroup_01 = new THREE.Object3D();
+let imageGroup_02 = new THREE.Object3D();
+let imageGroup_03 = new THREE.Object3D();
+let imageGroup_04 = new THREE.Object3D();
+let imageGroup_05 = new THREE.Object3D();
+let imageGroup_06 = new THREE.Object3D();
+let imageGroup_07 = new THREE.Object3D();
+let imageGroup_08 = new THREE.Object3D();
+let imageGroup_09 = new THREE.Object3D();
+let imageGroup_10 = new THREE.Object3D();
+let imageGroup_11 = new THREE.Object3D();
+let imageGroup_12 = new THREE.Object3D();
+
+let manuIndex = 1;
+
+const CameraPos=new THREE.Vector3(0,0,-105);
+const ImagePos = new THREE.Vector3(0,2,-30);
+const mirrorImagePos = new THREE.Vector3(0,-36,-30);
+const quaternion_rotationTarget = new THREE.Quaternion();
+const quaternion_rotationManu = new THREE.Quaternion();
+const imageScale = 0.06;
+const mirrorImageOpacity = 0.45;
+const divisionAngle = Math.PI/6;
+const clock = new THREE.Clock();
+const load_image_01 = './images/Manu_20230805_F0021.png';
+const load_image_02 = './images/Manu_20230805_F0001.png';
+const load_image_03 = './images/Manu_20230805_F0009.png';
+const load_image_04 = './images/Manu_20230805_F0010.png';
+const load_image_05 = './images/Manu_20230805_F0018.png';
+const load_image_06 = './images/portfolio_2023_website.png';
+const load_image_07 = './images/Manu_20230805_Inu.png';
+const load_image_08 = './images/Manu_20230805_F0028.png';
+const load_image_09 = './images/Manu_20230805_F0017.png';
+const load_image_10 = './images/Manu_20230805_F0005.png';
+const load_image_11 = './images/Manu_20230805_F0016.png';
+const load_image_12 = './images/Manu_20230805_F0002.png';
+
+let link_01 = "https://fimawork.droppages.net/F0024/";
+let link_02 = "https://fimawork.droppages.net/website/pages/F0001.html";
+let link_03 = "https://fimawork.droppages.net/website/pages/F0009.html";
+let link_04 = "https://fimawork.droppages.net/website/pages/F0010.html";
+let link_05 = "https://fimawork.droppages.net/website/pages/F0018.html";
+let link_06 = "http://www.benysports.com/";
+
+let link_07 = "https://fimawork.droppages.net/F0026/BlenderPractice.html";
+
+let link_08 = "https://fimawork.droppages.net/F0028_v1/";
+let link_09 = "https://fimawork.droppages.net/website/pages/F0017.html";
+let link_10 = "https://f4vivgln28blovtbkzmenq.on.drv.tw/modelf0002/f0005v6/";
+let link_11 = "https://fimawork.droppages.net/website/pages/F0016.html";
+let link_12 = "https://fimawork.droppages.net/F0002_v2/";
+	
+
+let IsHUDRise=false;
+
+
+
+function ManuRotate(value)
+{
+	var _value=value;
+
+
+	if(_value>0)
+	{
+		rotationTarget.rotation.y-=divisionAngle;
+		manuIndex++;
+	}
+
+	else if(_value<0)
+	{
+		rotationTarget.rotation.y+=divisionAngle;
+		manuIndex--;
+		
+	}
+	
+}
+
+function UpdateRotationManu()
+{
+	
+	quaternion_rotationTarget.setFromEuler(rotationTarget.rotation);
+
+	if(quaternion_rotationManu.angleTo(quaternion_rotationTarget)>0.01)
+    {
+		quaternion_rotationManu.slerp(quaternion_rotationTarget,0.1);
+    } 
+
+	rotationManu.rotation.setFromQuaternion(quaternion_rotationManu);
+    
+}
+
+function OpenWindows()
+{
+	switch(manuIndex)
+	{
+		case 0:
+		console.log("12");
+		window.open(link_12);
+		break;
+		
+		case 1:
+		console.log("1");
+		window.open(link_01);
+		break;
+
+		case 2:
+		console.log("2");
+		window.open(link_02);
+		break;
+
+		case 3:
+		console.log("3");
+		window.open(link_03);
+		break;
+
+		case 4:
+		console.log("4");
+		window.open(link_04);
+		break;
+
+		case 5:
+		console.log("5");
+		window.open(link_05);
+		break;
+
+		case 6:
+		console.log("6");
+		window.open(link_06);
+		break;
+
+		case 7:
+		console.log("7");
+		window.open(link_07);
+		break;
+
+		case 8:
+		console.log("8");
+		window.open(link_08);
+		break;
+
+		case 9:
+		console.log("9");
+		window.open(link_09);
+		break;
+
+		case 10:
+		console.log("10");
+		window.open(link_10);
+		break;
+
+		case 11:
+		console.log("11");
+		window.open(link_11);
+		break;
+
+		case 12:
+		console.log("12");
+		window.open(link_12);
+		break;
+
+		case 13:
+		console.log("13");
+		window.open(link_01);
+		break;
+
+	}
+}
+
+function HUD_SpeedUP()
+{
+	HUD_rpm=5;
+	IsHUDRise=true;
+}
+
+function HUD_Default()
+{
+	HUD_rpm=1;
+	IsHUDRise=false;
+}
+
+function HighLightEffect()
+{
+	const highlight_scale=1.11;
+	const middle_offset=new THREE.Vector3(0,2,-30);
+
+
+	switch(manuIndex)
+	{
+		case 0:
+		image_12.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		
+		
+		break;
+
+		case 1:
+		image_01.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+		break;
+
+		case 2:
+		image_02.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 3:
+		image_03.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 4:
+		image_04.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 5:
+		image_05.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 6:
+		image_06.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 7:
+		image_07.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 8:
+		image_08.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 9:
+		image_09.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 10:
+		image_10.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 11:
+		image_11.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+
+		case 12:
+		image_12.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_01.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		
+		break;
+
+		case 13:
+		image_01.scale.set( 600*imageScale*highlight_scale, 600*imageScale*highlight_scale, 1 );
+
+		image_02.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_03.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_04.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_05.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_06.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_07.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_08.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_09.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_10.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_11.scale.set( 600*imageScale, 600*imageScale, 1 );
+		image_12.scale.set( 600*imageScale, 600*imageScale, 1 );
+		break;
+	}
+}
+
+
+	</script>
+
+
+
+	</body>
+</html>

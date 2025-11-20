@@ -1,0 +1,445 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>title3D</title>
+		
+		<style type="text/css">
+			
+			
+			body
+			{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+			}
+			
+
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+			
+
+			
+		</style>
+
+        
+	</head>
+	
+	<body> 
+		
+		<div class="loading_canvas">
+			<div id="loadingUI" class="rotate_anim" ></div>
+		</div>
+
+		<script src="./js/three.js"></script> 
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+			uniform float time;
+	
+			uniform float fogDensity;
+			uniform vec3 fogColor;
+	
+			uniform sampler2D texture1;
+			uniform sampler2D texture2;
+	
+			varying vec2 vUv;
+	
+			void main( void ) {
+	
+				vec2 position = - 1.0 + 2.0 * vUv;
+	
+				vec4 noise = texture2D( texture1, vUv );
+				vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+				vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+	
+				T1.x += noise.x * 2.0;
+				T1.y += noise.y * 2.0;
+				T2.x -= noise.y * 0.2;
+				T2.y += noise.z * 0.2;
+	
+				float p = texture2D( texture1, T1 * 2.0 ).a;
+	
+				vec4 color = texture2D( texture2, T2 * 2.0 );
+				vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+	
+				if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+				if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
+				if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
+	
+				gl_FragColor = temp;
+	
+				float depth = gl_FragCoord.z / gl_FragCoord.w;
+				const float LOG2 = 1.442695;
+				float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+				fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+	
+				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+	
+			}
+	
+		</script>
+	
+		<script id="vertexShader" type="x-shader/x-vertex">
+	
+			uniform vec2 uvScale;
+			varying vec2 vUv;
+	
+			void main()
+			{
+	
+				vUv = uvScale * uv;
+				vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+				gl_Position = projectionMatrix * mvPosition;
+	
+			}
+	
+		</script>
+	
+	 
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "./build/three.module.js",				
+				"three/addons/": "./jsm/"             
+			}
+		}
+
+		
+		
+	</script>
+
+
+	<script type="module">
+
+		import * as THREE from 'three';
+
+		import Stats from 'three/addons/libs/stats.module.js';
+
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+	
+		import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+		import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+	
+
+let camera, scene, renderer, stats;
+
+let title_text_01='3D';
+
+let title_text_02='Content';
+
+let title_text_03='UI & UX Designer';
+
+let text_01, text_02, text_03;
+
+let rpm=0.02;
+
+let showTime=false;
+
+let ScanEffect_blue_03 =	new THREE.MeshBasicMaterial( { color: 0x006699, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9, side: THREE.DoubleSide} );
+
+const textureLoader = new THREE.TextureLoader();
+
+const cloudTexture = textureLoader.load( 'images/cloud.png' );
+				const lavaTexture = textureLoader.load( 'images/water_noise.jpg' );
+
+				lavaTexture.colorSpace = THREE.SRGBColorSpace;
+
+				cloudTexture.wrapS = cloudTexture.wrapT = THREE.RepeatWrapping;
+				lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
+
+let uniforms = {
+
+
+'time': { value: 1.0 },
+'uvScale': { value: new THREE.Vector2( 0.08, 0.08 ) },
+'texture1': { value: cloudTexture },
+					'texture2': { value: lavaTexture }
+
+
+};
+
+let ScanEffect_shader = new THREE.ShaderMaterial( {
+	side: THREE.DoubleSide,
+	transparent: true,
+	opacity:0.3,
+	blending: THREE.AdditiveBlending,
+uniforms: uniforms,
+vertexShader: document.getElementById( 'vertexShader' ).textContent,
+fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+
+} );
+
+let deltaTime=0;
+
+const clock = new THREE.Clock();
+
+let mixer;
+
+init();
+animate();
+StartAnim()
+
+
+function StartAnim()
+{
+	setTimeout(() => {showTime=true;}, 500);//1000=1sec}
+}
+
+
+
+function init() {
+
+
+	const container = document.createElement( 'div' );
+	document.body.appendChild( container );
+
+	camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera.position.set( 0, 0, 6 );	
+    camera.lookAt(0,0,0);
+
+	scene = new THREE.Scene();
+
+
+
+	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled = true;
+	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+	
+
+	document.body.appendChild(renderer.domElement);
+
+
+	const vertexCount = 500 * 3;
+
+				const positions = [];
+				const colors = [];
+
+				for ( let i = 0; i < vertexCount; i ++ ) {
+
+					// adding x,y,z
+					positions.push( Math.random() - 0.5 );
+					positions.push( Math.random() - 0.5 );
+					positions.push( Math.random() - 0.5 );
+
+					// adding r,g,b,a
+					colors.push( Math.random() * 255 );
+					colors.push( Math.random() * 255 );
+					colors.push( Math.random() * 255 );
+					colors.push( Math.random() * 255 );
+
+				}
+
+
+
+	const loader_01 = new FontLoader();
+	loader_01.load( './fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+					
+
+					//const message = title_text_01;
+
+					//const shapes = font.generateShapes( message, 3.3 );//字體大小
+
+					//const geometry = new THREE.ShapeGeometry( shapes );
+
+					//geometry.computeBoundingBox();
+
+					//const xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+
+					//geometry.translate( xMid, 0, 0 );
+
+					const geometry = new TextGeometry( title_text_01, {
+		
+		font: font,
+		
+		size: 3,
+		depth: 15,
+		curveSegments: 10,
+		
+		bevelThickness: 5,
+		bevelSize: 0,
+		bevelEnabled: true,
+		bevelSegments: 10,
+
+		} );
+
+		geometry.center();
+
+					const positionAttribute = new THREE.Float32BufferAttribute( positions, 3 );
+				const colorAttribute = new THREE.Uint8BufferAttribute( colors, 4 );
+
+				colorAttribute.normalized = true; // this will map the buffer values to 0.0f - +1.0f in the shader
+
+				//geometry.setAttribute( 'position', positionAttribute );
+				geometry.setAttribute( 'color', colorAttribute );
+
+					// make shape ( N.B. edge view not visible )
+
+					text_01 = new THREE.Mesh( geometry, ScanEffect_shader );
+					text_01.position.set(-3.6,0,0);
+					text_01.scale.copy(new THREE.Vector3(1,1,0.003));
+					scene.add( text_01 );
+
+				
+				} ); //end load function
+
+	const loader_02 = new FontLoader();
+	loader_02.load( './fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+			
+
+					const message = title_text_02;
+
+					const shapes = font.generateShapes( message, 0.75 );//字體大小
+
+					const geometry = new THREE.ShapeGeometry( shapes );
+
+					geometry.computeBoundingBox();
+
+					const xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+
+					geometry.translate( xMid, 0, 0 );
+
+					// make shape ( N.B. edge view not visible )
+
+					text_02 = new THREE.Mesh( geometry, ScanEffect_blue_03 );
+					text_02.position.set(-0.3,0,0);
+					scene.add( text_02 );
+
+				
+				} ); //end load function
+
+	const loader_03 = new FontLoader();
+	loader_03.load( './fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+				
+
+					const message = title_text_03;
+
+					const shapes = font.generateShapes( message, 0.75 );//字體大小
+
+					const geometry = new THREE.ShapeGeometry( shapes );
+
+					geometry.computeBoundingBox();
+
+					const xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+
+					geometry.translate( xMid, 0, 0 );
+
+					// make shape ( N.B. edge view not visible )
+
+					text_03 = new THREE.Mesh( geometry, ScanEffect_blue_03 );
+					text_03.position.set(1.9,-0.9,0);
+					scene.add( text_03 );
+
+				
+				} ); //end load function
+    
+  
+	container.appendChild( renderer.domElement );
+
+
+	window.addEventListener( 'resize', onWindowResize );
+
+	// stats
+	stats = new Stats();
+	//container.appendChild( stats.dom );
+	
+}
+
+function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+
+//類似Unity的Update()功能
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+	renderer.render( scene, camera );
+
+	stats.update();
+
+	deltaTime=delta*0.3;
+
+	if(showTime)
+	{
+		
+
+		if(text_01.rotation.y%3<0.3)
+		{
+		text_01.rotation.y+=rpm*0.15;	
+		}
+
+		else
+		{
+			text_01.rotation.y+=rpm;
+		}
+
+		text_01.scale.y=text_01.scale.y*0.025;
+		text_01.scale.x=text_01.scale.x*0.025;
+		text_01.scale.z=text_01.scale.z*0;
+
+		text_02.scale.y=text_02.scale.y*0.025;
+		text_02.scale.x=text_02.scale.x*0.025;
+
+		text_03.scale.y=text_03.scale.y*0.025;
+		text_03.scale.x=text_03.scale.x*0.025;
+
+		if (text_01.scale.y<0.01)
+		{
+			text_01.scale.x=1;
+			text_01.scale.y=1;
+			text_01.scale.z=0.003;
+
+			text_02.scale.y=1;
+			text_02.scale.x=1;
+
+			text_03.scale.y=1;
+			text_03.scale.x=1;
+		}
+	}
+
+	uniforms[ 'time' ].value -=  delta*10;
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+
+
+	</body>
+	
+</html>

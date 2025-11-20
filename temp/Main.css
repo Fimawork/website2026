@@ -1,0 +1,484 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,700');  
+		 
+		 
+		 	.background
+			{
+				position: absolute;
+				height: 400%;
+				width:  100%;
+				
+				background-image: url(./images/portfolio_2023_bgi.png);
+				background-size: 100% 100%;
+			}
+
+            .title_3D_panel
+			{
+				position: absolute;
+				width: 100%;
+   				height: 100%;
+			}
+
+
+
+			#title3D
+			{
+				width: 100%;
+				height: 100%;
+			}
+
+			#title
+			{
+				position: absolute;
+				font-family:Arial;
+				font-weight:lighter;
+				font-size: 15px;
+				letter-spacing: 0.5px;
+				color: rgba(250, 250, 250, 0.75);
+				left: 50%;
+				top: 57%;
+				transform: translate(-50%, -50%);
+			}
+
+			#shibaInu
+			{
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+				display: none;
+			}
+
+			#author
+			{
+				position: absolute;
+				right:0px;
+				bottom:0px;
+				/*width: 1188px;
+				height: 1080px;*/
+				height: 100%;
+				aspect-ratio: 1/1;
+				background-image: url(./images/portfolio_2023_fima_color.png);
+				background-size: 100% 100%;
+				opacity: 0.9;
+			}
+
+			@keyframes author_hud_effect 
+			{
+				0% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.6,url(./images/images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				1% {right:0px;background-image: url(./images/images/portfolio_2023_fima_color.png);opacity: 0.75;}
+				3% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.6,url(./images/images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				5% {right:0px;background-image: url(./images/images/portfolio_2023_fima_hud.png);opacity: 0.9;}
+				56% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.75;}
+				57% {right:0px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				58% {right:-6px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				59% {right:3px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.75;}
+				60% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.75,url(./images/images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				92% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.75;}
+				94% {right:6px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.6;}
+				96% {right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.75;}
+				97% {right:0px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.6;}
+				98% {right:-6px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.45;}
+				99% {right:3px;background-image: url(./images/portfolio_2023_fima_hud.png);opacity: 0.3;}
+				100%{right:0px;background-image: url(./images/portfolio_2023_fima_color.png);opacity: 0.6;}
+			}
+
+			.hauthor_hud_effect_anim
+			{
+				animation: author_hud_effect;
+				animation-duration: 0.003s;
+				animation-delay: 0.3s;
+				animation-iteration-count: infinite;
+				animation-fill-mode:both;
+				animation-timing-function:ease-in-out;
+			}
+
+			#profile_panel
+			{
+				position: absolute;
+				width: 17%;
+				height: 50%;
+				top:54%;
+				right: 3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				pointer-events: fill;
+			}
+
+			.author_title
+			{
+				font-family:Arial;
+				font-weight: normal;
+				font-size: 24px;
+				letter-spacing: 1.0px;
+				color: rgba(255, 255, 255, 1);
+			}
+
+			.profile_content
+			{
+				margin-top: 2%;
+				font-family:Arial;
+				font-weight:lighter;
+				letter-spacing: 1.5px;
+				font-size: 15px;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			#info_panel
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:100%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			#info_panel_2
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:200%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			#info_panel_3
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:300%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.sub_title
+			{
+				font-family:Arial;
+				font-weight: normal;
+				font-size: 24px;
+				color: rgba(255, 255, 255, 1);
+			}
+
+			.content
+			{
+				margin-top: 6%;
+				font-family:Arial;
+				font-weight:lighter;
+				font-size: 15px;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			#work_01
+			{
+				position: absolute;
+				top: 100%;
+				left: 0%;
+				width: 100%;
+				height: 100%;
+			}
+
+			#work_02
+			{
+				position: absolute;
+				top: 200%;
+				right: 0%;
+				width: 100%;
+				height: 100%;
+			}
+
+			#work_03
+			{
+				position: absolute;
+				top: 300%;
+				right: 0%;
+				width: 100%;
+				height: 100%;
+			}
+
+            .top_panel{
+                position:fixed;
+                right: 0%;
+                width: 60%;
+                height: 6%;
+                display: flex;
+                justify-content: end;
+                background-color: rgba(255, 255, 255, 0);
+                z-index: 9;
+            }
+
+			.logo_panel{
+                position:fixed;
+				top:3%;
+				left: 1.5%;
+                width: 60%;
+                height: 6%;
+                background-color: rgba(255, 255, 255, 0);
+                z-index: 9;
+            }
+
+			.logo{
+				position: absolute;
+				text-align: left;
+				font-family: "Roboto", sans-serif;
+				letter-spacing: 2px;
+				font-size: 27px;
+				color: rgba(255, 255, 255, 1);
+			}
+
+
+            .main_btn{
+                position: relative;
+                right: 3%;
+                width: 10%;
+                height: 100%;
+                z-index: 3;
+                pointer-events: auto;
+            }
+
+            .btn_text{
+                position: absolute;
+                right: 0px;
+                left: 0px;
+                bottom: 0px;
+                text-align: center;
+                font-family: "Roboto", sans-serif;
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+			
+
+
+			@media screen and (max-width:768px)
+			{
+
+				.background
+				{
+					position: absolute;
+					height: 370%;
+					width:  100%;
+
+					background-image: url(./images/portfolio_2023_bgi.png);
+					background-size: 100% 100%;
+				}
+
+				.title_3D_panel
+				{
+					width: 100%;
+   					height: 100%;
+				}
+
+                .top_panel{
+                    position:fixed;
+                    bottom: 0%;
+                    width: 100%;
+                    height: 6%;
+                    background-color: rgba(255, 255, 255,1);
+                    z-index: 9;
+                }
+
+				.logo_panel
+				{
+					top:3%;
+					left: 4.5%;
+					width: 60%;
+					height: 6%;
+				}
+
+				.logo
+				{
+					position: absolute;
+					text-align: left;
+					letter-spacing: 1px;
+					font-size: 21px;
+				}
+
+                .main_btn{
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    
+                    width: 33.3%;
+                    height: 100%;
+                }
+                
+                .btn_text{
+                    position: relative;
+                    font-size: 15px;
+                    color: rgba(0, 0, 0, 1);
+                }
+
+				#title3D
+				{
+					
+					position: absolute;
+					top: 45%;
+					width: 100%;
+   				    height: 75%;
+				}
+
+				#author
+				{
+					position: absolute;
+					top: 12%;
+					height: 81%;
+					aspect-ratio: 1/1;
+				}
+
+
+				/*#shibaInu
+				{
+					position: absolute;
+
+					width: 100%;
+					height: 100%;
+					display: block;
+				}*/
+
+				#profile_panel
+				{
+					position: absolute;
+					width: 42%;
+					height: 45%;
+					top:36%;
+					right: 0%;
+					z-index: 3;
+					pointer-events: fill;
+				}
+
+				.author_title
+				{
+					letter-spacing: 0px;
+					font-size: 21px;
+				}
+
+				.profile_content
+				{
+					margin-top: 2%;
+					font-family:Arial;
+					font-weight:lighter;
+					letter-spacing: 0.3px;
+					font-size: 12px;
+				}
+
+
+				#title
+				{
+					position: fixed;
+					top:  8%;
+					left: 4.5%;
+					font-family:Arial;
+					font-weight:lighter;
+					font-size: 12px;
+					color: rgba(250, 250, 250, 0.75);
+					transform: translate(0%, -50%);
+				}
+
+				
+
+				#info_panel
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:156%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				
+				#info_panel_2
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:245%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				#info_panel_3
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:334%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				.sub_title
+				{
+					font-family:Arial;
+					font-weight: normal;
+					text-align: center;
+					font-size: 21px;
+					color: rgba(255, 255, 255, 1);
+				}
+
+				.content
+				{
+					margin-top: 3%;
+					text-align: center;
+					font-family:Arial;
+					font-weight:lighter;
+					font-size: 12px;
+					color: rgba(255, 255, 255, 0.6);
+				}
+
+
+				#work_01
+				{
+					position: absolute;
+					top: 112%;
+					left: 0%;
+					width: 100%;
+					height: 50%;		
+					
+				}
+
+				#work_02
+				{
+					position: absolute;
+					top: 195%;
+					right: 0%;
+					width: 100%;
+					height: 55%;
+				}
+
+				#work_03
+				{
+					position: absolute;
+					top: 278%;
+					right: 0%;
+					width: 100%;
+					height: 55%;
+				}
+
+			}

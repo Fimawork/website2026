@@ -1,23 +1,577 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,700');  
 
-.header
+.background
 {
 	position: absolute;
-    right: 0px;
-    left: 0px;
-    top: 60%;
-    text-align: center;
-    font-family:"Inter", sans-serif;
-	font-weight:400;
-    font-size: 45px;
-    color: rgba(255, 255, 255, 1);
-	z-index: 99;
+	height: 400%;
+	width:  100%;
+	background-color: rgba(52, 50, 50, 1);
 }
 
-#title3D
+.title_3D_panel
 {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
+
+#title3D
+{
+	width: 100%;
+	height: 100%;
+}
+
+#title
+{
+	position: absolute;
+	right: 0px;
+	left: 0px;
+	top: 63%;
+	text-align: center;
+	font-family:"Inter", sans-serif;
+	font-weight:400;
+	font-size: 18px;
+	letter-spacing: 1px;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.vignette 
+{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-shadow: 0 0 210px rgba(0,0,0,0.9) inset;
+	pointer-events: none;
+}
+
+.main_btn
+{
+    position: relative;
+    right: 3%;
+    width: 10%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: auto;
+}
+	
+.btn_text
+{
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
+    font-family:"Inter", sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+	display: block;
+}
+
+.btn_text:hover
+{
+	color: rgba(255, 255, 255, 0.45);
+}
+
+			#profile_panel
+			{
+				position: absolute;
+				width: 17%;
+				height: 50%;
+				top:54%;
+				right: 3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				pointer-events: fill;
+			}
+
+			.author_title
+			{
+				font-family:Arial;
+				font-weight: normal;
+				font-size: 24px;
+				letter-spacing: 1.0px;
+				color: rgba(255, 255, 255, 1);
+			}
+
+			.profile_content
+			{
+				margin-top: 2%;
+				font-family:Arial;
+				font-weight:lighter;
+				letter-spacing: 1.5px;
+				font-size: 15px;
+				color: rgba(255, 255, 255, 0.6);
+			}
+
+			#info_panel
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:100%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			#info_panel_2
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:200%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			#info_panel_3
+			{
+				position: absolute;
+				width: 17%;
+				height: 100%;
+				top:300%;
+				right:3%;
+				z-index: 3;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+.sub_title
+{
+    margin-top: 6%;
+	text-align: center;
+    font-family:"Inter", sans-serif;
+    font-size: 24px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.content
+{
+	margin-top: 3%;
+	text-align: center;
+    font-family:"Inter", sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#work_01
+{
+	position: absolute;
+	top: 100%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+    display: flex;
+    justify-content: center;
+    
+}
+
+            .demo_window
+            {
+                position: relative;
+                margin: 39px;
+                top: 50%;
+                width: 480px;
+                height: 50%;
+                transform: translate(0%,-50%);
+            }
+
+            .demo_movie
+            {
+                height: 270px;
+                width: 480px;
+				background-image: url(./images/MedicalCartConfiguratorDemo.gif);
+				background-size: 100% 100%;
+                border-radius: 15px;
+            }
+
+			#work_02
+			{
+				position: absolute;
+				top: 200%;
+				right: 0%;
+				width: 100%;
+				height: 100%;
+			}
+
+			#work_03
+			{
+				position: absolute;
+				top: 300%;
+				right: 0%;
+				width: 100%;
+				height: 100%;
+			}
+
+			#anchor_01
+			{
+				position: absolute;
+				top: 150%;
+				left: 50%;
+				width: 1%;
+				height: 1%;
+				transform: translate(-50%, -50%);
+			}
+
+			#anchor_02
+			{
+				position: absolute;
+				top: 250%;
+				left: 50%;
+				width: 1%;
+				height: 1%;
+				transform: translate(-50%, -50%);
+			}
+
+			#anchor_03
+			{
+				position: absolute;
+				top: 350%;
+				left: 50%;
+				width: 1%;
+				height: 1%;
+				transform: translate(-50%, -50%);
+			}
+
+            .top_panel{
+                position:fixed;
+				left: 50%;
+                width: 60%;
+                height: 6%;
+                display: flex;
+                justify-content: center;
+                background-color: rgba(255, 255, 255, 0);
+                z-index: 9;
+				transform: translate(-50%,0%);
+            }
+
+			.logo_panel{
+                position:fixed;
+				top:3%;
+				left: 3%;
+                z-index: 9;
+            }
+
+			.logo{
+				position: absolute;
+				height: 30px;
+				aspect-ratio: 80/13.75;
+				background-image: url(./images/fimawork_logo_C_white.png);
+				background-size: 100% 100%;
+				opacity: 0.75;
+			}
+
+
+           
+
+			i{
+				position: absolute;
+				top: 50%;
+                left: 0%;
+				color: rgba(255, 255, 255, 0);
+				transform: translate(100%, 0%);
+				display: none;
+			}
+
+			@keyframes SceneCrossEffect 
+			{
+				0% {filter: blur(4.5px);}
+				100%{filter: blur(0px);}
+			}
+
+			.SceneCrossEffect_anim
+			{
+				animation: SceneCrossEffect ;
+				animation-duration: 3s;
+				animation-iteration-count: 1;
+				animation-fill-mode: forwards;
+				animation-timing-function:linear;
+			}
+
+
+			@media screen and (max-width:768px)
+			{
+
+				.background
+				{
+					position: absolute;
+					height: 370%;
+					width:  100%;
+
+					background-image: url(./images/portfolio_2023_bgi.png);
+					background-size: 100% 100%;
+				}
+
+				.title_3D_panel
+				{
+					width: 100%;
+   					height: 100%;
+				}
+
+                .top_panel{
+                    position:fixed;
+					right: 5%;
+                    bottom: 2%;
+                    width: 90%;
+                    height: 8%;
+                    
+					background: rgba(250, 250, 250, 0.1);
+					border-radius: 15px;
+
+					backdrop-filter: blur(5px);
+					-webkit-backdrop-filter: blur(5px);
+			
+					
+                    z-index: 9;
+                }
+
+				.logo_panel
+				{
+					top:3%;
+					left: 4.5%;
+					width: 60%;
+					height: 6%;
+				}
+
+				.logo
+				{
+					position: absolute;
+					text-align: left;
+					letter-spacing: 1px;
+					font-size: 21px;
+				}
+
+                .main_btn{
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    
+                    width: 33.3%;
+                    height: 100%;
+					
+                }
+                
+                .btn_text{
+                    position: relative;
+                    font-size: 15px;
+                    color: rgba(0, 0, 0, 1);
+					display: none;
+                }
+
+				.btn_text:hover{
+				color: rgba(0, 0, 0, 1);
+				}
+
+				i{
+				
+					position: absolute;
+					top: 20%;
+                	left: 50%;
+					color: rgba(255, 255, 255, 0.9);
+					transform: translate(0%, 0%);
+					display: block;
+				}
+
+				#title3D
+				{
+					
+					position: absolute;
+					top: 45%;
+					width: 100%;
+   				    height: 75%;
+				}
+
+				#author
+				{
+					position: absolute;
+					top: 12%;
+					height: 81%;
+					aspect-ratio: 1/1;
+				}
+
+
+				/*#shibaInu
+				{
+					position: absolute;
+
+					width: 100%;
+					height: 100%;
+					display: block;
+				}*/
+
+				#profile_panel
+				{
+					position: absolute;
+					width: 42%;
+					height: 45%;
+					top:36%;
+					right: 0%;
+					z-index: 3;
+					pointer-events: fill;
+				}
+
+				.author_title
+				{
+					letter-spacing: 0px;
+					font-size: 21px;
+				}
+
+				.profile_content
+				{
+					margin-top: 2%;
+					font-family:Arial;
+					font-weight:lighter;
+					letter-spacing: 0.3px;
+					font-size: 12px;
+				}
+
+
+				#title
+				{
+					position: fixed;
+					top:  8%;
+					left: 4.5%;
+					font-family:Arial;
+					font-weight:lighter;
+					font-size: 12px;
+					color: rgba(250, 250, 250, 0.75);
+					transform: translate(0%, -50%);
+				}
+
+				
+
+				#info_panel
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:156%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				
+				#info_panel_2
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:250%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				#info_panel_3
+				{
+					position: absolute;
+					width: 75%;
+					height: 30%;
+					top:334%;
+					right: 12.5%;
+					z-index: 3;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					pointer-events: none;
+				}
+
+				.sub_title
+				{
+					font-family:Arial;
+					font-weight: normal;
+					text-align: center;
+					font-size: 21px;
+					color: rgba(255, 255, 255, 1);
+				}
+
+				.content
+				{
+					margin-top: 3%;
+					text-align: center;
+					font-family:Arial;
+					font-weight:lighter;
+					font-size: 12px;
+					color: rgba(255, 255, 255, 0.6);
+				}
+
+
+				#work_01
+				{
+					position: absolute;
+					top: 112%;
+					left: 0%;
+					width: 100%;
+					height: 50%;		
+					
+				}
+
+				#work_02
+				{
+					position: absolute;
+					top: 195%;
+					right: 0%;
+					width: 100%;
+					height: 55%;
+				}
+
+				#work_03
+				{
+					position: absolute;
+					top: 278%;
+					right: 0%;
+					width: 100%;
+					height: 55%;
+				}
+
+				#anchor_01
+				{
+					position: absolute;
+					top: 142%;
+					left: 50%;
+					width: 1%;
+					height: 1%;
+					transform: translate(-50%, -50%);
+				}
+
+				#anchor_02
+				{
+					position: absolute;
+					top: 233%;
+					left: 50%;
+					width: 1%;
+					height: 1%;
+					transform: translate(-50%, -50%);
+				}
+
+				#anchor_03
+				{
+					position: absolute;
+					top: 328%;
+					left: 50%;
+					width: 1%;
+					height: 1%;
+					transform: translate(-50%, -50%);
+				}
+
+			}

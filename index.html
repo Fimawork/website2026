@@ -3,22 +3,22 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
-		<meta name="description" content="我是fimawork，專注於3D網頁介面與使用者體驗的設計工作室。"/>
+		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
 		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
 		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<title>fimawork | 3D網頁設計、3D Website</title>
-		<link rel="stylesheet" type="text/css" href="./Main.css">
+		<title>費馬工作室 | fimawork | 3D網頁設計、3D Website Design</title>
+	
+		<link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+		<link rel="manifest" href="./images/site.webmanifest">
+		<link rel="stylesheet" type="text/css" href="Main.css">
 		<style type="text/css">
-			@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,500,700');  
-			@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
-
+			
 			body
 			{
 				margin: 0;
 				padding:0; 
-				overflow: hidden;
-				background-color: rgba(52, 50, 50, 1);
 			}
 			
 			canvas
@@ -28,15 +28,238 @@
 			}
 
 		</style>
-	<body>	
-		
-		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
-		<div id="heading" class="header">3D Website Designer</div>
-		<iframe id="title3D" src="./title3D.html" frameborder="0" style="pointer-events: none;display: block;"></iframe>
-		
-    </body>
-	<script type="module">
-		
+
+	</head>
+	
+	<body>   
+	
 	</script>
 
-</html>
+		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
+		<script src="https://fimawork.droppages.net/website2025/LevelManager.js"></script> 
+		<div class="background"></div>
+
+		<div class="logo_panel">
+			<div class="logo"></div>
+		</div>
+
+		<div class="top_panel">
+			<div class="main_btn"onclick="scrollToPosition(0)">
+				<div class="btn_text" >Home</div>
+			</div>
+			<div class="main_btn"  onclick="scrollToPosition(1)">
+				<div class="btn_text">服務項目</div>
+			</div>
+			<div class="main_btn" onclick="scrollToPosition(2)">
+				<div class="btn_text">技術優勢</div>
+			</div>
+			<div class="main_btn"  onclick="scrollToPosition(3)">
+				<div class="btn_text">合作流程</div>
+			</div>
+		</div>
+
+        <div class="title_3D_panel">
+            <iframe id="title3D" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
+			<!--<iframe id="work_01" src="https://fimawork.droppages.net/website2024/audicar.html" frameborder="0"></iframe>-->
+
+			<div id="work_01">
+				<div class="demo_window">
+					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);"></div>
+					<div class="sub_title">3D產品配置器</div>
+					<div class="content">打造互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</div>
+				</div>
+				<div class="demo_window">
+					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);"></div>
+					<div class="sub_title">3D產品櫥窗</div>
+					<div class="content">打造可在網頁中任意旋轉、縮放、可近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</div>
+				</div>
+			</div>
+			<iframe id="work_02" src="https://fimawork.droppages.net/website2024/taiwan.html" frameborder="0"></iframe>
+			<iframe id="work_03" src="https://fimawork.droppages.net/f0038/skills.html" frameborder="0"></iframe>
+
+			<div id="anchor_01"></div>
+			<div id="anchor_02"></div>
+			<div id="anchor_03"></div>
+        </div>
+
+		<div id="title" >工業設計x3D互動設計，費馬幫你打造最懂產品的3D網頁</div>
+
+		<div id="profile_panel" style="display: none;">
+			<div class="author_title" style="letter-spacing: 1.0px">
+				Fima Chou
+			</div>
+			<div class="profile_content" style="margin-top: 6%">
+				23 | Octorber | 1982
+			</div>
+			<div class="profile_content">
+				Taipei City, Taiwan
+			</div>
+			<div class="profile_content">
+				fima.chou@gmail.com
+			</div>
+		</div>
+
+		<div id="info_panel" style="display: none;">
+			<div class="sub_title">
+				About
+			</div>
+			<div class="content">
+				I am an Industrial Designer with a well-trained for CAD and CAE. Over 10 years in product development, I’ve specialized in finding solutions to problom of usability. 
+			</div>
+			<div class="content" style="color: #068db6; pointer-events: fill;"onclick="parent.open('https://fimawork.droppages.net/f0026/car_demo.html')">
+				F0026_Car_Demo
+			</div>
+		</div>
+
+		<div id="info_panel_2">
+			<div class="sub_title">
+				3D UI/UX
+			</div>
+			<div class="content">
+				I'm skillfull at making 3D content and having greatest passion to explore a better UI/UX design for Digtal Twin Applications.
+			</div>
+
+			<div class="content" style="color: #068db6; pointer-events: fill;"onclick="parent.open('https://fimawork.droppages.net/F0036/')">
+				F0036
+			</div>
+		</div>
+
+		<div id="info_panel_3">
+			<div class="sub_title">
+				Skills
+			</div>
+			<div class="content">
+				Three.js, JavaScript, Unity, Unreal Engine, Photoshop, Illustrator – Skilled in developing interactive 3D interfaces and integrating visual assets into immersive experiences.
+			</div>
+		</div>
+
+		<div class="vignette"></div>
+
+		<script>
+			let _author = document.querySelector('#author');
+
+
+			//author_hud_effect();
+
+			async function author_hud_effect()
+			{
+			    setTimeout(() => {_author.classList.toggle("hauthor_hud_effect_anim");}, 6000);//1000=1sec}
+				setTimeout(() => {_author.classList.remove("hauthor_hud_effect_anim");}, 6900);//1000=1sec}
+				setTimeout(() => {author_hud_effect();}, 15000);
+			}
+
+
+			window.addEventListener("scroll", (event) => {
+    		scroll = this.scrollY;
+
+				updateScrollValue(scroll);
+			
+			});
+
+			window.addEventListener("pointerdown", (event) => {
+
+				present_scroll=scroll;
+
+			});
+
+
+//			/////客製一個 addEventListener練習
+//
+//			document.addEventListener('custom_event_name', e => {
+//				console.log(e.detail); // => 可以傳出去的值
+//			});
+			
+
+			const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+			const element_1 = document.querySelector('#anchor_01')
+			const rect_1 = element_1.getBoundingClientRect() // get rects(width, height, top, etc)
+			const element_2 = document.querySelector('#anchor_02')
+			const rect_2 = element_2.getBoundingClientRect() // get rects(width, height, top, etc)
+			const element_3 = document.querySelector('#anchor_03')
+			const rect_3 = element_3.getBoundingClientRect() // get rects(width, height, top, etc)
+
+			function scrollToPosition(index) 
+			{
+				
+				switch(index)
+				{
+					case 0:
+					window.scrollTo({
+					  top: 0,
+					  left: 0,
+					  behavior: "smooth",
+					});
+					
+					break;
+
+					case 1:
+
+					window.scroll({
+					  top: rect_1.top + rect_1.height / 2 - viewHeight / 2,
+					  behavior: 'smooth' // smooth scroll
+					});
+					
+					break;
+
+					case 2:
+
+					window.scroll({
+					  top: rect_2.top + rect_2.height / 2 - viewHeight / 2,
+					  behavior: 'smooth' // smooth scroll
+					});
+					
+					break;
+
+					case 3:
+
+					window.scroll({
+					  top: rect_3.top + rect_3.height / 2 - viewHeight / 2,
+					  behavior: 'smooth' // smooth scroll
+					});
+					
+					break;
+				}
+
+			}
+
+		</script>
+
+		<script>
+
+			let title_string="十年工業設計，費馬幫你打造最懂產品的3D網頁";
+			let current_title_string="";
+			let text_num=0;
+			const _title = document.querySelector('#title')
+
+			//_title.textContent=null;
+
+			//setTimeout(() => {blinking_text_anim();}, 3000);//1000=1sec}
+			//blinking_text_anim();
+
+
+			function blinking_text_anim()
+			{
+				if(text_num<title_string.length)
+				{
+					text_num++;
+					current_title_string=title_string.substring(0, text_num);
+					_title.textContent=current_title_string;
+					setTimeout(() => {blinking_text_anim();}, 30);//1000=1sec}
+
+					if(text_num<12)
+					{
+						_title.style.opacity=0.3;
+					}
+
+					else
+					{
+						_title.style.opacity=1;
+					}
+				}
+			}
+		</script>
+		
+
+        
+    </body>
+    </html>

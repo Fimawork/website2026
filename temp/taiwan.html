@@ -1,0 +1,987 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>Taiwan AQI</title>
+		
+
+		<style>
+			body
+			{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+			}
+			
+
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+			.aqi_index
+			{
+				position: absolute;
+				display: flex;
+				justify-content: center;
+				width: 100%;
+				bottom: 10%;
+				/*left: 50%;*/
+			}
+
+			.title
+			{
+				position: absolute;
+				left: 50%;
+				top: 60px;
+				font-family:Arial;
+				font-weight:300px;
+				font-size: 18px;
+				transform: translate(-50%,-50%);
+				color: rgba(250, 250, 250, 0.75);
+			}
+			
+			.description
+			{
+				position: absolute;
+				top: -30px;
+				font-family:Arial;
+				font-weight:lighter;
+				font-size: 15px;
+				color: rgba(250, 250, 250, 0.75);
+			}
+
+			.description:nth-child(2)
+			{
+				left: 0px;
+			}
+		
+			.description:nth-child(3)
+			{
+				right: 0px;
+			}
+			
+			.ConcentrationBar
+			{
+				position: relative;
+				
+				width: 360px;
+   				height: 10px;
+				background:linear-gradient(to right,#096,#ffde33,#f93,#c03,#609,#7e0023,#2d020e);
+			}
+
+			.sceneTag_holder
+			{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+
+			.dashboard
+			{
+				position: absolute;
+				top: 15%;
+				left: 40%;
+				display: flex;
+				width: 150px;
+				height: 120px;
+				transform: translate(-50%,-50%);
+			}
+
+			.titlePanel
+			{
+				padding: 5px;
+				width: 25%;
+				height: 100%;
+			}
+
+			.detailPanel
+			{
+				padding: 5px;
+				width: 50%;
+				height: 100%;
+			}
+
+			.detail_title
+			{
+				height: 16.7%;
+				text-align: right;
+				font-family:Arial;
+				font-weight:lighter;
+				font-size: 12px;
+				color: rgba(250, 250, 250, 0.75);
+			}
+
+			.detail_value
+			{
+				height: 16.7%;
+				padding-left: 10px;
+				font-family:Arial;
+				font-weight:lighter;
+				font-size: 12px;
+				color: rgba(250, 250, 250, 0.75);
+			}
+
+			.detail_unit
+			{
+				height: 16.7%;
+				font-family:Arial;
+				font-weight:100px;
+				font-size: 10px;
+				color: rgba(250, 250, 250, 0.75);
+			}
+
+			@media screen and (max-width:768px)
+			{
+				.aqi_index
+				{
+					bottom: 8%;
+					/*left: 50%;*/
+				}
+				
+				.ConcentrationBar
+				{
+					width: 180px;
+   					height: 8px;
+				}
+
+				.sceneTag_holder
+				{
+					position: absolute;
+					left: 20%;
+					top:12%;
+					width: 0%;
+					height: 0%;
+					pointer-events: none;
+				}
+
+				.title
+				{
+					top: 30px;
+					font-family:Arial;
+					font-weight:300px;
+					font-size: 12px;
+		
+				}
+
+				.description
+				{
+					top: -20px;
+					font-size: 10px;
+				}
+
+				.dashboard
+				{
+					position: absolute;
+					top: 12%;
+					left: 20%;
+					display: flex;
+					width: 120px;
+					height: 96px;
+					transform: translate(-50%,-50%);
+				}
+
+				.detail_title
+				{
+					font-size: 10px;
+
+				}
+
+				.detail_value
+				{
+					padding-left: 0px;
+					font-size: 10px;
+				}
+			}
+
+			
+		</style>
+
+        
+        
+	</head>
+	<body>
+	<div class="aqi_index">
+		
+		<div class="ConcentrationBar"> 
+			<div class="title">Air Quality Index </div>
+			<div class="description">Good</div>
+			<div class="description">Hazardous</div>
+		</div>	
+
+	</div> 
+	
+	<div class="sceneTag_holder">
+		<div id="sceneTag_info" class="dashboard">
+			<div class="titlePanel">
+				<div class="detail_title">location</div>
+				<div class="detail_title">aqi</div>
+				<div class="detail_title">pm2.5</div>
+				<div class="detail_title">pm10</div>
+				<div class="detail_title">co</div>
+				<div class="detail_title">status</div>
+			</div>
+			<div class="detailPanel">
+				<div id="location" class="detail_value">---</div>
+				<div id="aqi" class="detail_value">---</div>
+				<div id="pm25" class="detail_value">---</div>
+				<div id="pm10" class="detail_value">---</div>
+				<div id="co" class="detail_value">---</div>
+				<div id="status" class="detail_value">---</div>
+			</div>
+			<div class="titlePanel">
+				<div class="detail_unit"></div>
+				<div class="detail_unit">aqi</div>
+				<div class="detail_unit">μg/m3</div>
+				<div class="detail_unit">μg/m3</div>
+				<div class="detail_unit">ppm</div>
+				<div class="detail_unit"></div>
+			</div>
+		</div>
+	</div>
+	
+		
+	<script src="./js/three.js"></script> 
+
+	<!--<script src="./jsm/threex.domevents/threex.domevents.js"></script>-->
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "./build/three.module.js",				
+				"three/addons/": "./jsm/"             
+			}
+		}
+
+		
+		
+	</script>
+
+
+
+	<script>
+
+		let camera, scene, renderer, stats;
+		let idleTime=0;
+
+		let deltaTime=0;
+
+		const clock = new THREE.Clock();
+
+		let mixer;
+
+		let modelChild_0, modelChild_1, modelChild_2, modelChild_3, modelChild_4, modelChild_5, modelChild_6, modelChild_7, modelChild_8, modelChild_9, modelChild_10, modelChild_11, modelChild_12, modelChild_13, modelChild_14, modelChild_15, modelChild_16, modelChild_17;
+
+		let Taiwan_3D = new THREE.Object3D();
+
+		let ScanEffect_blue = new THREE.MeshBasicMaterial( { color: 0x0EAEAE, transparent: true, blending: THREE.AdditiveBlending, opacity:0.2} );
+
+		let aqi_good = new THREE.MeshBasicMaterial( { color: 0x02bf21, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+		let aqi_moderate = new THREE.MeshBasicMaterial( { color: 0xfbff03, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+		let aqi_UnhealthyForSensitiveGroup = new THREE.MeshBasicMaterial( { color: 0xff9603, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+		let aqi_Unhealthy = new THREE.MeshBasicMaterial( { color: 0xff0000, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+		let aqi_VeryUnhealthy = new THREE.MeshBasicMaterial( { color: 0xa500c9, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+		let aqi_Hazardous = new THREE.MeshBasicMaterial( { color: 0x960000, transparent: true, blending: THREE.AdditiveBlending, opacity:0.6} );
+
+		let AQI_data;
+
+		class Local_Data 
+		{
+  			constructor(country_value,aqi_value, pm25_value,pm10_value,co_value,status_value) 
+			{
+				this.country_value=country_value;
+    			this.aqi_value = aqi_value;
+    			this.pm25_value = pm25_value;
+				this.pm10_value = pm10_value;
+				this.co_value = co_value;
+				this.status_value = status_value;
+		    }
+		}
+
+		const keelung_data=new Local_Data();
+		const taipei_data=new Local_Data();
+		const new_taipei_city_data=new Local_Data();
+		const taoyuan_data=new Local_Data();
+		const hsinchu_data=new Local_Data();
+		const hsinchu_city_data=new Local_Data();
+		const miaoli_data=new Local_Data();
+		const taichung_data=new Local_Data();
+		const changhua_data=new Local_Data();
+		const yunlin_data=new Local_Data();
+		const chiayi_data=new Local_Data();
+		const tainan_data=new Local_Data();
+		const kaohsiung_data=new Local_Data();
+		const pingtung_data=new Local_Data();
+		const yilan_data=new Local_Data();
+		const hualien_data=new Local_Data();
+		const taitung_data=new Local_Data();
+		const natou_data=new Local_Data();
+
+		let _location = document.querySelector('#location');
+		let _aqi = document.querySelector('#aqi');
+		let _pm25 = document.querySelector('#pm25');
+		let _pm10 = document.querySelector('#pm10');
+		let _co = document.querySelector('#co');
+		let _status = document.querySelector('#status');
+		let _sceneTag_info= document.querySelector('#sceneTag_info');
+
+
+		let mousePos = { x: undefined, y: undefined };
+
+		//////Raycaster工具//////
+		const raycaster = new THREE.Raycaster();
+		const pointer = new THREE.Vector2();
+		let INTERSECTED;
+
+		let hover_location;
+
+	</script>
+
+	
+	
+	<script type="module">
+
+		import * as THREE from 'three';
+
+		import Stats from 'three/addons/libs/stats.module.js';
+
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		
+		import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+
+
+		//document.write("/js/test.js");//引用外部的script
+
+		//document.write("/js/FX_CameraController.js");
+
+
+        init();
+        animate();
+		getAQI();
+		//WindowEventListenerInit();
+		
+		
+
+function init() {
+
+    
+	const container = document.createElement( 'div' );
+	document.body.appendChild( container );
+	scene = new THREE.Scene();
+
+	camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera.position.set(10,-10,100);
+	//camera.rotation.y=-Math.PI/2;
+	camera.lookAt(0,0,0);
+
+
+	renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled = true;
+	renderer.useLegacyLights = true;
+	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+
+
+
+
+
+
+	function load_Taipei()
+	{
+		const model_scale = 0.12 ;
+		const modelscale = new THREE.Vector3(model_scale,model_scale,model_scale);
+		const modelPosition = new THREE.Vector3(0,-12,0);
+
+		Taiwan_3D.add(modelChild_0).add(modelChild_1).add(modelChild_2).add(modelChild_3).add(modelChild_4).add(modelChild_5).add(modelChild_6).add(modelChild_7).add(modelChild_8).add(modelChild_9).add(modelChild_10).add(modelChild_11).add(modelChild_12).add(modelChild_13).add(modelChild_14).add(modelChild_15).add(modelChild_16).add(modelChild_17);
+
+		scene.add(Taiwan_3D);
+
+		Taiwan_3D.scale.copy(modelscale);
+		Taiwan_3D.position.copy(modelPosition);
+
+		modelChild_0.material=ScanEffect_blue;//taitung
+		modelChild_1.material=ScanEffect_blue;//taichung
+		modelChild_2.material=ScanEffect_blue;//kaohsiung
+		modelChild_3.material=ScanEffect_blue;//yilan
+		modelChild_4.material=ScanEffect_blue;//hsinchuCity
+		modelChild_5.material=ScanEffect_blue;//NewTaipeiCity
+		modelChild_6.material=ScanEffect_blue;//Miaoli
+		modelChild_7.material=ScanEffect_blue;//Tainan
+		modelChild_8.material=ScanEffect_blue;//keelung
+		modelChild_9.material=ScanEffect_blue;//yunlin
+		modelChild_10.material=ScanEffect_blue;//chiayi
+		modelChild_11.material=ScanEffect_blue;//pingtung
+		modelChild_12.material=ScanEffect_blue;//taoyuan
+		modelChild_13.material=ScanEffect_blue;//hsinchu
+		modelChild_14.material=ScanEffect_blue;//nantou
+		modelChild_15.material=ScanEffect_blue;//hualien
+		modelChild_16.material=ScanEffect_blue;//changhua
+		modelChild_17.material=ScanEffect_blue;//taipei
+
+		
+
+
+		modelChild_7.position.set(1,1,3);
+		modelChild_11.position.set(1,1,-3);
+		modelChild_0.position.set(1,1,3);
+		modelChild_6.position.set(1,1,3);
+		modelChild_17.position.set(1,1,-3);
+		modelChild_5.position.set(1,1,3);
+		modelChild_3.position.set(1,1,3);
+		modelChild_16.position.set(1,1,3);
+		modelChild_1.position.set(1,1,-3);
+		modelChild_15.position.set(1,1,-3);
+
+	}
+
+
+	const loadingManager_Taipei = new THREE.LoadingManager(load_Taipei);
+	// 導入3D模型
+    
+
+	const loader_Taipei = new FBXLoader(loadingManager_Taipei);
+	loader_Taipei.load( './3D/TaiwanPixel_20240616.fbx', 
+
+		(object) => {
+		
+		//console.log(object);
+		modelChild_0=object.children[0];//taitung
+		modelChild_1=object.children[1];//taichung
+		modelChild_2=object.children[2];//kaohsiung
+		modelChild_3=object.children[3];//yilan
+		modelChild_4=object.children[4];//hsinchuCity
+		modelChild_5=object.children[5];//NewTaipeiCity
+		modelChild_6=object.children[6];//Miaoli
+		modelChild_7=object.children[7];//Tainan
+		modelChild_8=object.children[8];//keelung
+		modelChild_9=object.children[9];//yunlin
+		modelChild_10=object.children[10];//chiayi
+		modelChild_11=object.children[11];//pingtung
+		modelChild_12=object.children[12];//taoyuan
+		modelChild_13=object.children[13];//hsinchu
+		modelChild_14=object.children[14];//nantou
+		modelChild_15=object.children[15];//hualien
+		modelChild_16=object.children[16];//changhua
+		modelChild_17=object.children[17];//taipei
+		
+		
+		
+    },
+    (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+    },
+    (error) => {
+        console.log(error)
+    } );
+
+	
+
+	///////Collider/////
+
+    
+
+	
+   
+	//boxcollider_01.position.set(0,5,0);
+
+
+	//////
+	
+
+
+    // stats
+	//stats = new Stats();
+	//container.appendChild( stats.dom );
+
+    //把3D渲染效果加入網頁視窗中
+	container.appendChild( renderer.domElement );
+
+
+	//利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+	const controls = new OrbitControls( camera, renderer.domElement );
+	controls.enablePan = true;//右鍵平移效果
+	controls.enableDamping = true;
+	controls.dampingFactor =1.5;
+	controls.maxDistance = 500;
+	controls.target.set( 0, 10, 0 );
+	controls.zoomSpeed=1;
+	controls.update();
+
+	//////EventListener//////
+	window.addEventListener( 'resize', onWindowResize );
+
+	document.addEventListener('keydown', event => {
+  
+	  switch (event.keyCode)
+	 { 
+		case 32://spacebar
+
+		//ScanModeOn();
+		//changeColor(2);
+		
+		//console.log(taipei_data.aqi_value);
+
+		break;
+
+		case 37://left arrow
+		//console.log("left arrow");
+		
+		break;
+
+		case 38://up arrow
+		//console.log("up arrow");
+		break;
+
+		case 39: //right arrow
+		//console.log("right arrow");
+		break;
+
+
+	 }
+
+	})
+
+	document.addEventListener("pointerdown", function (e) {
+
+		//mousePos = { x: event.clientX, y: event.clientY };
+
+		if(INTERSECTED!=null)
+		{
+			UpdateInfoPanel();
+
+			if((mousePos.x)/window.innerWidth>0.5)
+			{
+				_sceneTag_info.style.cssText = `position:absolute;left:${(mousePos.x)/window.innerWidth*100+10}%;top:${(mousePos.y)/window.innerHeight*100}%;`;
+			}
+		
+			else
+			{
+				_sceneTag_info.style.cssText = `position:absolute;left:${(mousePos.x)/window.innerWidth*100-10}%;top:${(mousePos.y)/window.innerHeight*100}%;`;
+			}
+		}
+		
+	});
+
+	//window.addEventListener('mousemove', (event) => {
+   ////mousePos = { x: event.clientX, y: event.clientY };
+
+   //});
+
+   	window.addEventListener("touchmove", (event) => {
+		f(INTERSECTED!=null)
+		{
+			UpdateInfoPanel();
+
+			if((mousePos.x)/window.innerWidth>0.5)
+			{
+				_sceneTag_info.style.cssText = `position:absolute;left:${(mousePos.x)/window.innerWidth*100+10}%;top:${(mousePos.y)/window.innerHeight*100}%;`;
+			}
+		
+			else
+			{
+				_sceneTag_info.style.cssText = `position:absolute;left:${(mousePos.x)/window.innerWidth*100-10}%;top:${(mousePos.y)/window.innerHeight*100}%;`;
+			}
+		}
+
+	});
+
+	window.addEventListener('pointermove', (event) => {
+    mousePos = { x: event.clientX, y: event.clientY };
+	onPointerMove(event);
+    });
+
+	//////Raycaster工具//////
+	//window.addEventListener( 'pointermove', onPointerMove );
+}
+
+function onWindowResize() {
+
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
+
+
+//類似Unity的Update()功能
+function animate() {
+
+	requestAnimationFrame( animate );
+	
+	renderer.render( scene, camera );
+
+	
+	//stats.update();
+
+    const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+	//Taiwan_3D.rotation.y-=0.01;
+
+	//////Raycast工具/////
+	RaycastFunction();
+
+	
+				
+	}
+
+	function ScreenPosLable(target,lable,targetCam)  
+	{
+		var width = window.innerWidth, height = window.innerHeight;
+	    var widthHalf = width / 2, heightHalf = height / 2;
+	
+		var _target=target;
+		var _lable=lable;
+		var _targetCam=targetCam;
+	    var pos_3D = _target.position.clone();
+	    pos_3D.project(_targetCam);
+	    pos_3D.x = ( pos_3D.x * widthHalf ) + widthHalf;
+	    pos_3D.y = - ( pos_3D.y * heightHalf ) + heightHalf;
+
+		_lable.style.cssText = `position:absolute;top:${pos_3D.y/height*100}%;left:${pos_3D.x/width*100}%;`;
+
+	}
+	
+	
+
+
+
+	async function getAQI()
+	{
+		const api_url = "https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=658eedda-b14d-4a13-a503-f8dc7bdb6298";
+		const response = await fetch(api_url);
+		AQI_data = await response.json();
+
+		console.log(AQI_data);
+
+		//temp_data=data.records.location[0].weatherElement[3].elementValue;
+
+
+		setTimeout(() => {FindTargetData("基隆",keelung_data);}, 500);
+		setTimeout(() => {FindTargetData("士林",taipei_data);}, 550);
+		setTimeout(() => {FindTargetData("板橋",new_taipei_city_data);}, 600);
+		setTimeout(() => {FindTargetData("桃園",taoyuan_data);}, 650);
+		setTimeout(() => {FindTargetData("竹東",hsinchu_data);}, 700);
+		setTimeout(() => {FindTargetData("新竹",hsinchu_city_data);}, 750);
+		setTimeout(() => {FindTargetData("苗栗",miaoli_data);}, 800);
+		setTimeout(() => {FindTargetData("西屯",taichung_data);}, 850);
+		setTimeout(() => {FindTargetData("彰化",changhua_data);}, 900);
+		setTimeout(() => {FindTargetData("斗六",yunlin_data);}, 950);
+		setTimeout(() => {FindTargetData("嘉義",chiayi_data);}, 1000);
+		setTimeout(() => {FindTargetData("臺南",tainan_data);}, 1050);
+		setTimeout(() => {FindTargetData("左營",kaohsiung_data);}, 1100);
+		setTimeout(() => {FindTargetData("屏東",pingtung_data);}, 1150);
+		setTimeout(() => {FindTargetData("宜蘭",yilan_data);}, 1200);
+		setTimeout(() => {FindTargetData("花蓮",hualien_data);}, 1250);
+		setTimeout(() => {FindTargetData("臺東",taitung_data);}, 1300);
+		setTimeout(() => {FindTargetData("埔里",natou_data);}, 1350);
+
+		setTimeout(() => {UpdateMapAQI();}, 1400);
+
+
+		//AQI_data.replace("pm2.5", 'pm25');
+
+	}
+	
+
+	function FindTargetData(site_name,target)
+    {
+		var _site_name=site_name;
+		var _target=target;
+
+		_target=new Local_Data();
+		//console.log(AQI_data);
+        for( let i = 0 ; i < AQI_data.records.length ; i++ )
+		{
+ 			if(AQI_data.records[i].sitename===_site_name)
+			{
+				//console.log(AQI_data.records[i].aqi);
+				//console.log(AQI_data.records[i]["pm2.5"]);
+				//console.log(AQI_data.records[i].pm10);
+				//console.log(AQI_data.records[i].co);
+				//console.log(AQI_data.records[i].status);
+
+				target.aqi_value=parseInt(AQI_data.records[i].aqi);
+    			target.pm25_value=parseFloat(AQI_data.records[i]["pm2.5"]);
+				target.pm10_value=parseFloat(AQI_data.records[i].pm10);
+				target.co_value=parseFloat(AQI_data.records[i].co);
+				target.status_value=AQI_data.records[i].status;
+				target.country_value=AQI_data.records[i].county;
+				
+			}
+		}
+    }
+
+	async function SetMapAQIColor(target_model,aqi_index)
+	{
+		try{
+			var _target_model=target_model;
+			var _aqi_index=aqi_index;
+			
+			if(_aqi_index<50)//good
+			{
+				_target_model.material=aqi_good;
+			}
+		
+			else if(_aqi_index<100)//moderate
+			{
+				_target_model.material=aqi_moderate;
+			}
+		
+			else if(_aqi_index<151)//unhealthy for sensitive groups
+			{
+				_target_model.material=aqi_UnhealthyForSensitiveGroup;
+			}
+		
+			else if(_aqi_index<200)//unhealthy
+			{
+				_target_model.material=aqi_Unhealthy;
+			}
+		
+			else if(_aqi_index<300)//very unhealthy
+			{
+				_target_model.material=aqi_VeryUnhealthy;
+			}
+		
+			else//(301~500) hazzrdous
+			{
+				_target_model.material=aqi_Hazardous;
+			}
+		}
+
+		catch(e)
+		{
+			console.error(e); 
+		}
+		
+	}
+
+	function UpdateMapAQI()
+	{
+		setTimeout(() => {SetMapAQIColor(modelChild_8,keelung_data.aqi_value);}, 500);
+		setTimeout(() => {SetMapAQIColor(modelChild_17,taipei_data.aqi_value);}, 550);
+		setTimeout(() => {SetMapAQIColor(modelChild_5,new_taipei_city_data.aqi_value);}, 600);
+		setTimeout(() => {SetMapAQIColor(modelChild_12,taoyuan_data.aqi_value);}, 650);
+		setTimeout(() => {SetMapAQIColor(modelChild_13,hsinchu_data.aqi_value);}, 700);
+		setTimeout(() => {SetMapAQIColor(modelChild_4,hsinchu_city_data.aqi_value);}, 750);
+		setTimeout(() => {SetMapAQIColor(modelChild_6,miaoli_data.aqi_value);}, 800);
+		setTimeout(() => {SetMapAQIColor(modelChild_1,taichung_data.aqi_value);}, 850);
+		setTimeout(() => {SetMapAQIColor(modelChild_16,changhua_data.aqi_value);}, 900);
+		setTimeout(() => {SetMapAQIColor(modelChild_9,yunlin_data.aqi_value);}, 950);
+		setTimeout(() => {SetMapAQIColor(modelChild_10,chiayi_data.aqi_value);}, 1000);
+		setTimeout(() => {SetMapAQIColor(modelChild_7,tainan_data.aqi_value);}, 1050);
+		setTimeout(() => {SetMapAQIColor(modelChild_2,kaohsiung_data.aqi_value);}, 1100);
+		setTimeout(() => {SetMapAQIColor(modelChild_11,pingtung_data.aqi_value);}, 1150);
+		setTimeout(() => {SetMapAQIColor(modelChild_3,yilan_data.aqi_value);}, 1200);
+		setTimeout(() => {SetMapAQIColor(modelChild_15,hualien_data.aqi_value);}, 1250);
+		setTimeout(() => {SetMapAQIColor(modelChild_0,taitung_data.aqi_value);}, 1300);
+		setTimeout(() => {SetMapAQIColor(modelChild_14,natou_data.aqi_value);}, 1350);
+
+		setTimeout(() => {DefaultDashboard();CheckIfTheDataUpdated();}, 1400);
+
+	}
+
+	function DefaultDashboard()
+	{
+		_location.textContent = `${taipei_data.country_value}`;
+		_aqi.textContent = `${taipei_data.aqi_value}`;
+		_pm25.textContent = `${taipei_data.pm25_value}`;
+		_pm10.textContent = `${taipei_data.pm10_value}`;
+		_co.textContent = `${taipei_data.co_value}`;
+		_status.textContent = `${taipei_data.status_value}`;
+	}
+
+	function FetchData(target)
+	{
+		var _target=target;
+		_location.textContent = `${_target.country_value}`;
+		_aqi.textContent = `${_target.aqi_value}`;
+		_pm25.textContent = `${_target.pm25_value}`;
+		_pm10.textContent = `${_target.pm10_value}`;
+		_co.textContent = `${_target.co_value}`;
+		_status.textContent = `${_target.status_value}`;
+	}
+
+	function UpdateInfoPanel()
+	{
+		switch (hover_location) 
+		{
+  			case 'Taipei':
+    		//console.log('台北');
+			FetchData(taipei_data);
+    		break;
+
+			case 'NewTaipeiCity':
+    		//console.log('新北');
+			FetchData(new_taipei_city_data);
+    		break;
+
+			case 'Taoyuan':
+    		//console.log('桃園');
+			FetchData(taoyuan_data);
+    		break;
+
+			case 'Hsinchu':
+    		//console.log('新竹縣');
+			FetchData(hsinchu_data);
+    		break;
+
+			case 'HsinchuCity':
+    		//console.log('新竹市');
+			FetchData(hsinchu_city_data);
+    		break;
+
+			case 'Miaoli':
+    		//console.log('苗栗');
+			FetchData(miaoli_data);
+    		break;
+
+			case 'Taichung':
+    		//console.log('台中市');
+			FetchData(taichung_data);
+    		break;
+
+			case 'Nantou':
+    		//console.log('南投');
+			FetchData(natou_data);
+    		break;
+
+			case 'Changhua':
+    		//console.log('彰化');
+			FetchData(changhua_data);
+    		break;
+
+			case 'Yunlin':
+    		//console.log('雲林');
+			FetchData(yunlin_data);
+    		break;
+
+			case 'Chiayi':
+    		//console.log('嘉義');
+			FetchData(chiayi_data);
+    		break;
+
+			case 'Tainan':
+    		//console.log('台南');
+			FetchData(tainan_data);
+    		break;
+
+			case 'Kaohsiung':
+    		//console.log('高雄');
+			FetchData(kaohsiung_data);
+    		break;
+
+			case 'Pingtung':
+    		//console.log('屏東');
+			FetchData(pingtung_data);
+    		break;
+
+			case 'Yilan':
+    		//console.log('宜蘭');
+			FetchData(yilan_data);
+    		break;
+
+			case 'Hualien':
+    		//console.log('花蓮');
+			FetchData(hualien_data);
+    		break;
+
+			case 'Taitung':
+    		//console.log('台東');
+			FetchData(taitung_data);
+    		break;
+
+			case 'Keelung':
+    		//console.log('基隆');
+			FetchData(keelung_data);
+    		break;
+		}
+	}
+
+
+	//////Raycaster工具//////
+	function onPointerMove( event ) {
+
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+	}
+
+	function RaycastFunction()
+	{
+				// update the picking ray with the camera and pointer position
+		raycaster.setFromCamera( pointer, camera );
+	
+		const intersects = raycaster.intersectObjects( scene.children);
+
+		if ( intersects.length > 0 ) 
+		{
+			if ( INTERSECTED != intersects[ 0 ].object ) 
+			{
+				INTERSECTED = intersects[ 0 ].object;
+				hover_location=INTERSECTED.name;
+				console.log(INTERSECTED.name);
+			}
+		} 
+
+		else 
+		{
+			INTERSECTED = null;
+			//console.log(INTERSECTED);
+		}
+	}
+
+	function CheckIfTheDataUpdated()
+	{
+		if(modelChild_14.material!=aqi_good)
+		{
+			if(modelChild_14.material!=aqi_moderate)
+			{
+				if(modelChild_14.material!=aqi_UnhealthyForSensitiveGroup)
+				{
+					if(modelChild_14.material!=aqi_Unhealthy)
+					{
+						if(modelChild_14.material!=aqi_VeryUnhealthy)
+						{
+							if(modelChild_14.material!=aqi_Hazardous)
+							{
+								getAQI();
+								console.log("no data");
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
+
+	</script>
+
+
+<script>
+
+
+
+
+
+	
+</script>
+
+
+
+	
+
+	</body>
+</html>

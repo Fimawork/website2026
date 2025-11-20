@@ -1,0 +1,717 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>Skills</title>
+		
+
+		<style>
+
+			@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" );
+			@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" );
+			
+			body{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+			}
+
+			canvas{
+				width: 100%;
+   				height: 100%;				
+			}
+
+			a {
+				color: #8ff;
+			}
+
+			#menu {
+				position: absolute;
+				bottom: 20px;
+				width: 100%;
+				text-align: center;
+			}
+
+			.element {
+				width: 120px;
+				height: 160px;
+				background-color: rgba(0,127,127,0.5);
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				font-family: Helvetica, sans-serif;
+				text-align: center;
+				line-height: normal;
+				cursor: default;
+			}
+
+			.element:hover {
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+
+			.element .logo {
+				position: relative;
+				top: 36%;
+				left: 50%;
+
+				width: 114px;
+				height: 114px;
+				background-image:url(./images/Logo_javascript.png);
+				background-size: 100% 100%;
+				transform: translate(-50%, -50%);
+			}
+
+			.element .title {
+				position: relative;
+				bottom: -5px;
+				left: 0px;
+				right: 0px;
+				font-size: 18px;
+				color: rgba(127,255,255,0.75);
+			}
+             
+		</style>
+
+        
+        
+	</head>
+	<body>   
+
+	<div id="container"></div>
+
+	<script src="./js/three.js"></script> 
+
+	<script type="x-shader/x-vertex" id="vertexshader">
+
+		uniform float amplitude;
+
+		attribute vec3 displacement;
+		attribute vec3 customColor;
+
+		varying vec3 vColor;
+
+		void main() {
+
+			vec3 newPosition = position + amplitude * displacement;
+
+			vColor = customColor;
+
+			gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+
+		}
+
+	</script>
+
+	<script type="x-shader/x-fragment" id="fragmentshader">
+
+		uniform vec3 color;
+		uniform float opacity;
+
+		varying vec3 vColor;
+
+		void main() {
+
+			gl_FragColor = vec4( vColor * color, opacity );
+
+		}
+
+	</script>
+
+	<script type="importmap">
+		{
+			"imports": {
+				"three": "./build/three.module.js",				
+				"three/addons/": "./jsm/"             
+			}
+		}
+
+		
+		
+	</script>
+
+	
+	
+	<script type="module">
+
+		import * as THREE from 'three';
+
+		import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+
+		///Post Processing///
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+		import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+		import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+		import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+		import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+		import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+			
+		import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+		
+
+		let scene, camera, renderer, stats, mixer;
+		let renderer_css3d;
+
+		let lable_javascript= new THREE.Object3D();
+		let lable_unity= new THREE.Object3D();
+		let lable_unreal= new THREE.Object3D();
+		let lable_photoshop= new THREE.Object3D();
+		let lable_illustrator= new THREE.Object3D();
+		let lable_threejs= new THREE.Object3D();
+
+		let rotationManu = new THREE.Object3D();
+		let rotationTarget = new THREE.Object3D();
+		let HUD_rpm=1;
+
+		let HUD = new THREE.Object3D();
+		let HUD_A = new THREE.Object3D();
+		let HUD_B = new THREE.Object3D();
+		let HUD_C = new THREE.Object3D();
+		let HUD_D = new THREE.Object3D();
+		let HUD_E = new THREE.Object3D();
+
+		let index=0;
+
+		const divisionAngle = Math.PI/3;
+
+		let image_01, image_02, image_03, image_04, image_05, image_06;
+
+		let imageGroup_01 = new THREE.Object3D();
+		let imageGroup_02 = new THREE.Object3D();
+		let imageGroup_03 = new THREE.Object3D();
+		let imageGroup_04 = new THREE.Object3D();
+		let imageGroup_05 = new THREE.Object3D();
+		let imageGroup_06 = new THREE.Object3D();
+
+		const textPos = new THREE.Vector3(0,39,0);
+		const model_scale = 0.25 ;
+
+		const ImagePos = new THREE.Vector3(0,15,-36);
+		const mirrorImagePos = new THREE.Vector3(0,-36,-30);
+		const quaternion_rotationTarget = new THREE.Quaternion();
+		const quaternion_rotationManu = new THREE.Quaternion();
+		const imageScale =15;
+		const mirrorImageOpacity = 0.45;
+
+		const clock = new THREE.Clock();
+		const load_image_01 = './images/Logo_threejs.png';
+		const load_image_02 = './images/Logo_unity.png';
+		const load_image_03 = './images/Logo_unreal.png';
+		const load_image_04 = './images/Logo_javascript.png';
+		const load_image_05 = './images/Logo_illustrator.png';
+		const load_image_06 = './images/Logo_photoshop.png';
+
+		let text_info = "Three.js";
+
+		let line, uniforms,text_geometry, loader, shaderMaterial;
+	
+
+
+	
+    init();
+    animate();
+	demo_anim();
+
+	//Camera_Inspector(camera,controls);
+	//Postprocessing_Editor();
+	
+	function init() 
+	{
+		camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
+		camera.position.set(0,75,-150);
+		camera.lookAt(0,18,0);
+
+		//camera.layers.enableAll();
+
+		renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+		renderer.setPixelRatio( window.devicePixelRatio );
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.shadowMap.enabled = true;
+
+		scene = new THREE.Scene();
+
+
+		let ambientLight = new THREE.AmbientLight(0xE1DDD2, 1);
+
+	let hemiLight = new THREE.HemisphereLight( 0xE5E5DE, 0x000000, 0.9 ); //(上半球顏色,下半球顏色,強度)
+	hemiLight.position.set( 0, 0, 0 );
+
+	scene.add(ambientLight).add(hemiLight);
+
+	uniforms = {
+
+	amplitude: { value: 5.0 },
+	opacity: { value: 0.3 },
+	color: { value: new THREE.Color( 0x256C92 ) }
+
+	};
+
+	shaderMaterial = new THREE.ShaderMaterial( {
+
+	uniforms: uniforms,
+	vertexShader: document.getElementById( 'vertexshader' ).textContent,
+	fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+	blending: THREE.AdditiveBlending,
+	depthTest: false,
+	transparent: true
+
+	} );
+
+	loader = new FontLoader();
+	loader.load( 'fonts/helvetiker_bold.typeface.json', function ( font ) {
+
+		text_geometry = new TextGeometry( text_info, {
+		
+		font: font,
+		
+		size: 45,
+		depth: 15,
+		curveSegments: 10,
+		
+		bevelThickness: 5,
+		bevelSize: 1.5,
+		bevelEnabled: true,
+		bevelSegments: 10,
+
+		} );
+
+		text_geometry.center();
+
+		const count = text_geometry.attributes.position.count;
+
+		const displacement = new THREE.Float32BufferAttribute( count * 3, 3 );
+		text_geometry.setAttribute( 'displacement', displacement );
+
+		const customColor = new THREE.Float32BufferAttribute( count * 3, 3 );
+		text_geometry.setAttribute( 'customColor', customColor );
+
+		const color = new THREE.Color( 0xffffff );
+
+		for ( let i = 0, l = customColor.count; i < l; i ++ ) {
+		
+		color.setHSL( i / l, 0.5, 0.5 );
+		color.toArray( customColor.array, i * customColor.itemSize );
+
+		}
+
+		const modelscale = new THREE.Vector3(model_scale,model_scale,model_scale*0.5);
+		line = new THREE.Line( text_geometry, shaderMaterial );
+		line.position.copy(textPos);
+		//line.rotation.x = 0.1;
+		line.rotation.y = Math.PI;
+		line.scale.copy(modelscale);
+		scene.add( line );
+
+	} );
+
+
+	const css3d_scale=0.09;
+
+	//第1張圖
+	SpriteTag(lable_threejs,load_image_01,"Three.js");
+	lable_threejs.position.copy( ImagePos );
+	lable_threejs.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_01.add(lable_threejs);
+
+
+	//第2張圖
+	SpriteTag(lable_unity,load_image_02,"Unity");
+	lable_unity.position.copy( ImagePos );
+	lable_unity.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_02.add(lable_unity);
+
+	//第3張圖
+	SpriteTag(lable_unreal,load_image_03,"Unreal Engine");
+	lable_unreal.position.copy( ImagePos );
+	lable_unreal.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_03.add(lable_unreal);
+
+
+	//第4張圖
+	SpriteTag(lable_javascript,load_image_04,"Javascript");
+	lable_javascript.position.copy( ImagePos );
+	lable_javascript.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_04.add(lable_javascript);
+
+	//第5張圖
+	SpriteTag(lable_illustrator,load_image_05,"Illustrator");
+	lable_illustrator.position.copy( ImagePos );
+	lable_illustrator.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_05.add(lable_illustrator);
+
+
+	//第6張圖
+	SpriteTag(lable_photoshop,load_image_06,"Photoshop");
+	lable_photoshop.position.copy( ImagePos );
+	lable_photoshop.scale.set(-1*css3d_scale,css3d_scale,css3d_scale);
+	imageGroup_06.add(lable_photoshop);
+
+	imageGroup_02.rotation.y=divisionAngle;
+	imageGroup_03.rotation.y=divisionAngle*2;
+	imageGroup_04.rotation.y=divisionAngle*3;
+	imageGroup_05.rotation.y=divisionAngle*4;
+	imageGroup_06.rotation.y=divisionAngle*5;
+	imageGroup_01.rotation.y=divisionAngle*6;
+
+	rotationManu.add(imageGroup_01).add(imageGroup_02).add(imageGroup_03).add(imageGroup_04).add(imageGroup_05).add(imageGroup_06);
+
+	scene.add(rotationManu).add(rotationTarget);
+
+
+	///載入模型底下的HUD圖片///
+	
+	const loader_HUD_A = new TIFFLoader();
+
+	const geometry_HUD_A = new THREE.PlaneGeometry();
+
+	loader_HUD_A.load( './images/HUD_A_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_A = new THREE.MeshBasicMaterial( { map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:1 ,depthWrite: false } );
+
+		const mesh_HUD_A = new THREE.Mesh( geometry_HUD_A, material_HUD_A );
+		const img_scale =51;
+
+		mesh_HUD_A.position.set( 0, -0.5, 0 );
+		mesh_HUD_A.scale.set(img_scale*2,img_scale*2,1);
+		mesh_HUD_A.rotation.x=-Math.PI/2;
+		HUD_A.add(mesh_HUD_A);
+
+		setTimeout(() => {scene.add( HUD_A );}, 500);//10分鐘更新一次
+
+		//scene.add( HUD_A );
+
+	} );
+
+	const loader_HUD_B = new TIFFLoader();
+
+	const geometry_HUD_B = new THREE.PlaneGeometry();
+
+	loader_HUD_B.load( './images/HUD_B_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_B = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.36,depthWrite: false } );
+
+		const mesh_HUD_B = new THREE.Mesh( geometry_HUD_B, material_HUD_B );
+		const img_scale =48;
+
+		mesh_HUD_B.position.set( 0, -0.4, 0 );
+		mesh_HUD_B.scale.set(img_scale*2,img_scale*2,1);
+		mesh_HUD_B.rotation.x=-Math.PI/2;
+		HUD_B.add(mesh_HUD_B);
+
+		setTimeout(() => {scene.add( HUD_B );}, 800);
+
+		//scene.add( HUD_B );
+
+	} );
+
+	const loader_HUD_C = new TIFFLoader();
+
+	const geometry_HUD_C = new THREE.PlaneGeometry();
+
+	loader_HUD_C.load( './images/HUD_C_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_C = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.9,depthWrite: false } );
+
+		const mesh_HUD_C = new THREE.Mesh( geometry_HUD_C, material_HUD_C );
+		const img_scale =48;
+
+		mesh_HUD_C.position.set( 0, 1.3, 0 );
+		mesh_HUD_C.scale.set(img_scale*2,img_scale*2,1);
+		mesh_HUD_C.rotation.x=-Math.PI/2;
+		HUD_C.add(mesh_HUD_C);
+
+		setTimeout(() => {scene.add( HUD_C );}, 1100);
+
+		//scene.add( HUD_C );
+
+	} );
+
+	const loader_HUD_D = new TIFFLoader();
+
+	const geometry_HUD_D = new THREE.PlaneGeometry();
+
+	loader_HUD_D.load( './images/HUD_D_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_D = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.45,depthWrite: false } );
+
+		const mesh_HUD_D = new THREE.Mesh( geometry_HUD_D, material_HUD_D );
+		const img_scale =60;
+
+		mesh_HUD_D.position.set( 0, -12.2, 0 );
+		mesh_HUD_D.scale.set(img_scale*2,img_scale*2,1);
+		mesh_HUD_D.rotation.x=-Math.PI/2;
+		HUD_D.add(mesh_HUD_D);
+
+		setTimeout(() => {scene.add( HUD_D );}, 1400);
+
+		//scene.add( HUD_D );
+
+	} );
+
+	const loader_HUD_E = new TIFFLoader();
+
+	const geometry_HUD_E = new THREE.PlaneGeometry();
+
+	loader_HUD_E.load( './images/HUD_E_20230813.tif', function ( texture ) {
+
+		texture.colorSpace = THREE.SRGBColorSpace;
+
+		const material_HUD_E = new THREE.MeshBasicMaterial( { color: 0x256C92,map: texture, transparent: true, blending: THREE.AdditiveBlending, opacity:0.45,depthWrite: false } );
+
+		const mesh_HUD_E = new THREE.Mesh( geometry_HUD_E, material_HUD_E );
+		const img_scale =60;
+
+		mesh_HUD_E.position.set( 0, -18.1, 0 );
+		mesh_HUD_E.scale.set(img_scale*2,img_scale*2,1);
+		mesh_HUD_E.rotation.x=-Math.PI/2;
+		HUD_E.add(mesh_HUD_E);
+
+		setTimeout(() => {scene.add( HUD_E );}, 1700);
+		//scene.add( HUD_E );
+
+	} );
+
+	/////////////////////////
+
+
+
+	window.addEventListener( 'resize', onWindowResize );
+
+
+    //把3D渲染效果加入網頁視窗中
+	document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+
+
+
+		
+
+		
+
+
+		
+
+		renderer_css3d = new CSS3DRenderer();
+		renderer_css3d.domElement.style.position = 'absolute';
+		renderer_css3d.domElement.style.top = '0px';
+		renderer_css3d.setSize( window.innerWidth, window.innerHeight );
+		document.getElementById( 'container' ).appendChild( renderer_css3d.domElement );
+
+
+		window.addEventListener( 'resize', onWindowResize );
+
+	}
+
+	
+
+	function onWindowResize() {
+
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer_css3d.setSize( window.innerWidth, window.innerHeight );
+
+	}
+
+	function animate() 
+	{
+
+		requestAnimationFrame( animate );
+		const delta = clock.getDelta();
+
+		if ( mixer ) mixer.update( delta );
+		
+		renderer.render( scene, camera );
+		renderer_css3d.render( scene, camera );
+
+		UpdateRotationManu();
+
+
+
+		HUD_A.rotation.y +=0.036*HUD_rpm;
+		HUD_B.rotation.y -=0.005*HUD_rpm;
+		HUD_C.rotation.y +=0.02*HUD_rpm;
+		HUD_D.rotation.y -=0.0001*HUD_rpm;
+		HUD_E.rotation.y +=0.001*HUD_rpm;
+	
+
+		const time = Date.now() * 0.001;
+
+	}
+
+	function SpriteTag(tagetObjetCSS,logo_url,logo_title)
+	{
+		const element = document.createElement( 'div' );
+		element.className = 'element';
+
+
+		const logo = document.createElement( 'div' );
+		logo.className = 'logo';
+		logo.style.backgroundImage = `url(${logo_url})`;
+		element.appendChild( logo );
+
+		const title = document.createElement( 'div' );
+		title.className = 'title';
+		title.textContent = logo_title;
+		element.appendChild( title );
+		
+		const objectCSS = new CSS3DObject( element );
+		tagetObjetCSS.add(objectCSS)
+		scene.add( tagetObjetCSS );
+		
+	}
+
+	function ManuRotate(value)
+{
+	var _value=value;
+
+
+	if(_value>0)
+	{
+		rotationTarget.rotation.y-=divisionAngle;
+	}
+
+	else if(_value<0)
+	{
+		rotationTarget.rotation.y+=divisionAngle;
+	}
+
+	if(index>5)
+	{
+		index=0;
+		text_info=`Three.js`;
+	}
+	
+	
+}
+
+function UpdateRotationManu()
+{
+	
+	quaternion_rotationTarget.setFromEuler(rotationTarget.rotation);
+
+	if(quaternion_rotationManu.angleTo(quaternion_rotationTarget)>0.01)
+    {
+		quaternion_rotationManu.slerp(quaternion_rotationTarget,0.1);
+    } 
+
+	rotationManu.rotation.setFromQuaternion(quaternion_rotationManu);
+    
+}
+
+async function demo_anim()
+{
+	setTimeout(() => {RemoveText();index++;SetupText();}, 5999);//1000=1sec}
+    setTimeout(() => {ManuRotate(1);UpdateText();}, 6000);//1000=1sec}
+	setTimeout(() => {demo_anim();}, 9000);
+}
+
+function RemoveText()
+{
+	scene.remove(line);
+}
+
+function SetupText()
+{
+	switch(index)
+	{
+		case 0:
+		text_info=`Three.js`;
+		break;
+
+		case 1:
+		text_info=`Unity`;
+		break;
+
+		case 2:
+		text_info=`Unreal Engine`;
+		break;
+
+		case 3:
+		text_info=`Javascript`;
+		break;
+
+		case 4:
+		text_info=`Illustrator`;
+		break;
+
+		case 5:
+		text_info=`Photoshop`;
+		break;
+	}	
+
+}
+
+function UpdateText()
+{
+	//console.log(index);
+
+	loader = new FontLoader();
+	loader.load( 'fonts/helvetiker_bold.typeface.json', function ( font ) {
+
+	text_geometry = new TextGeometry( text_info, {
+
+	font: font,
+
+	size: 45,
+	depth: 15,
+	curveSegments: 10,
+
+	bevelThickness: 5,
+	bevelSize: 1.5,
+	bevelEnabled: true,
+	bevelSegments: 10,
+
+	} );
+
+	text_geometry.center();
+
+	const count = text_geometry.attributes.position.count;
+
+	const displacement = new THREE.Float32BufferAttribute( count * 3, 3 );
+	text_geometry.setAttribute( 'displacement', displacement );
+
+	const customColor = new THREE.Float32BufferAttribute( count * 3, 3 );
+	text_geometry.setAttribute( 'customColor', customColor );
+
+	const color = new THREE.Color( 0xffffff );
+
+	for ( let i = 0, l = customColor.count; i < l; i ++ ) {
+
+	color.setHSL( i / l, 0.5, 0.5 );
+	color.toArray( customColor.array, i * customColor.itemSize );
+
+	}
+
+	const modelscale = new THREE.Vector3(model_scale,model_scale,model_scale*0.5);
+	line = new THREE.Line( text_geometry, shaderMaterial );
+	line.position.copy(textPos);
+	line.rotation.x = 0.2;
+	line.rotation.y = Math.PI;
+	line.scale.copy(modelscale);
+	scene.add( line );
+
+	} );
+}
+
+
+	</script>
+
+
+
+
+
+
+	</body>
+</html>
