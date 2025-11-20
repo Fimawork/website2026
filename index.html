@@ -36,7 +36,6 @@
 	</script>
 
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
-		<script src="https://fimawork.droppages.net/website2025/LevelManager.js"></script> 
 		<div class="background"></div>
 
 		<div class="logo_panel">
@@ -58,23 +57,25 @@
 			</div>
 		</div>
 
-        <div class="title_3D_panel">
-            <iframe id="title3D" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
-			<!--<iframe id="work_01" src="https://fimawork.droppages.net/website2024/audicar.html" frameborder="0"></iframe>-->
+        <div class="main_canvas">
+			<iframe id="digitalRainBackground" src="./digitalRainEffect.html" frameborder="0"></iframe>
+            <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
+			
 
-			<div id="work_01">
+			<div id="content_01">
+				<div class="title">服務項目</div>
 				<div class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);"></div>
 					<div class="sub_title">3D產品配置器</div>
-					<div class="content">打造互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</div>
+					<div class="content">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</div>
 				</div>
 				<div class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);"></div>
 					<div class="sub_title">3D產品櫥窗</div>
-					<div class="content">打造可在網頁中任意旋轉、縮放、可近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</div>
+					<div class="content">在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</div>
 				</div>
 			</div>
-			<iframe id="work_02" src="https://fimawork.droppages.net/website2024/taiwan.html" frameborder="0"></iframe>
+			<div id="content_02"></div>
 			<iframe id="work_03" src="https://fimawork.droppages.net/f0038/skills.html" frameborder="0"></iframe>
 
 			<div id="anchor_01"></div>
@@ -82,62 +83,19 @@
 			<div id="anchor_03"></div>
         </div>
 
-		<div id="title" >工業設計x3D互動設計，費馬幫你打造最懂產品的3D網頁</div>
+		<div id="slogan" >工業設計x3D互動設計，幫你打造最懂產品的3D網頁</div>
 
-		<div id="profile_panel" style="display: none;">
-			<div class="author_title" style="letter-spacing: 1.0px">
-				Fima Chou
-			</div>
-			<div class="profile_content" style="margin-top: 6%">
-				23 | Octorber | 1982
-			</div>
-			<div class="profile_content">
-				Taipei City, Taiwan
-			</div>
-			<div class="profile_content">
-				fima.chou@gmail.com
-			</div>
-		</div>
-
-		<div id="info_panel" style="display: none;">
-			<div class="sub_title">
-				About
-			</div>
-			<div class="content">
-				I am an Industrial Designer with a well-trained for CAD and CAE. Over 10 years in product development, I’ve specialized in finding solutions to problom of usability. 
-			</div>
-			<div class="content" style="color: #068db6; pointer-events: fill;"onclick="parent.open('https://fimawork.droppages.net/f0026/car_demo.html')">
-				F0026_Car_Demo
-			</div>
-		</div>
-
-		<div id="info_panel_2">
-			<div class="sub_title">
-				3D UI/UX
-			</div>
-			<div class="content">
-				I'm skillfull at making 3D content and having greatest passion to explore a better UI/UX design for Digtal Twin Applications.
-			</div>
-
-			<div class="content" style="color: #068db6; pointer-events: fill;"onclick="parent.open('https://fimawork.droppages.net/F0036/')">
-				F0036
-			</div>
-		</div>
-
-		<div id="info_panel_3">
-			<div class="sub_title">
-				Skills
-			</div>
-			<div class="content">
-				Three.js, JavaScript, Unity, Unreal Engine, Photoshop, Illustrator – Skilled in developing interactive 3D interfaces and integrating visual assets into immersive experiences.
-			</div>
-		</div>
 
 		<div class="vignette"></div>
 
 		<script>
 			let _author = document.querySelector('#author');
+			let _slogan = document.querySelector('#slogan');
 
+			let scroll=0;
+			let present_scroll=0;
+			let position_ratio=0;
+			let targetPosition;
 
 			//author_hud_effect();
 
@@ -153,7 +111,9 @@
     		scroll = this.scrollY;
 
 				updateScrollValue(scroll);
-			
+				let value=scroll*0.001;
+				_slogan.style.opacity=1-value;
+
 			});
 
 			window.addEventListener("pointerdown", (event) => {
@@ -221,6 +181,16 @@
 				}
 
 			}
+
+			
+
+
+
+		function updateScrollValue(value)
+		{
+		    delta_value=(value-present_scroll)/window.innerHeight;//正，往下滑;負 往上滑
+		    position_ratio=value/window.innerHeight;//桌機 3;手機 2.7
+		}
 
 		</script>
 

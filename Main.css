@@ -9,21 +9,28 @@
 	background-color: rgba(52, 50, 50, 1);
 }
 
-.title_3D_panel
+.main_canvas
 {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
-
-#title3D
+#digitalRainBackground
 {
+	position: fixed;
 	width: 100%;
 	height: 100%;
 }
 
-#title
+#fimawork_logo
+{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+}
+
+#slogan
 {
 	position: absolute;
 	right: 0px;
@@ -32,7 +39,7 @@
 	text-align: center;
 	font-family:"Inter", sans-serif;
 	font-weight:400;
-	font-size: 18px;
+	font-size: 24px;
 	letter-spacing: 1px;
 	color: rgba(255, 255, 255, 0.9);
 }
@@ -147,6 +154,16 @@
 				flex-direction: column;
 				justify-content: center;
 			}
+.title
+{
+	position: absolute;
+	top: 24%;
+	text-align: center;
+    font-family:"Inter", sans-serif;
+    font-size: 39px;
+	letter-spacing: 3px;
+	color: rgba(255, 255, 255, 1);
+}
 
 .sub_title
 {
@@ -160,13 +177,15 @@
 .content
 {
 	margin-top: 3%;
+	padding-left: 12%;
+	padding-right: 12%;
 	text-align: center;
     font-family:"Inter", sans-serif;
-    font-size: 12px;
+    font-size: 15px;
     color: rgba(255, 255, 255, 0.9);
 }
 
-#work_01
+#content_01
 {
 	position: absolute;
 	top: 100%;
@@ -178,33 +197,33 @@
     
 }
 
-            .demo_window
-            {
-                position: relative;
-                margin: 39px;
-                top: 50%;
-                width: 480px;
-                height: 50%;
-                transform: translate(0%,-50%);
-            }
+.demo_window
+{
+    position: relative;
+    margin: 39px;
+    top: 57%;
+    width: 480px;
+    height: 50%;
+    transform: translate(0%,-50%);
+}
 
-            .demo_movie
-            {
-                height: 270px;
-                width: 480px;
-				background-image: url(./images/MedicalCartConfiguratorDemo.gif);
-				background-size: 100% 100%;
-                border-radius: 15px;
-            }
+.demo_movie
+{
+    height: 270px;
+    width: 480px;
+	background-image: url(./images/MedicalCartConfiguratorDemo.gif);
+	background-size: 100% 100%;
+    border-radius: 15px;
+}
 
-			#work_02
-			{
-				position: absolute;
-				top: 200%;
-				right: 0%;
-				width: 100%;
-				height: 100%;
-			}
+#content_02
+{
+	position: absolute;
+	top: 200%;
+	right: 0%;
+	width: 100%;
+	height: 100%;
+}
 
 			#work_03
 			{
@@ -257,21 +276,21 @@
 				transform: translate(-50%,0%);
             }
 
-			.logo_panel{
-                position:fixed;
-				top:3%;
-				left: 3%;
-                z-index: 9;
-            }
+.logo_panel{
+    position:fixed;
+	top:3%;
+	left: 3%;
+    z-index: 9;
+}
 
-			.logo{
-				position: absolute;
-				height: 30px;
-				aspect-ratio: 80/13.75;
-				background-image: url(./images/fimawork_logo_C_white.png);
-				background-size: 100% 100%;
-				opacity: 0.75;
-			}
+.logo{
+	position: absolute;
+	height: 30px;
+	aspect-ratio: 80/13.75;
+	background-image: url(./images/fimawork_logo_C_white.png);
+	background-size: 100% 100%;
+	opacity: 1;
+}
 
 
            
@@ -314,7 +333,7 @@
 					background-size: 100% 100%;
 				}
 
-				.title_3D_panel
+				.main_canvas
 				{
 					width: 100%;
    					height: 100%;
@@ -385,14 +404,13 @@
 					display: block;
 				}
 
-				#title3D
-				{
-					
-					position: absolute;
-					top: 45%;
-					width: 100%;
-   				    height: 75%;
-				}
+#fimawork_logo
+{
+	position: fixed;
+	top: 45%;
+	width: 100%;
+    height: 75%;
+}
 
 				#author
 				{
@@ -439,7 +457,7 @@
 				}
 
 
-				#title
+				#slogan
 				{
 					position: fixed;
 					top:  8%;
@@ -516,24 +534,23 @@
 				}
 
 
-				#work_01
-				{
-					position: absolute;
-					top: 112%;
-					left: 0%;
-					width: 100%;
-					height: 50%;		
-					
-				}
+#content_01
+{
+	position: absolute;
+	top: 112%;
+	left: 0%;
+	width: 100%;
+	height: 50%;		
+}
 
-				#work_02
-				{
-					position: absolute;
-					top: 195%;
-					right: 0%;
-					width: 100%;
-					height: 55%;
-				}
+#content
+{
+	position: absolute;
+	top: 195%;
+	right: 0%;
+	width: 100%;
+	height: 55%;
+}
 
 				#work_03
 				{

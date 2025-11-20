@@ -139,9 +139,9 @@ let uniforms = {
 
 let ScanEffect_shader = new THREE.ShaderMaterial( {
 side: THREE.DoubleSide,
-	transparent: true,
-	opacity:0.3,
-	blending: THREE.AdditiveBlending,
+transparent: true,
+opacity:0.3,
+blending: THREE.AdditiveBlending,
 uniforms: uniforms,
 vertexShader: document.getElementById( 'vertexShader' ).textContent,
 fragmentShader: document.getElementById( 'fragmentShader' ).textContent
@@ -186,7 +186,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
-	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+	renderer.setClearColor(0x000000, 0.01);//需加入這一條，否則看不到CSS的底圖
 	renderer.toneMapping = THREE.ACESFilmicToneMapping;
 	renderer.toneMappingExposure = 1;
 	
