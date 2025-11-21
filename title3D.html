@@ -110,9 +110,9 @@
 		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 		import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-
+		import { WebGLInspector } from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
 	
-let camera, scene, renderer, stats;
+let camera, scene, renderer;
 const frustumSize = 10;
 
 const textureLoader = new THREE.TextureLoader();
@@ -216,9 +216,8 @@ function init() {
 	window.addEventListener( 'resize', onWindowResize );
 
 	// stats
-	stats = new Stats();
+	//stats = new Stats();
 	//container.appendChild( stats.dom );
-	
 }
 
 function onWindowResize() 
@@ -245,7 +244,9 @@ function animate() {
 
 	renderer.render( scene, camera );
 
-	stats.update();
+	//console.log(renderer.info.render.calls);
+
+	//stats.update();
 
 	deltaTime=delta*0.3;
 
