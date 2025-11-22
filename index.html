@@ -58,7 +58,7 @@
 		</div>
 
         <div class="main_canvas">
-			<iframe id="carousel3D"  src="./digitalRainEffect.html" frameborder="0"></iframe>
+			<iframe id="digitalRain"  src="./digitalRainEffect.html" frameborder="0"></iframe>
             <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
 			
 			
@@ -91,6 +91,7 @@
 		<script>
 			let _author = document.querySelector('#author');
 			let _slogan = document.querySelector('#slogan');
+			let _digitalRain = document.querySelector('#digitalRain');
 
 			let scroll=0;
 			let present_scroll=0;
@@ -113,7 +114,6 @@
 				updateScrollValue(scroll);
 				let value=scroll*0.001;
 				_slogan.style.opacity=1-value;
-
 			});
 
 			window.addEventListener("pointerdown", (event) => {
