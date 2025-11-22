@@ -110,7 +110,8 @@
 		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 		import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-		import { WebGLInspector } from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
+		import { dracoLoader,InstGLTFDracoBase64Loader,WebGLInspector } from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
+		import { draco_logo } from './models/draco_logo_slices.js';
 	
 let camera, scene, renderer;
 const frustumSize = 10;
@@ -191,15 +192,44 @@ function init() {
 	renderer.setClearColor(0x000000, 0);//需加入這一條，否則看不到CSS的底圖
 	document.body.appendChild(renderer.domElement);
 
+	//draco模組
+  	dracoLoader.setDecoderPath( 'https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/' );
+  	dracoLoader.preload();
+
+	//加密模組
+	function base64ToArrayBuffer(base64) 
+	{
+		// 去除所有非 base64 字元
+		base64 = base64.replace(/[^A-Za-z0-9+/=]/g, "");
+
+    	const binary = atob(base64);
+    	const len = binary.length;
+    	const bytes = new Uint8Array(len);
+
+    	for (let i = 0; i < len; i++) 
+		{
+    	    bytes[i] = binary.charCodeAt(i);
+    	}
+
+    	return bytes.buffer;
+	}
+
+	const arrayBuffer = base64ToArrayBuffer(draco_logo());
+
 	const loader_title = new GLTFLoader();
-	loader_title.load( './models/logo.glb', function ( gltf ) {
+	loader_title.setDRACOLoader(dracoLoader);
 
-		const model = gltf.scene;
-		model.position.set(0,0,0);
-		model.rotation.set(Math.PI,Math.PI, model_angel);
-		model.scale.set(model_scale,model_scale,model_scale);
+	loader_title.parse(
+        arrayBuffer,
+        '',
+        (gltf) => {
+            
+            const model = gltf.scene;
+			model.position.set(0,0,0);
+			model.rotation.set(Math.PI,Math.PI, model_angel);
+			model.scale.set(model_scale,model_scale,model_scale);
 
-		model.traverse( function ( object ) {
+            model.traverse( function ( object ) {
 
 			if ( object.isMesh )
 			{
@@ -209,12 +239,14 @@ function init() {
 		});
 
 		scene.add( model );
-		
-	});
 
+        },
+        (error) => {
+            console.error('Failed to load model:', error);
+        }
+    );
 
 	container.appendChild( renderer.domElement );
-
 
 	window.addEventListener( 'resize', onWindowResize );
 
