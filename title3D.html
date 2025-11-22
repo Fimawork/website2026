@@ -177,6 +177,9 @@ function init() {
     100                       // far
   	);
 
+	let model_angel=window.innerWidth<=450?-0.5*Math.PI:Math.PI;
+	let model_scale=window.innerWidth<=450?0.4:0.8;
+
   	camera.position.set(0, 0, 5);
   	camera.lookAt(0,0,0);
 
@@ -193,8 +196,8 @@ function init() {
 
 		const model = gltf.scene;
 		model.position.set(0,0,0);
-		model.rotation.set(Math.PI,Math.PI, Math.PI);
-		model.scale.set(0.8,0.8,0.8);
+		model.rotation.set(Math.PI,Math.PI, model_angel);
+		model.scale.set(model_scale,model_scale,model_scale);
 
 		model.traverse( function ( object ) {
 
@@ -251,7 +254,7 @@ function animate() {
 	deltaTime=delta*0.3;
 
 	uniforms[ 'time' ].value -=  delta*3;
-	
+
 }
 
 		</script>

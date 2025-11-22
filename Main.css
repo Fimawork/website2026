@@ -407,15 +407,6 @@
 					display: block;
 				}
 
-#fimawork_logo
-{
-	position: fixed;
-	left: 50%;
-	top: 50%;
-    height:20%;
-	width: 100%;
-	transform: translate(-50%,-50%);
-}
 
 #slogan
 {
