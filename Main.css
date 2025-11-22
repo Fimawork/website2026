@@ -402,7 +402,7 @@
 {
 	position: relative;
 	left: 50%;
-    font-size: 33px;
+    font-size: 30px;
 	letter-spacing: 3px;
 	color: rgba(255, 255, 255, 1);
 	transform: translate(-50%,-50%);
@@ -413,7 +413,7 @@
 	top: 50%;
 	padding-left: 6%;
 	padding-right: 6%;
-	font-size: 33px;
+	font-size: 30px;
 	text-align: center;
 	white-space: pre-line;
 	transform: translate(0%,-50%);
@@ -497,7 +497,7 @@
 .demo_window
 {
     position: relative;
-    margin: auto;
+    margin-bottom: 0.1%;
     top: 50%;
     width: 80%;
     height:100%;
