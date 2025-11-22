@@ -58,6 +58,8 @@
 		import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 		import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
+		import { WebGLInspector } from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
+
 	
 
 let camera, scene, renderer, stats, controls;
@@ -174,6 +176,8 @@ function init() {
 	container.appendChild( renderer.domElement );
 
 	window.addEventListener( 'resize', onWindowResize );
+
+	//WebGLInspector(container,renderer);
 }
 
 function onWindowResize() {
