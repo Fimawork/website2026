@@ -115,12 +115,11 @@
 				let value=scroll*0.001;
 
 				const aspect = window.innerWidth / window.innerHeight;
-				
+
 				if(aspect>1.5)
 				{
 					_slogan.style.opacity=1-value;
 				}
-	
 			});
 
 			window.addEventListener("pointerdown", (event) => {
@@ -203,7 +202,7 @@
 
 		<script>
 
-			let title_string="十年工業設計，費馬幫你打造最懂產品的3D網頁";
+			let title_string="工業設計x3D互動設計，幫你打造最懂產品的3D網頁";
 			let current_title_string="";
 			let text_num=0;
 			const _title = document.querySelector('#title')
@@ -213,12 +212,16 @@
 			//setTimeout(() => {blinking_text_anim();}, 3000);//1000=1sec}
 			//blinking_text_anim();
 			
-			 test();
-			function test()
+			SloganRWD();
+
+			function SloganRWD()
 			{
 				const aspect = window.innerWidth / window.innerHeight;
 
-				console.log(aspect);
+				if(aspect<1.5)
+				{
+					_slogan.textContent=`費馬工作室\n\n工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
+				}
 			}
 
 			function blinking_text_anim()
