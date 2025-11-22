@@ -47,28 +47,18 @@
 	<script type="module">
 
 		import * as THREE from 'three';
-
 		import Stats from 'three/addons/libs/stats.module.js';
-
-		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
 		import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-
 		import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 		import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 		import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-
 		import { WebGLInspector } from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@V1.1/fx_functions.js';
 
-	
-
-let camera, scene, renderer, stats, controls;
+let camera, scene, renderer, stats;
 
 let moving=1;
 
 let ScanEffect = new THREE.MeshBasicMaterial( { color: 0x3AAE07, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9, side: THREE.DoubleSide} );
-
-
 
 let composer;
 
@@ -83,37 +73,15 @@ const clock = new THREE.Clock();
 
 let mixer;
 
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-let INTERSECTED;
-
 let title='H\nE\nL\nL\nO\nW\nO\nR\nL\nD\nI\nA\nM\nF\nI\nM\nA\nW\nO\nR\nK';
-
 let title_02='3\nD\nW\nE\nB\nS\nI\nD\nE\nD\nE\nS\nI\nG\nN\nS\nT\nU\nD\nI\nO';
-
 let title_03='I\nN\nD\nU\nS\nT\nR\nI\nA\nL\nD\nE\nS\nI\nG\nN\nX\nI\nN\nT\nE\nA\nC\nT\nI\nV\nE\nD\nE\nS\nI\nG\nN';
 
 let model_holder=new THREE.Object3D();
 let model_holder_02=new THREE.Object3D();
-let text,text_02,text_03;
-var _new_text = document.getElementById("new_text");
+let text;
 let speed=1;
 let num=0;
-
-
-function ResetText()
-{
-	let reset_text_value=_new_text.value.split('').join(`\n`);
-
-	title=reset_text_value;
-
-	title_02=reset_text_value;
-
-	title_03=reset_text_value;
-
-	_new_text.value='';
-}
-
 
 init();
 animate();
@@ -128,6 +96,7 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 	camera.position.set( 0, -15, 0 );	
+	camera.lookAt(0,0,0);
 
 	scene = new THREE.Scene();
 
@@ -140,22 +109,6 @@ function init() {
 	document.body.appendChild(renderer.domElement);
 
 	scene.add(model_holder).add(model_holder_02);
-
-
-	
-	//end load function
-
-	//利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
-	controls = new OrbitControls( camera, renderer.domElement );
-	controls.enablePan = false;//右鍵平移效果
-	controls.enableDamping = false;
-	controls.enableRotate = false;
-	controls.dampingFactor =1.5;
-	controls.maxDistance = 1200;
-	controls.target.set( 0, 0, 0 );
-	controls.zoomSpeed=4;
-	controls.update();
-
 
 	//////PostProcessing/////
 
@@ -189,8 +142,6 @@ function onWindowResize() {
 	composer.setSize( window.innerWidth, window.innerHeight );
 }
 
-
-//類似Unity的Update()功能
 function animate() {
 
 	requestAnimationFrame( animate );
@@ -202,8 +153,6 @@ function animate() {
 	//renderer.render( scene, camera );
 
 	composer.render();
-
-	controls.update();
 
 	if(num>10)
 	{
