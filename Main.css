@@ -419,9 +419,12 @@
 
 #slogan
 {
-	padding-top: 210%;
+	top: 50%;
+	padding-left: 6%;
+	padding-right: 6%;
+	font-size: 36px;
+	text-align: center;
 }
-
 
 				/*#shibaInu
 				{
@@ -459,17 +462,6 @@
 				}
 
 
-				#slogan
-				{
-					position: fixed;
-					top:  8%;
-					left: 4.5%;
-					font-family:Arial;
-					font-weight:lighter;
-					font-size: 12px;
-					color: rgba(250, 250, 250, 0.75);
-					transform: translate(0%, -50%);
-				}
 
 				
 
