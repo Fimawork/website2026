@@ -178,6 +178,13 @@
     border-radius: 15px;
 }
 
+.demo_movie:hover
+{
+	border:solid;
+	border-width:1px;
+	border-color: rgb(0, 217, 255);
+}
+
 .tech_window
 {
     position: relative;
