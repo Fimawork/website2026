@@ -94,9 +94,15 @@ function init() {
 	const container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
+	let camera_angel=window.innerWidth<=450?-0.5*Math.PI:0;
+
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 	camera.position.set( 0, -15, 0 );	
 	camera.lookAt(0,0,0);
+	camera.rotation.z=camera_angel;
+
+	
+
 
 	scene = new THREE.Scene();
 
@@ -104,7 +110,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
-	renderer.setClearColor(0x343232, 0.12);//需加入這一條，否則看不到CSS的底圖
+	renderer.setClearColor(0x343232, 0.1);//需加入這一條，否則看不到CSS的底圖
 	
 	document.body.appendChild(renderer.domElement);
 
@@ -152,6 +158,12 @@ function animate() {
 
 	//renderer.render( scene, camera );
 
+	if(speed_up>0)
+	{
+		speed_up-=delta;
+	}
+	
+
 	composer.render();
 
 	if(num>10)
@@ -163,7 +175,7 @@ function animate() {
  	{
 		if(model_holder.children[i]!=null)
 		{
-			model_holder.children[i].position.y-=0.1*speed;
+			model_holder.children[i].position.y-=0.1*(speed+speed_up);
 
 			if(model_holder.children[i].position.y<-15)
 			{
@@ -182,7 +194,7 @@ function animate() {
  	{
 		if(model_holder_02.children[j]!=null)
 		{
-			model_holder_02.children[j].position.y-=0.15*speed;
+			model_holder_02.children[j].position.y-=0.15*(speed+speed_up);
 
 			if(model_holder_02.children[j].position.y<-15)
 			{
@@ -252,6 +264,17 @@ function RainTextAnim(_content)
 	{
 		instText(_content);
 	}
+}
+
+
+</script>
+<script>
+
+let speed_up=0;	
+
+function FectchScrollValue()
+{
+	speed_up+=0.1;
 }
 
 </script>

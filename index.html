@@ -115,6 +115,24 @@
 			let present_scroll=0;
 			let position_ratio=0;
 			let targetPosition;
+			let delta_value=0;
+
+			let title_string="工業設計x3D互動設計，幫你打造最懂產品的3D網頁";
+			let current_title_string="";
+			let text_num=0;
+			const _title = document.querySelector('#title')
+
+			SloganRWD();
+
+			function SloganRWD()
+			{
+				const aspect = window.innerWidth / window.innerHeight;
+
+				if(aspect<1.5)
+				{
+					_slogan.textContent=`費馬工作室\n\n工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
+				}
+			}
 
 			//author_hud_effect();
 
@@ -206,42 +224,19 @@
 
 			}
 
-			
+			function updateScrollValue(value)
+			{
+			    delta_value=(value-present_scroll)/window.innerHeight;//正，往下滑;負 往上滑
+			    position_ratio=value/window.innerHeight;//桌機 3;手機 2.7
 
-
-
-		function updateScrollValue(value)
-		{
-		    delta_value=(value-present_scroll)/window.innerHeight;//正，往下滑;負 往上滑
-		    position_ratio=value/window.innerHeight;//桌機 3;手機 2.7
-		}
-
-		</script>
-
-		<script>
-
-			let title_string="工業設計x3D互動設計，幫你打造最懂產品的3D網頁";
-			let current_title_string="";
-			let text_num=0;
-			const _title = document.querySelector('#title')
+				TriggerDigitalRainAnim();
+			}
 
 			//_title.textContent=null;
 
 			//setTimeout(() => {blinking_text_anim();}, 3000);//1000=1sec}
 			//blinking_text_anim();
 			
-			SloganRWD();
-
-			function SloganRWD()
-			{
-				const aspect = window.innerWidth / window.innerHeight;
-
-				if(aspect<1.5)
-				{
-					_slogan.textContent=`費馬工作室\n\n工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
-				}
-			}
-
 			function blinking_text_anim()
 			{
 				if(text_num<title_string.length)
@@ -262,6 +257,12 @@
 					}
 				}
 			}
+
+			function TriggerDigitalRainAnim()
+			{
+				_digitalRain.contentWindow.FectchScrollValue();
+			}
+			
 		</script>
 		
 
