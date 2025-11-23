@@ -115,7 +115,7 @@
 	color: rgba(255, 255, 255, 1);
 }
 
-.content
+.description
 {
 	margin-top: 3%;
 	padding-left: 12%;
@@ -135,7 +135,28 @@
 	height: 100%;
     display: flex;
     justify-content: center;
-    
+}
+
+#content_02
+{
+	position: absolute;
+	top: 200%;
+	right: 0%;
+	width: 100%;
+	height: 100%;
+	display: flex;
+    justify-content: center;
+}
+
+#content_03
+{
+	position: absolute;
+	top: 300%;
+	right: 0%;
+	width: 100%;
+	height: 100%;
+	display: flex;
+    justify-content: center;
 }
 
 .demo_window
@@ -157,17 +178,6 @@
     border-radius: 15px;
 }
 
-#content_02
-{
-	position: absolute;
-	top: 200%;
-	right: 0%;
-	width: 100%;
-	height: 100%;
-	display: flex;
-    justify-content: center;
-}
-
 .tech_window
 {
     position: relative;
@@ -186,62 +196,23 @@
     width: 210px;
 	background-image: url(./images/fimawork_logo_white.png);
 	background-size: 100% 100%;
-    border-radius: 15px;
 	transform: translate(-50%,0%);
 }
 
-			#work_03
-			{
-				position: absolute;
-				top: 300%;
-				right: 0%;
-				width: 100%;
-				height: 100%;
-			}
+.top_panel{
+    position:fixed;
+	left: 50%;
+    width: 60%;
+    height: 6%;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 9;
+	transform: translate(-50%,0%);
+}
 
-			#anchor_01
-			{
-				position: absolute;
-				top: 150%;
-				left: 50%;
-				width: 1%;
-				height: 1%;
-				transform: translate(-50%, -50%);
-			}
-
-			#anchor_02
-			{
-				position: absolute;
-				top: 250%;
-				left: 50%;
-				width: 1%;
-				height: 1%;
-				transform: translate(-50%, -50%);
-			}
-
-			#anchor_03
-			{
-				position: absolute;
-				top: 350%;
-				left: 50%;
-				width: 1%;
-				height: 1%;
-				transform: translate(-50%, -50%);
-			}
-
-            .top_panel{
-                position:fixed;
-				left: 50%;
-                width: 60%;
-                height: 6%;
-                display: flex;
-                justify-content: center;
-                background-color: rgba(255, 255, 255, 0);
-                z-index: 9;
-				transform: translate(-50%,0%);
-            }
-
-.logo_panel{
+.logo_panel
+{
     position:fixed;
 	top:3%;
 	left: 3%;
@@ -284,25 +255,49 @@
 				animation-timing-function:linear;
 			}
 
+#anchor_01
+{
+	position: absolute;
+	top: 150%;
+	left: 50%;
+	width: 1%;
+	height: 1%;
+	transform: translate(-50%, -50%);
+}
 
-			@media screen and (max-width:768px)
-			{
+#anchor_02
+{
+	position: absolute;
+	top: 250%;
+	left: 50%;
+	width: 1%;
+	height: 1%;
+	transform: translate(-50%, -50%);
+}
 
-				.main_canvas
-				{
-					width: 100%;
-   					height: 100%;
-				}
+#anchor_03
+{
+	position: absolute;
+	top: 350%;
+	left: 50%;
+	width: 1%;
+	height: 1%;
+	transform: translate(-50%, -50%);
+}
+
+
+@media screen and (max-width:768px)
+{
+
 
                 .top_panel{
                     position:fixed;
 					right: 5%;
                     bottom: 2%;
                     width: 90%;
-                    height: 8%;
-                    
+                    height: 8%;  
 					background: rgba(250, 250, 250, 0);
-                }
+	}
 
 				.logo_panel
 				{
@@ -351,15 +346,6 @@
 					transform: translate(0%, 0%);
 					display: block;
 				}
-.title
-{
-	position: relative;
-	left: 50%;
-    font-size: 30px;
-	letter-spacing: 3px;
-	color: rgba(255, 255, 255, 1);
-	transform: translate(-50%,-50%);
-}
 
 #slogan
 {
@@ -372,89 +358,59 @@
 	transform: translate(0%,-50%);
 }
 
-				
+.title
+{
+	top: 6%;
+	right: 0%;
+	left: 0%;
+	font-size: 30px;
+}
 
-				#info_panel
-				{
-					position: absolute;
-					width: 75%;
-					height: 30%;
-					top:156%;
-					right: 12.5%;
-					z-index: 3;
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					pointer-events: none;
-				}
+.sub_title
+{
+	font-family:Arial;
+	font-weight: normal;
+	text-align: center;
+	font-size: 21px;
+	color: rgba(255, 255, 255, 1);
+}
 
-				
-				#info_panel_2
-				{
-					position: absolute;
-					width: 75%;
-					height: 30%;
-					top:250%;
-					right: 12.5%;
-					z-index: 3;
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					pointer-events: none;
-				}
-
-				#info_panel_3
-				{
-					position: absolute;
-					width: 75%;
-					height: 30%;
-					top:334%;
-					right: 12.5%;
-					z-index: 3;
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					pointer-events: none;
-				}
-
-				.sub_title
-				{
-					font-family:Arial;
-					font-weight: normal;
-					text-align: center;
-					font-size: 21px;
-					color: rgba(255, 255, 255, 1);
-				}
-
-				.content
-				{
-					margin-top: 3%;
-					text-align: center;
-					font-family:Arial;
-					font-weight:lighter;
-					font-size: 12px;
-					color: rgba(255, 255, 255, 0.6);
-				}
-
+.description
+{
+	margin-top: 3%;
+	text-align: center;
+	font-family:Arial;
+	font-weight:lighter;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.9);
+}
 
 #content_01
 {
 	position: absolute;
-	top: 112%;
+	top: 90%;
 	left: 0%;
 	width: 100%;
-	height: 80%;	
-	flex-direction: column;	
+	height: 100%;
+	display:grid;
+}
+
+#content_02
+{
+	position: absolute;
+	top: 210%;
+	right: 0%;
+	width: 100%;
+	height: 100%;
+	display:grid;
 }
 
 .demo_window
 {
     position: relative;
-    margin-bottom: 0.1%;
-    top: 50%;
+	margin-top: 0.1%;
+	margin-bottom: 0.1%;
     width: 80%;
-    height:100%;
-    transform: translate(0%,-50%);
 }
 
 .demo_movie
@@ -466,23 +422,26 @@
     border-radius: 15px;
 }
 
-#content
+.tech_window
 {
-	position: absolute;
-	top: 195%;
-	right: 0%;
-	width: 100%;
-	height: 55%;
+    position: relative;
+   	margin-top: 0.1%;
+	margin-bottom: 0.1%;
+    width: 80%;
 }
 
-				#work_03
-				{
-					position: absolute;
-					top: 278%;
-					right: 0%;
-					width: 100%;
-					height: 55%;
-				}
+.tech_img
+{
+	position: relative;
+	top: 0%;
+    height: 150px;
+	width: 150px;
+	background-image: url(./images/fimawork_logo_white.png);
+	background-size: 100% 100%;
+	transform: translate(-50%,0%);
+}
+
+
 
 				#anchor_01
 				{
@@ -514,4 +473,4 @@
 					transform: translate(-50%, -50%);
 				}
 
-			}
+}
