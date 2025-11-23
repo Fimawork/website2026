@@ -378,10 +378,12 @@
 .description
 {
 	margin-top: 3%;
+	padding-left: 3%;
+	padding-right: 3%;
 	text-align: center;
 	font-family:Arial;
 	font-weight:lighter;
-	font-size: 12px;
+	font-size: 15px;
 	color: rgba(255, 255, 255, 0.9);
 }
 
