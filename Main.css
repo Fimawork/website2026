@@ -53,6 +53,37 @@
 	cursor: pointer;
 }
 
+.studio_name
+{
+	margin-top: 30px;
+	font-family:"Inter", sans-serif;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 1);
+	text-align: right;
+	letter-spacing: 9px;
+}
+
+#profile_panel
+{
+	position:fixed;
+	bottom:3%;
+	right: 3%;
+}
+
+.profile_info
+{
+	font-family:Arial;
+    font-size: 18px;
+    color: rgba(255, 255, 255, 1);
+	margin-bottom: 6px;
+}
+
+
+.profile_info:nth-child(1)
+{
+	font-size: 30px;
+}
+
 .logo:hover
 {
 	opacity: 0.5;
@@ -195,8 +226,6 @@
 	cursor: pointer;
 }
 
-
-
 .tech_window
 {
     position: relative;
@@ -227,6 +256,8 @@
     z-index: 9;
 	pointer-events: none;
 }
+
+
 
 @keyframes SceneCrossEffect 
 {
@@ -440,6 +471,13 @@ i
 	transform: translate(-75%,-50%);
 }
 
+#profile_panel
+{
+	position:absolute;
+	top: 380%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
 
 
 
