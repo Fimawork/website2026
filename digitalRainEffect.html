@@ -112,7 +112,7 @@ function init() {
 	renderer.shadowMap.enabled = true;
 	renderer.setClearColor(0x343232, 0.1);//需加入這一條，否則看不到CSS的底圖
 
-	scene.fog = new THREE.Fog( 0x000000, 10, 30 );
+	scene.fog = new THREE.Fog( 0x000000, 10, 40 );
 	
 	document.body.appendChild(renderer.domElement);
 
@@ -170,7 +170,7 @@ function animate() {
 
 	if(num>10)
 	{
-		speed=0.025;
+		speed=0.03;
 	}
 
 	for(let i=0;i<model_holder.children.length;i++)

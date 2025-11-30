@@ -162,6 +162,17 @@
 	padding-right: 18%;
 }
 
+.end_title
+{
+    margin-top: 6%;
+	text-align: center;
+    font-family:"Inter", sans-serif;
+    font-size: 27px;
+	color: rgba(255, 255, 255, 1);
+	padding-left: 18%;
+	padding-right: 18%;
+}
+
 .description
 {
 	margin-top: 3%;
@@ -413,10 +424,13 @@ i
 
 .sub_title
 {
-	font-family:Arial;
-	font-weight: normal;
-	text-align: center;
 	font-size: 21px;
+	color: rgba(255, 255, 255, 1);
+}
+
+.end_title
+{
+	font-size: 24px;
 	color: rgba(255, 255, 255, 1);
 }
 
