@@ -63,10 +63,10 @@ let ScanEffect = new THREE.MeshBasicMaterial( { color: 0x3AAE07, blending: THREE
 let composer;
 
 const params_post = {
-		threshold: 0.1,
+		threshold: 0.5,
 		strength: 1.5,
 		radius: 1,
-		exposure: 3
+		exposure: 1
 	};
 
 const clock = new THREE.Clock();
@@ -111,6 +111,8 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
 	renderer.setClearColor(0x343232, 0.1);//需加入這一條，否則看不到CSS的底圖
+
+	scene.fog = new THREE.Fog( 0x000000, 10, 30 );
 	
 	document.body.appendChild(renderer.domElement);
 

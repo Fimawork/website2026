@@ -51,8 +51,8 @@
 			<div class="main_btn" onclick="scrollToPosition(2)">
 				<div class="btn_text">技術優勢</div>
 			</div>
-			<div class="main_btn"  onclick="scrollToPosition(3)">
-				<div class="btn_text">合作流程</div>
+			<div class="main_btn" style="opacity: 0.3;pointer-events: none;">
+				<div class="btn_text" >合作流程</div>
 			</div>
 		</div>
 
@@ -60,7 +60,7 @@
 			<iframe id="digitalRain"  src="./digitalRainEffect.html" frameborder="0"></iframe>
             <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
 			<div id="content_01">
-				<div class="title">服務項目</div>
+				<div class="title" id="title_01">服務項目</div>
 				<div class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);" title="Try Demo Page" onclick="parent.open('https://fimawork.github.io/Medical_Cart_Configurator_Demo/')"></div>
 					<div class="sub_title">3D產品配置器</div>
@@ -74,7 +74,7 @@
 			</div>
 
 			<div id="content_02">
-				<div class="title">技術優勢</div>
+				<div class="title" id="title_02">技術優勢</div>
 				<div class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-cube fa-8x"></i></div>
 					<div class="sub_title">3D網頁技術</div>
@@ -94,12 +94,12 @@
 			</div>
 
 			<div id="content_03">
-
+				<div class="sub_title" id="title_03">把品牌升級到下一個維度——立即啟動你的3D轉型計畫</div>
 			</div>
 
 			<div id="profile_panel">
 				<div class="profile_info">
-					<j class="fa-solid fa-message"></j>
+					Contact
 				</div>
 				<div class="profile_info">
 					0910010725
@@ -136,6 +136,11 @@
 			let text_num=0;
 			const _title = document.querySelector('#title')
 
+			
+			let _title_01 = document.querySelector('#title_01');
+			let _title_02 = document.querySelector('#title_02');
+			let _title_03 = document.querySelector('#title_03');
+
 			SloganRWD();
 
 			function SloganRWD()
@@ -144,7 +149,7 @@
 
 				if(aspect<1.5)
 				{
-					_slogan.textContent=`費馬工作室\n\n工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
+					_slogan.textContent=`工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
 				}
 			}
 
@@ -170,6 +175,23 @@
 				{
 					_slogan.style.opacity=1-value;
 				}
+
+				if(value>0.45&&value<=0.5)
+				{
+					blinking_text_anim(_title_01,"服務項目");
+				}
+
+
+				if(value>1.45&&value<=1.5)
+				{
+					blinking_text_anim(_title_02,"技術優勢");
+				}
+
+				if(value>=2)
+				{
+					_title_03.style.opacity=1-(2.4-value)/0.2;
+				}
+				console.log(value);
 			});
 
 			window.addEventListener("pointerdown", (event) => {
@@ -250,26 +272,40 @@
 
 			//setTimeout(() => {blinking_text_anim();}, 3000);//1000=1sec}
 			//blinking_text_anim();
-			
-			function blinking_text_anim()
-			{
-				if(text_num<title_string.length)
-				{
-					text_num++;
-					current_title_string=title_string.substring(0, text_num);
-					_title.textContent=current_title_string;
-					setTimeout(() => {blinking_text_anim();}, 30);//1000=1sec}
 
-					if(text_num<12)
+			
+
+			//blinking_text_anim(_title_01,"服務項目")
+			
+			function blinking_text_anim(targetCSS,content)
+			{
+				let target_content=content;
+				let current_content="";
+				let index=0;
+				
+				TriggerBlink();
+
+				function TriggerBlink()
+				{
+					if(index<target_content.length)
 					{
-						_title.style.opacity=0.3;
+						index++;
+						current_content=target_content.substring(0, index);
+						targetCSS.textContent=current_content;
+						setTimeout(() => {TriggerBlink();}, 80);//1000=1sec}
+						targetCSS.style.color="rgba(255, 255, 255, 0.3);"
+						targetCSS.style.textDecorationLine = "underline";
+						targetCSS.style.textUnderlineOffset = "10px";
+						targetCSS.style.opacity=0.3;
 					}
 
 					else
 					{
-						_title.style.opacity=1;
+						targetCSS.style.opacity=1;
+						targetCSS.style.color="rgba(255,255, 255, 1)"
+						targetCSS.style.textDecorationLine = "none";
 					}
-				}
+				}	
 			}
 
 			function TriggerDigitalRainAnim()
