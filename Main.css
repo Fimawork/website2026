@@ -147,7 +147,7 @@
     font-family:"Inter", sans-serif;
     font-size: 42px;
 	letter-spacing: 3px;
-	color: rgba(255, 255, 255, 0);
+	color: rgba(255, 255, 255, 1);
 	user-select: none;
 }
 
@@ -345,6 +345,11 @@ i
 	.demo_movie:hover
 	{
 		opacity: 0.5;
+	}
+
+	i:hover
+	{
+		color: rgba(255, 255, 255,0.8);
 	}
 }
 

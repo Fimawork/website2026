@@ -60,13 +60,13 @@
 			<iframe id="digitalRain"  src="./digitalRainEffect.html" frameborder="0"></iframe>
             <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
 			<div id="content_01">
-				<div class="title" id="title_01">服務項目</div>
+				<div class="title" id="title_01"  onpointerenter="titleHoverEvent(1)">服務項目</div>
 				<div class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);" title="前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Medical_Cart_Configurator_Demo/')"></div>
 					<div class="sub_title">3D產品配置器</div>
 					<div class="description">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</div>
 				</div>
-				<div class="demo_window">
+				<div class="demo_window" >
 					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);" title="前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Showcase3D_Demo/')"></div>
 					<div class="sub_title">3D產品櫥窗</div>
 					<div class="description">在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</div>
@@ -74,7 +74,7 @@
 			</div>
 
 			<div id="content_02">
-				<div class="title" id="title_02">技術優勢</div>
+				<div class="title" id="title_02" onpointerenter="titleHoverEvent(2)">技術優勢</div>
 				<div class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-cube fa-8x"></i></div>
 					<div class="sub_title">3D網頁技術</div>
@@ -177,16 +177,16 @@
 					_slogan.style.opacity=1-value;
 				}
 
-				if(value>0.45&&value<=0.5)
-				{
-					blinking_text_anim(_title_01,"服務項目");
-				}
-
-
-				if(value>1.45&&value<=1.5)
-				{
-					blinking_text_anim(_title_02,"技術優勢");
-				}
+				//if(value>0.45&&value<=0.5)
+				//{
+				//	blinking_text_anim(_title_01,"服務項目");
+				//}
+//
+//
+				//if(value>1.45&&value<=1.5)
+				//{
+				//	blinking_text_anim(_title_02,"技術優勢");
+				//}
 	
 			});
 
@@ -211,6 +211,20 @@
 			const rect_2 = element_2.getBoundingClientRect() // get rects(width, height, top, etc)
 			const element_3 = document.querySelector('#anchor_03')
 			const rect_3 = element_3.getBoundingClientRect() // get rects(width, height, top, etc)
+
+			function titleHoverEvent(i)
+			{
+				switch(i)
+				{
+					case 1:
+						blinking_text_anim(_title_01,"服務項目");
+					break;
+
+					case 2:
+						blinking_text_anim(_title_02,"技術優勢");
+					break;
+				}
+			}
 
 			function scrollToPosition(index) 
 			{
