@@ -9,7 +9,7 @@
 	background-color: rgba(52, 50, 50, 1);
 }
 
-.main_canvas
+main
 {
 	position: absolute;
 	width: 100%;
@@ -53,13 +53,14 @@
 	cursor: pointer;
 }
 
-.studio_name
+h3
 {
 	margin-top: 30px;
 	margin-right: -3px;
 	font-family:"Inter", sans-serif;
     font-size: 15px;
     color: rgba(255, 255, 255, 1);
+	font-weight: 300;
 	text-align: right;
 	letter-spacing: 9px;
 }
@@ -113,8 +114,9 @@
 	pointer-events: none;
 }
 
-.main_btn
+button
 {
+	all: unset; /* 清除預設樣式 */ 
     position: relative;
     right: 3%;
     width: 6%;
@@ -139,8 +141,9 @@
 }
 
 
-.title
+h1
 {
+	all: unset; /* 清除預設樣式 */ 
 	position: absolute;
 	top: 24%;
 	text-align: center;
@@ -151,18 +154,19 @@
 	user-select: none;
 }
 
-.sub_title
+h2
 {
     margin-top: 6%;
 	text-align: center;
     font-family:"Inter", sans-serif;
     font-size: 24px;
+	font-weight: 500;
 	color: rgba(255, 255, 255, 1);
 	padding-left: 18%;
 	padding-right: 18%;
 }
 
-.end_title
+footer
 {
     margin-top: 6%;
 	text-align: center;
@@ -173,14 +177,14 @@
 	padding-right: 18%;
 }
 
-.description
+p
 {
 	margin-top: 3%;
 	padding-left: 12%;
 	padding-right: 12%;
 	text-align: center;
     font-family:"Inter", sans-serif;
-    font-size: 12px;
+    font-size: 15px;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -261,7 +265,7 @@
 	transform: translate(-50%,0%);
 }
 
-.top_panel{
+nav{
     position:fixed;
 	right: 0%;
     width: 100%;
@@ -365,7 +369,7 @@ i
 		height: 24px;
 	}
 
-	.studio_name
+	h3
 	{
 		margin-top: 24px;
 		margin-right: -2px;
@@ -374,7 +378,7 @@ i
 		letter-spacing: 4.2px;
 	}
 
-                .top_panel{
+                nav{
                     position:fixed;
 					right: 5%;
                     bottom: 2%;
@@ -385,7 +389,7 @@ i
 
 
 
-                .main_btn{
+                button{
                     position: relative;
                     display: flex;
                     justify-content: center;
@@ -419,7 +423,7 @@ i
 	transform: translate(0%,-50%);
 }
 
-.title
+h1
 {
 	top: 6%;
 	right: 0%;
@@ -427,19 +431,19 @@ i
 	font-size: 30px;
 }
 
-.sub_title
+h2
 {
 	font-size: 21px;
 	color: rgba(255, 255, 255, 1);
 }
 
-.end_title
+footer
 {
 	font-size: 24px;
 	color: rgba(255, 255, 255, 1);
 }
 
-.description
+p
 {
 	margin-top: 3%;
 	padding-left: 3%;

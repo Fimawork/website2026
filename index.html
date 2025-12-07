@@ -41,81 +41,79 @@
 
 
 		<div class="logo" onclick="scrollToPosition(0)">
-			<div class="studio_name">費馬工作室</div>
+			<h3>費馬工作室</h3>
 		</div>
 	
-		<div class="top_panel">
-			<div class="main_btn"  onclick="scrollToPosition(1)">
+		<nav>
+			<button  onclick="scrollToPosition(1)">
 				<div class="btn_text">服務項目</div>
-			</div>
-			<div class="main_btn" onclick="scrollToPosition(2)">
+			</button>
+			<button onclick="scrollToPosition(2)">
 				<div class="btn_text">技術優勢</div>
-			</div>
-			<div class="main_btn" style="opacity: 0.3;pointer-events: none;">
+			</button>
+			<button style="opacity: 0.3;pointer-events: none;">
 				<div class="btn_text" >合作流程</div>
-			</div>
-		</div>
+			</button>
+		</nav>
 
-        <div class="main_canvas">
+        <main>
 			<iframe id="digitalRain"  src="./digitalRainEffect.html" frameborder="0"></iframe>
             <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
-			<div id="content_01">
-				<div class="title" id="title_01"  onpointerenter="titleHoverEvent(1)">服務項目</div>
-				<div class="demo_window">
+			<header id="slogan" >工業設計x3D互動設計，幫你打造最懂產品的3D網頁</header>
+			<section id="content_01">
+				<h1 id="title_01"  onpointerenter="titleHoverEvent(1)">服務項目</h1>
+				<article class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);" title="前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Medical_Cart_Configurator_Demo/')"></div>
-					<div class="sub_title">3D產品配置器</div>
-					<div class="description">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</div>
-				</div>
-				<div class="demo_window" >
+					<h2>3D產品配置器</h2>
+					<p>互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</p>
+				</article>
+				<article class="demo_window" >
 					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);" title="前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Showcase3D_Demo/')"></div>
-					<div class="sub_title">3D產品櫥窗</div>
-					<div class="description">在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</div>
-				</div>
-			</div>
+					<h2>3D產品櫥窗</h2>
+					<p>在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</p>
+				</article>
+			</section>
 
-			<div id="content_02">
-				<div class="title" id="title_02" onpointerenter="titleHoverEvent(2)">技術優勢</div>
-				<div class="tech_window">
+			<section id="content_02">
+				<h1 id="title_02" onpointerenter="titleHoverEvent(2)">技術優勢</h1>
+				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-cube fa-8x"></i></div>
-					<div class="sub_title">3D網頁技術</div>
-					<div class="description">擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</div>
-				</div>	
-				<div class="tech_window">
+					<h2>3D網頁技術</h2>
+					<p>擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</p>
+				</article>	
+				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-circle-nodes fa-8x"></i></div>
-					<div class="sub_title">高度整合性</div>
-					<div class="description">具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</div>
-				</div>
-				<div class="tech_window">
+					<h2>高度整合性</h2>
+					<p>具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</p>
+				</article>
+				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-link fa-8x"></i></div>
-					<div class="sub_title">技術同理性</div>
-					<div class="description">具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</div>
-				</div>
+					<h2>技術同理性</h2>
+					<p>具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</p>
+				</article>
 				
-			</div>
+			</section>
 
-			<div id="content_03">
-				<div class="end_title" id="title_03">把品牌升級到下一個維度——立即啟動你的3D轉型計畫</div>
-			</div>
+			<section id="content_03">
+				<footer id="title_03">把品牌升級到下一個維度——立即啟動你的3D轉型計畫</footer>
+			</section>
 
-			<div id="profile_panel">
+			<aside id="profile_panel">
 				<div class="profile_info">
 					Contact
 				</div>
 				<div class="profile_info">
-					0910010725
-				</div>
-				<div class="profile_info">
 					fima.chou@gmail.com
 				</div>
-			</div>
+			</aside>
 				
 
 			<div id="anchor_01"></div>
 			<div id="anchor_02"></div>
 			<div id="anchor_03"></div>
-        </div>
+        </main>
 
-		<div id="slogan" >工業設計x3D互動設計，幫你打造最懂產品的3D網頁</div>
+		
 
 
 		<div class="vignette"></div>
