@@ -159,8 +159,8 @@ h2
     margin-top: 6%;
 	text-align: center;
     font-family:"Inter", sans-serif;
-    font-size: 24px;
-	font-weight: 500;
+    font-size: 21px;
+	font-weight: 400;
 	color: rgba(255, 255, 255, 1);
 	padding-left: 18%;
 	padding-right: 18%;
@@ -184,7 +184,8 @@ p
 	padding-right: 12%;
 	text-align: center;
     font-family:"Inter", sans-serif;
-    font-size: 15px;
+    font-size: 12px;
+	font-weight: 300;
     color: rgba(255, 255, 255, 0.9);
 }
 
@@ -417,9 +418,10 @@ i
 	top: 50%;
 	padding-left: 6%;
 	padding-right: 6%;
-	font-size: 30px;
+	font-size: 24px;
 	text-align: center;
 	white-space: pre-line;
+	font-weight: 400;
 	transform: translate(0%,-50%);
 }
 
@@ -428,19 +430,20 @@ h1
 	top: 6%;
 	right: 0%;
 	left: 0%;
-	font-size: 30px;
+	font-size: 27px;
 }
 
 h2
 {
-	font-size: 21px;
+	font-size: 15px;
 	color: rgba(255, 255, 255, 1);
 }
 
 footer
 {
-	font-size: 24px;
+	font-size: 21px;
 	color: rgba(255, 255, 255, 1);
+	white-space: pre-line;
 }
 
 p
@@ -450,8 +453,8 @@ p
 	padding-right: 3%;
 	text-align: center;
     font-family:"Inter", sans-serif;
-	font-weight: 200;
-	font-size: 15px;
+	font-weight: 300;
+	font-size: 12px;
 	color: rgba(255, 255, 255, 0.9);
 }
 
@@ -496,8 +499,8 @@ p
 {
 	position: relative;
 	left: 50%;
-    width: 320px;
-	height: 180px;
+    width: 288px;
+	height: 162px;
 	background-image: url(./images/MedicalCartConfiguratorDemo.gif);
 	background-size: 100% 100%;
     border-radius: 15px;
