@@ -1,0 +1,509 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>Carousel</title>
+		<style type="text/css">
+
+			body
+			{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+			}
+			
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+			
+
+		</style>
+
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+			  }
+			}
+		</script>
+
+	</head>
+	
+	<body>
+		<script type="module">
+
+			import * as THREE from 'three';
+
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_functions.js';
+import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeezer_Juicy_Salif_slices.js';
+import { chair_20251216 } from './models/chair_20251216_slices.js';
+import { apple_watch_series8_45mm_20251217 } from './models/apple_watch_series8_45mm_20251217_slices.js';
+import { JEEP_COMPASS_2021_20251217 } from './models/JEEP_COMPASS_2021_20251217_slices.js';
+import { Lamborghini_Centenario_roadster_20251218 } from './models/Lamborghini_Centenario_roadster_20251218_slices.js';
+
+let scene, camera, renderer, stats, mixer,container;
+let controls;
+let idleTime=0;
+
+const clock = new THREE.Clock();
+
+const modelPosition=new THREE.Vector3(60,0,0);
+const modelRotation=new THREE.Vector3(0,Math.PI, 0);
+const modeScale=0.05;
+
+const CameraDefaultPos=new THREE.Vector3(60,3,-20);
+const ControlsTargetDefaultPos=new THREE.Vector3(60,0,0);
+
+let carouselManu = new THREE.Object3D();
+let rotationTarget = new THREE.Object3D();
+const item_num=3;
+const divisionAngle = 2*Math.PI/item_num;//2*Math.PI為360度
+
+const quaternion_rotationTarget = new THREE.Quaternion();
+const quaternion_carouselManu = new THREE.Quaternion();
+
+let item_01 = new THREE.Object3D();
+let item_02 = new THREE.Object3D();
+let item_03 = new THREE.Object3D();
+let item_04 = new THREE.Object3D();
+let item_05 = new THREE.Object3D();
+let item_06 = new THREE.Object3D();
+
+let item_01_object = new THREE.Object3D();
+let item_02_object = new THREE.Object3D();
+let item_03_object = new THREE.Object3D();
+let item_04_object = new THREE.Object3D();
+let item_05_object = new THREE.Object3D();
+let item_06_object = new THREE.Object3D();
+
+let item_object_list=[];
+let isRotateOn=false;
+
+let gridWall = new THREE.GridHelper( 100, 500, 0x3AAE07, 0x3AAE07 );	
+let rotation_interpolation=0;
+
+let item_list=[];
+
+
+const hold_time=15;
+
+
+init();
+
+
+function init()
+{
+	FX.SetupEnvironment("cloud");
+
+  	scene = new THREE.Scene();
+  	//=scene.background= new THREE.Color( 0xFFFFFF );
+	scene.fog = new THREE.Fog( 0x3AAE07, 25, 30 );
+
+ 	container = document.createElement( 'div' );
+ 	document.body.appendChild( container );
+
+  	camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 8, 30 );
+  	renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
+  	renderer.setPixelRatio( window.devicePixelRatio );
+  	renderer.setSize( window.innerWidth, window.innerHeight );
+
+  	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  	renderer.toneMappingExposure = 0.9;
+  	document.body.appendChild( renderer.domElement );
+
+  	camera.position.copy(CameraDefaultPos);
+  	FX.posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+
+
+  	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls.enablePan = true;//右鍵平移效果
+  	controls.panSpeed = 0.4;
+  	controls.enableDamping = true;
+  	controls.dampingFactor =0.05;
+  	controls.maxDistance = 500;
+  	controls.target.copy( ControlsTargetDefaultPos );
+  	controls.zoomSpeed=0.5;
+	//controls.autoRotate=true;
+	//controls.autoRotateSpeed=2;
+  	controls.update();
+
+  	///hdri 環境光源
+	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer) 
+
+	
+
+	gridWall.material.opacity = 0.3;
+	gridWall.material.depthWrite = false;
+	gridWall.material.transparent = true;
+
+	scene.add(gridWall);
+	gridWall.position.set(60,0,5);
+	gridWall.rotation.x=Math.PI/2;
+	gridWall.visible=false;
+	gridWall.scale.set(0.1,0.1, 0.1);
+
+	
+  ///主要物件
+	const defaultScenes = 
+    [
+		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();resolve(); }, 100)), 
+		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
+	];
+
+	async function SetupDefaultScene() 
+  	{
+		for (const task of defaultScenes) 
+    	{
+			await task(); // 確保每個任務依次完成
+		}
+		
+    	console.log('All scenes loaded');
+	}
+
+	SetupDefaultScene();
+
+	
+
+	///Apple Watch
+	const loader_apple_watch = new GLTFLoader();
+    loader_apple_watch.setDRACOLoader(FX.dracoLoader);
+	loader_apple_watch.parse(
+    FX.Base64ToArrayBuffer(apple_watch_series8_45mm_20251217()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+
+		const main_case_material=FXM.InstMaterial(0xe3bea1,0.27,0.7,0,2.333,1,false,1,true);
+		const rear_case_material=FXM.InstMaterial(0x1f1f1f,0.05,0,0,2.333,0.75,false,1,true);
+
+		const winder_surface_material=FXM.InstMaterial(0x9c8181,0.5,0.75,0,2.333,1,false,1,true);
+
+		const belt_material=FXM.InstEtchingMaterial(0xfff2f0,1,1,1,false,1,'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),new THREE.Vector2(0, 0),'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),15);
+
+		const pin_surface_material=FXM.InstEtchingMaterial(0xdedede,0.75,1,1,false,1,'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1,1),new THREE.Vector2(-0.27,0.35),'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1, 1),0);
+
+		const window_material=FXM.InstMaterial(0x000000,0,0,1,1.5,0.5,true,0.9,false);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("window"),window_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("main_case"),main_case_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("rear_case"),rear_case_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("winder"),main_case_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("winder_surface"),winder_surface_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("belt"),belt_material,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("pin"),null,item_01_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("pin_surface"),pin_surface_material,item_01_object,scene);
+
+		item_01_object.position.set(60,2,-3);
+		item_01_object.rotation.set(Math.PI,Math.PI, Math.PI/2);
+		item_01_object.scale.set(0.06,0.06,0.06);
+
+		item_01.add(item_01_object)
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+	///eames-chair
+	const loader_eames_chair = new GLTFLoader();
+    loader_eames_chair.setDRACOLoader(FX.dracoLoader);
+	loader_eames_chair.parse(
+    FX.Base64ToArrayBuffer(chair_20251216()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+		//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+		//InstEtchingMaterial(thisColor,thisRoughness,thisMetalness,thisReflectivity,isTransparent,thisOpacity,map_src,map_repeat,map_offset,bumpMap_src,bumpMap_repeat,bumpMap_scale)
+		const support_material=FXM.InstMaterial(0x000000,0.5,0.75,0,2.333,1,false,1,true);
+
+		const knob_material=FXM.InstMaterial(0x000000,0.15,1,0,2.333,1,false,1,true);
+
+		const sofa_back_01_material=FXM.InstEtchingMaterial(0x080808,0.4,0.3,0.75,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const woodPanel_01_material=FXM.InstEtchingMaterial(0xc08854,0.5,0.5,0.5,false,1,'./textures/Walnut_culomn.png',new THREE.Vector2(0.8,0.8),new THREE.Vector2(0,0),'./textures/Walnut_culomn.png',new THREE.Vector2(1, 1),0);
+
+		const woodPanel_02_material=FXM.InstEtchingMaterial(0xc08854,0.5,0.5,0.5,false,1,'./textures/Walnut.png',new THREE.Vector2(1,1),new THREE.Vector2(0,0),'./textures/Walnut.png',new THREE.Vector2(1, 1),0);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_01"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_02"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_03"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_04"),woodPanel_02_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_back"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_buttom_main"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_buttom_sub"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("cap"),null,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_back_01"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_back_02"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_main"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_sub"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_01"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_02"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("knob"),knob_material,item_02_object,scene);
+
+		//item_02_object.add(model);
+
+		item_02_object.position.set(60,1.4,0);
+		item_02_object.rotation.set(0,FX.ToThreeEulerAngle(-90), 0);
+		item_02_object.scale.set(0.004,0.004,0.004);
+
+		item_02.add(item_02_object);
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+
+	///Lamborghini_Centenario_roadster
+	const loader_Lamborghini_Centenario_roadster = new GLTFLoader();
+    loader_Lamborghini_Centenario_roadster.setDRACOLoader(FX.dracoLoader);
+	loader_Lamborghini_Centenario_roadster.parse(
+    FX.Base64ToArrayBuffer(Lamborghini_Centenario_roadster_20251218()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+		//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+		//InstEtchingMaterial(thisColor,thisRoughness,thisMetalness,thisReflectivity,isTransparent,thisOpacity,map_src,map_repeat,map_offset,bumpMap_src,bumpMap_repeat,bumpMap_scale)
+		const inner_material=FXM.InstMaterial(0x000000,1,0.5,0,2.333,0.5,false,1,true);
+
+		const silver_paint_material=FXM.InstMaterial(0xd2dde5,0.45,0.9,0,2.333,1,false,1,true);
+
+		const wheel_frame_sliver_material=FXM.InstMaterial(0xeff3f6,0.3,0.6,0,2.333,1,false,1,true);
+
+		const window_material=FXM.InstMaterial(0xFFFFFF,0,0,0.96,1.5,1,true,1,false);
+
+		const red_light_material=FXM.InstMaterial(0xff0000,0,1,1,2.4,1,true,0.95,false);
+
+		const wipers_material=FXM.InstMaterial(0x000000,0.5,0.5,0,2.333,1,false,1,true);
+
+		const black_carbon_fiber_01_material=FXM.InstEtchingMaterial(0x585555,0.5,0.75,1,false,1,'./textures/Carbon_Fiber_10_B35F70.jpg',new THREE.Vector2(100,100),new THREE.Vector2(0,0),'./textures/Carbon_Fiber_10_B35F70.jpg',new THREE.Vector2(100, 100),0);
+
+		const brown_leather_material=FXM.InstEtchingMaterial(0xd2852d,0.5,0.1,0.5,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const black_leather_material=FXM.InstEtchingMaterial(0x383838,0.5,0.1,0.5,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const other_material=FXM.InstMaterial(0x000000,0,1,0,1.5,1,false,1,true);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("silver_paint"),silver_paint_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("black_carbon_fiber"),black_carbon_fiber_01_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("leather_brown"),brown_leather_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("car_window"),window_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("red_light"),red_light_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wheel_frame_black"),inner_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wheel_frame_sliver"),wheel_frame_sliver_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("tire"),null,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wipers"),wipers_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("inner"),inner_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("leather_black"),black_leather_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("inner_silver"),silver_paint_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("other"),other_material,item_03_object,scene);
+
+		item_03_object.add(model.getObjectByName("logo"));
+
+		//item_02_object.add(model);
+
+		//item_03_object.add(model);
+
+		item_03_object.position.set(60,1.8,0);
+		item_03_object.rotation.set(0,Math.PI, 0);
+		item_03_object.scale.set(0.0024,0.0024,0.0024);
+
+		item_03.add(item_03_object);
+
+		//FX.Material_Inspector(scene);
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06);
+	item_01.rotation.y=divisionAngle*6;
+	item_02.rotation.y=divisionAngle*5;
+	item_03.rotation.y=divisionAngle*4;
+	item_04.rotation.y=divisionAngle*3;
+	item_05.rotation.y=divisionAngle*2;
+	item_06.rotation.y=divisionAngle*1;
+
+	carouselManu.position.y=-1.5;
+	scene.add(carouselManu);
+
+
+	///桌布
+	
+	let HUD = new THREE.Object3D();
+		
+	const loader_HUD = new TIFFLoader();
+		
+	const geometry_HUD = new THREE.PlaneGeometry();
+		
+	loader_HUD.load( './images/apple_watch_wallpaper.tif', function ( texture ) {
+		
+		texture.colorSpace = THREE.SRGBColorSpace;
+		
+		const material_HUD = new THREE.MeshBasicMaterial( { map: texture, transparent: true,blending: THREE.AdditiveBlending,opacity:0.9 ,depthWrite: false } );
+		
+		const mesh_HUD = new THREE.Mesh( geometry_HUD, material_HUD );
+		const img_scale =0.052;
+		
+		mesh_HUD.position.set( 0.5, 9.5, -1);
+		mesh_HUD.scale.set(img_scale*44/0.06,img_scale*48.8/0.06,1);
+		//mesh_HUD.rotation.y=Math.PI/2;
+
+		mesh_HUD.rotation.set(Math.PI/2,-Math.PI, -Math.PI/2);
+		
+		HUD.add(mesh_HUD);
+		//scene.add( HUD );
+
+		item_01_object.add(HUD);
+	} );
+
+
+	function SetupItemGroup()
+	{
+		//3D
+		//item_list.push(item_01);
+		//item_list.push(item_02);
+		//item_list.push(item_03);
+		//item_list.push(item_04);
+		//item_list.push(item_05);
+		//item_list.push(item_06);
+			
+	
+		//item_01_object = scene.getObjectByName("item_01");
+		//item_02_object = scene.getObjectByName("item_02");
+		//item_03_object = scene.getObjectByName("item_03");
+		//item_04_object = scene.getObjectByName("item_04");
+		//item_05_object = scene.getObjectByName("item_05");
+		//item_06_object = scene.getObjectByName("item_06");
+
+		item_object_list.push(item_01_object)
+		item_object_list.push(item_02_object)
+		item_object_list.push(item_03_object)
+		item_object_list.push(item_04_object)
+		item_object_list.push(item_05_object)
+		item_object_list.push(item_06_object);
+	}
+
+	///EventListener
+  	window.addEventListener( 'resize', onWindowResize );  
+
+}
+
+
+function onWindowResize() 
+{
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function animate() 
+{
+  	requestAnimationFrame( animate );
+
+
+  	//controls.update();
+  	renderer.render( scene, camera );
+
+  	//FX.UpdateCameraPosition(camera,controls);
+
+	UpdateRotationManu();
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+	idleTime+=delta;
+
+	if(idleTime>hold_time)
+	{
+		idleTime=0;
+		rotationTarget.rotation.y+=divisionAngle;
+		isRotateOn=true;
+	}
+
+	if(isRotateOn)
+	{
+		GridWallEffect();
+	}
+
+	//FX.WebGLInspector(container , renderer);
+}
+
+function GridWallEffect()
+{
+	if(idleTime<=3.4&&idleTime>1.7)
+	{
+		gridWall.visible=true;
+
+		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(1,1, 1),0.05);
+		gridWall.rotation.x=FX.ToThreeEulerAngle(FX.LerpFloat(90,180,rotation_interpolation+=0.004*idleTime));
+	}
+
+	if(idleTime>4)
+	{
+		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(0.01,0.01, 0.01),0.25);
+	}
+
+	if(idleTime>5)
+	{
+		gridWall.visible=false;
+		gridWall.rotation.x=FX.ToThreeEulerAngle(90);
+		rotation_interpolation=0;
+	}
+}
+
+
+
+function UpdateRotationManu()
+{
+	quaternion_rotationTarget.setFromEuler(rotationTarget.rotation);
+	quaternion_carouselManu.slerp(quaternion_rotationTarget,0.025);
+	carouselManu.rotation.setFromQuaternion(quaternion_carouselManu);   
+	const rpm=0.004;
+
+	for(let i=0;i<item_object_list.length;i++)
+	{
+		if(item_object_list[i]!=null)
+		{
+			if(i===0)
+			{
+				item_object_list[i].rotation.y-=rpm;
+			}
+
+			else
+			{
+				item_object_list[i].rotation.y+=rpm;
+			}
+		}
+
+		else
+		{
+			item_object_list[i]=scene.getObjectByName(`item_0${i+1}`);
+		}
+	}
+}
+
+
+
+		</script>
+    </body>
+
+</html>

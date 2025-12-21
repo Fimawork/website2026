@@ -23,6 +23,16 @@ main
 	height: 100%;
 }
 
+#carousel
+{
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	height: 100%;
+	width: 100%;
+	pointer-events: none;
+}
+
 #fimawork_logo
 {
 	position: fixed;
@@ -85,7 +95,7 @@ h3
 {
 	font-size: 18px;
 	font-weight: 600;
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 }
 
 #slogan
@@ -175,6 +185,7 @@ footer
 	color: rgba(255, 255, 255, 1);
 	padding-left: 18%;
 	padding-right: 18%;
+	z-index: 3;
 }
 
 p
@@ -533,41 +544,17 @@ i
 #profile_panel
 {
 	position:absolute;
-	top: 390%;
+	top: 400%;
 	left: 50%;
 	transform: translate(-50%,-50%);
 }
 
-
-
-				#anchor_01
-				{
-					position: absolute;
-					top: 142%;
-					left: 50%;
-					width: 1%;
-					height: 1%;
-					transform: translate(-50%, -50%);
-				}
-
-				#anchor_02
-				{
-					position: absolute;
-					top: 233%;
-					left: 50%;
-					width: 1%;
-					height: 1%;
-					transform: translate(-50%, -50%);
-				}
-
-				#anchor_03
-				{
-					position: absolute;
-					top: 328%;
-					left: 50%;
-					width: 1%;
-					height: 1%;
-					transform: translate(-50%, -50%);
-				}
+#carousel
+{
+	top: 50%;
+	width: 100%;
+	aspect-ratio: 1/1;
+	transform: translate(0%,-50%);
+}
 
 }
