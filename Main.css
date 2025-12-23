@@ -555,7 +555,7 @@ i
 	width: 100%;
 	aspect-ratio: 1/1;
 	transform: translate(0%,-50%);
-	display: none;
+	/*display: none;*/
 }
 
 }
