@@ -169,13 +169,13 @@
 			window.addEventListener("scroll", (event) => {
     		scroll = this.scrollY;
 
-				updateScrollValue(scroll);
-				let value=scroll*0.001;
-
+	
 				const aspect = window.innerWidth / window.innerHeight;
 
 				if(aspect>1.5)
 				{
+					updateScrollValue(scroll);
+					let value=scroll*0.001;
 					_slogan.style.opacity=1-value;
 				}
 
