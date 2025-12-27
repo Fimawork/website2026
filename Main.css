@@ -4,7 +4,7 @@
 .background
 {
 	position: absolute;
-	height: 400%;
+	height: 500%;
 	width:  100%;
 	background-color: rgba(52, 50, 50, 1);
 }
@@ -47,6 +47,42 @@ main
 	left: 0%;
 	width: 100%;
 	height: 100%;
+}
+
+
+
+#code_info
+{
+	position: relative;
+	top: 40%;
+	width: 60%;
+	height: 60%;
+	background-color: rgba(0, 0, 0, 0.5);
+	border:solid;
+	border-width:1px;
+	border-radius: 15px;
+	border-color: rgb(0, 217, 255);
+}
+
+#web3d_window
+{
+	position: absolute;
+	top: 15%;
+	left: 5%;
+	height: 70%;
+	aspect-ratio: 1/1;
+}
+
+#code_content
+{
+	position: absolute;
+	left: 45%;
+	top: 30%;
+	width: 50%;
+	font-family:"Inter", sans-serif;
+	text-align: start;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 1);
 }
 
 .logo
@@ -228,6 +264,17 @@ p
 	top: 300%;
 	right: 0%;
 	width: 100%;
+	height:100%;
+	display: flex;
+    justify-content: center;
+}
+
+#content_04
+{
+	position: absolute;
+	top: 400%;
+	right: 0%;
+	width: 100%;
 	height: 100%;
 	display: flex;
     justify-content: center;
@@ -254,8 +301,8 @@ p
 	cursor: pointer;
 
 	border:solid;
-		border-width:1px;
-		border-color: rgb(0, 217, 255);
+	border-width:1px;
+	border-color: rgb(0, 217, 255);
 }
 
 .tech_window
@@ -368,6 +415,17 @@ i
 	.demo_movie:hover
 	{
 		opacity: 0.5;
+	}
+}
+
+
+@media screen and (max-width:1400px)/*平板(橫向)*/
+{
+	#code_info
+	{
+		top: 35%;
+		width: 85%;
+		height: 60%;
 	}
 }
 
@@ -502,7 +560,16 @@ p
 #content_03
 {
 	position: absolute;
-	top: 310%;
+	top: 335%;
+	right: 0%;
+	width: 100%;
+	height: 100%;
+}
+
+#content_04
+{
+	position: absolute;
+	top: 420%;
 	right: 0%;
 	width: 100%;
 	height: 100%;
@@ -559,7 +626,7 @@ i
 #profile_panel
 {
 	position:absolute;
-	top: 400%;
+	top:500%;
 	left: 50%;
 	transform: translate(-50%,-50%);
 }
@@ -577,6 +644,34 @@ i
 #gallery_btn
 {
 	display: block;
+}
+
+#code_info
+{
+	top: 15%;
+	width: 80%;
+	height: 75%;
+}
+
+#web3d_window
+{
+	position: absolute;
+	top: 0%;
+	left: 5%;
+	width:90%;
+	height:50%;
+}
+
+#code_content
+{
+	position: absolute;
+	left: 5%;
+	top: 65%;
+	width: 90%;
+	font-family:"Inter", sans-serif;
+	text-align: start;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 1);
 }
 
 }

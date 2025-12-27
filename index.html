@@ -52,8 +52,11 @@
 			<button onclick="scrollToPosition(2)">
 				<div class="btn_text">技術優勢</div>
 			</button>
+			<button onclick="scrollToPosition(3)">
+				<div class="btn_text" >介面導入</div>
+			</button>
 			<button onclick="parent.open('https://fimaworkshowcase.blogspot.com/')">
-				<div class="btn_text" >案例展示</div>
+				<div class="btn_text" >範例展示</div>
 				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
 			</button>
 		</nav>
@@ -70,7 +73,7 @@
 					<p>互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</p>
 				</article>
 				<article class="demo_window" >
-					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);" title="點擊前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Showcase3D_Demo/')"></div>
+					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);" title="點擊前往Demo頁面" onclick="parent.open('https://fimaworkshowcase.blogspot.com/')"></div>
 					<h2>3D產品櫥窗</h2>
 					<p>在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</p>
 				</article>
@@ -97,9 +100,23 @@
 			</section>
 
 			<section id="content_03">
-				<iframe id="carousel"  src="./carousel.html" frameborder="0"></iframe>
-				<footer id="title_03">把品牌升級到下一個維度——立即啟動你的3D轉型計畫</footer>
+				<h1 id="title_03"  onpointerenter="titleHoverEvent(3)">介面導入</h1>
+				<div id="code_info">
+					<iframe id="web3d_window"  src="./Sample.html" frameborder="0"></iframe>	
+					<div id="code_content">
+						<p style="text-align: start;">iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！</br></br>
+						<span style="color: rgba(1, 199, 83, 0.658);">&lt;!-- 利用iframe插入以下3D網頁頁面連結 -- &gt;</span></br>
+						<span style="color: rgba(255, 255, 255, 0.5);">&lt;</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span> <span style="color: rgba(255, 255, 255, 0.5);">src</span>=<span style="color: rgba(231, 158, 0, 0.952);">"https://fimawork.tw/Sample.html"</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;&lt;/</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;</span>
+						</p>	
+					</div>
+				</div>
 			</section>
+
+			<section id="content_04">
+				<iframe id="carousel"  src="./carousel.html" frameborder="0"></iframe>
+				<footer id="title_04">把品牌升級到下一個維度——立即啟動你的3D轉型計畫</footer>
+			</section>
+
 
 			<aside id="profile_panel">
 				<div class="profile_info">
@@ -143,6 +160,7 @@
 			let _title_01 = document.querySelector('#title_01');
 			let _title_02 = document.querySelector('#title_02');
 			let _title_03 = document.querySelector('#title_03');
+			let _title_04 = document.querySelector('#title_04');
 
 			SloganRWD();
 
@@ -153,7 +171,7 @@
 				if(aspect<1.5)
 				{
 					_slogan.textContent=`工業設計x3D互動設計\n幫你打造最懂產品的\n3D網頁`;
-					_title_03.textContent=`把品牌升級到下一個維度\n立即啟動你的3D轉型計畫`;
+					_title_04.textContent=`把品牌升級到下一個維度\n立即啟動你的3D轉型計畫`;
 					_fimawork_logo.remove();
 					_digitalRain.remove();
 				}
@@ -227,6 +245,10 @@
 
 					case 2:
 						blinking_text_anim(_title_02,"技術優勢");
+					break;
+
+					case 3:
+						blinking_text_anim(_title_03,"介面導入");
 					break;
 				}
 			}

@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>Carousel</title>
+		<style type="text/css">
+
+			body
+			{
+				margin: 0;
+				padding:0; 
+			}
+			
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+		</style>
+
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+			  }
+			}
+		</script>
+
+	</head>
+	
+	<body>
+		<script type="module">
+
+import * as THREE from 'three';
+
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_functions.js';
+import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeezer_Juicy_Salif_slices.js';
+
+let scene, camera, renderer, stats, mixer,container;
+let controls;
+
+const clock = new THREE.Clock();
+
+const CameraDefaultPos=new THREE.Vector3(-3,2,-3);
+const ControlsTargetDefaultPos=new THREE.Vector3(0,0,0);
+
+let main_model= new THREE.Object3D();
+
+init();
+//FX.Camera_Inspector(camera,controls);
+
+function init()
+{
+	FX.SetupEnvironment("cloud");
+
+	container = document.createElement( 'div' );
+ 	document.body.appendChild( container );
+
+  	scene = new THREE.Scene();
+	scene.background= new THREE.Color( 0x111111 );
+
+  	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
+  	renderer = new THREE.WebGLRenderer({ antialias: true });
+  	renderer.setSize(window.innerWidth, window.innerHeight);
+
+  	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  	renderer.toneMappingExposure = 1;
+  	document.body.appendChild( renderer.domElement );
+
+  	camera.position.copy(CameraDefaultPos);
+  
+  	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls.enablePan = true;//右鍵平移效果
+  	controls.panSpeed = 0.4;
+  	controls.enableDamping = true;
+  	controls.dampingFactor =0.015;
+  	controls.maxDistance = 500;
+  	controls.target.copy( ControlsTargetDefaultPos );
+  	controls.zoomSpeed=0.5;
+	controls.autoRotate=false;
+	controls.autoRotateSpeed=0.3;
+  	controls.update();
+
+  	///hdri 環境光源
+	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer);
+
+	///Apple Watch
+	const loader_apple_watch = new GLTFLoader();
+    loader_apple_watch.setDRACOLoader(FX.dracoLoader);
+	loader_apple_watch.parse(
+    FX.Base64ToArrayBuffer(ALESSI_Lemon_Squeezer_Juicy_Salif()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+
+		const polishMetal_material=FXM.InstMaterial(0xd4d4d4,0,1,0,2.4,1,false,1,true);
+		
+		FX.ReturnBufferGeometry(model.getObjectByName("model"),polishMetal_material,main_model,scene);
+
+		main_model.position.set(0,-1.5,0);
+		main_model.scale.set(0.01,0.01,0.01);
+
+		scene.add(main_model);
+
+		animate();
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+	const floor = new THREE.GridHelper( 10, 15, 0x3AAE07, 0x3AAE07 );	
+
+	scene.add(floor);
+
+
+	///EventListener
+  	window.addEventListener( 'resize', onWindowResize );  
+
+}
+
+
+function onWindowResize() 
+{
+    camera.aspect = window.innerWidth, window.innerHeight;
+	camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight);
+}
+
+function animate() 
+{
+  	requestAnimationFrame( animate );
+
+  	controls.update();
+  	renderer.render( scene, camera );
+  	//UpdateCameraPosition(camera,controls);
+
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+}
+		</script>
+    </body>
+
+</html>
