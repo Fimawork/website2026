@@ -70,8 +70,10 @@ function init()
 	scene.background= new THREE.Color( 0x111111 );
 
   	camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
-  	renderer = new THREE.WebGLRenderer({ antialias: true });
-  	renderer.setSize(window.innerWidth, window.innerHeight);
+
+	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize(window.innerWidth, window.innerHeight);
 
   	renderer.toneMapping = THREE.ACESFilmicToneMapping;
   	renderer.toneMappingExposure = 1;
@@ -127,16 +129,16 @@ function init()
 
 
 	///EventListener
-  	window.addEventListener( 'resize', onWindowResize );  
+  	//window.addEventListener( 'resize', onWindowResize );  
 
 }
 
 
 function onWindowResize() 
 {
-    camera.aspect = window.innerWidth, window.innerHeight;
+    camera.aspect = container.clientWidth/container.clientHeight;
 	camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight);
+    renderer.setSize( container.clientWidth/container.clientHeight);
 }
 
 function animate() 
