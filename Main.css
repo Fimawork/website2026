@@ -57,10 +57,12 @@ main
 	width: 60%;
 	height: 60%;
 	background-color: rgba(0, 0, 0, 0.5);
-	border:solid;
-	border-width:1px;
+	/*border:solid;
+	border-width:1px;*/
 	border-radius: 15px;
-	border-color: rgb(0, 217, 255);
+	/*border-color: rgb(0, 217, 255);*/
+
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 #web3d_window
