@@ -30,7 +30,6 @@ main
 	left: 0%;
 	height: 100%;
 	width: 100%;
-	pointer-events: none;
 }
 
 #fimawork_logo
@@ -521,8 +520,10 @@ h2
 footer
 {
 	font-size: 21px;
+	height: 50%;
 	color: rgba(255, 255, 255, 1);
 	white-space: pre-line;
+	align-content: center;
 }
 
 p

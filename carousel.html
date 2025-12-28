@@ -129,6 +129,8 @@ function init()
   	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
   	controls = new OrbitControls( camera, renderer.domElement );
   	controls.enablePan = false;//右鍵平移效果
+	controls.enableZoom = false;
+	controls.enableRotate = false;
   	controls.panSpeed = 0.4;
   	controls.enableDamping = true;
   	controls.dampingFactor =0.05;
