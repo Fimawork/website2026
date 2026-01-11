@@ -52,20 +52,25 @@
 		<div class="logo" onclick="scrollToPosition(0)">
 			<h3>費馬工作室</h3>
 		</div>
+
+
 	
 		<nav>
 			<button  onclick="scrollToPosition(1)">
-				<div class="btn_text">服務項目</div>
+				<div class="btn_text" id="main_btn_service">服務項目</div>
 			</button>
 			<button onclick="scrollToPosition(2)">
-				<div class="btn_text">技術優勢</div>
+				<div class="btn_text" id="main_btn_technicalEdge">技術優勢</div>
 			</button>
 			<button onclick="scrollToPosition(3)">
-				<div class="btn_text" >介面導入</div>
+				<div class="btn_text" id="main_btn_integration">介面導入</div>
 			</button>
 			<button onclick="parent.open('https://fimaworkshowcase.blogspot.com/')">
-				<div class="btn_text" >範例展示</div>
+				<div class="btn_text" id="main_btn_demo">範例展示</div>
 				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
+			</button>
+			<button onclick="LanguageSwitch()">
+				<div class="btn_text" id="language_btn">EN</div>
 			</button>
 		</nav>
 
@@ -75,48 +80,48 @@
 			<iframe id="carousel"  src="./carousel.html" frameborder="0"></iframe>
 			<header id="slogan" >用維度呈現深度，讓產品自己說話</header>
 			<section id="content_01">
-				<h1 id="title_01"  onpointerenter="titleHoverEvent(1)">服務項目</h1>
+				<h1 id="title_01">服務項目</h1>
 				<article class="demo_window">
 					<div class="demo_movie" style="background-image: url(./images/MedicalCartConfiguratorDemo_compress.gif);" title="點擊前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Medical_Cart_Configurator_Demo/')"></div>
-					<h2>3D產品配置器</h2>
-					<p>互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</p>
+					<h2 id="configurator_title">3D產品配置器</h2>
+					<p id="configurator_content">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</p>
 				</article>
 				<article class="demo_window" >
 					<div class="demo_movie" style="background-image: url(./images/Showcase3DDemo.gif);" title="點擊前往Demo頁面" onclick="parent.open('https://fimawork.github.io/Showcase3D_Demo/')"></div>
-					<h2>3D產品櫥窗</h2>
-					<p>在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</p>
+					<h2 id="showcase_title">3D產品櫥窗</h2>
+					<p id="showcase_content">在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</p>
 				</article>
 			</section>
 
 			<section id="content_02">
-				<h1 id="title_02" onpointerenter="titleHoverEvent(2)">技術優勢</h1>
+				<h1 id="title_02">技術優勢</h1>
 				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-cube fa-8x"></i></div>
-					<h2>3D網頁技術</h2>
-					<p>擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</p>
+					<h2 id="web3D_title">3D網頁技術</h2>
+					<p id="web3D_content">擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</p>
 				</article>	
 				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-circle-nodes fa-8x"></i></div>
-					<h2>高度整合性</h2>
-					<p>具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</p>
+					<h2 id="integration_title">高度整合性</h2>
+					<p id="integration_content">具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</p>
 				</article>
 				<article class="tech_window">
 					<div class="tech_img"><i class="fa-solid fa-link fa-8x"></i></div>
-					<h2>技術同理性</h2>
-					<p>具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</p>
+					<h2 id="empathy_title">技術同理性</h2>
+					<p id="empathy_content">具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</p>
 				</article>
 				
 			</section>
 
 			<section id="content_03">
-				<h1 id="title_03"  onpointerenter="titleHoverEvent(3)">介面導入</h1>
+				<h1 id="title_03">介面導入</h1>
 				<div id="code_info">
 					<iframe id="web3d_window"  src="./Sample.html" frameborder="0"></iframe>	
 					<div id="code_content">
 						<p style="text-align: start;">
-							<span style="color: rgba(1, 199, 83, 0.658);">&lt;!-- 利用iframe插入以下3D網頁頁面連結 -- &gt;</span></br>
+							<span style="color: rgba(1, 199, 83, 0.658);" id="code_info_title">&lt;!-- 利用iframe插入以下3D網頁頁面連結 -- &gt;</span></br>
 						<span style="color: rgba(255, 255, 255, 0.5);">&lt;</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span> <span style="color: rgba(255, 255, 255, 0.5);">src</span>=<span style="color: rgba(231, 158, 0, 0.952);">"https://fimawork.tw/Sample.html"</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;&lt;/</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;</span></br></br>
-							iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！
+							<span id="code_info_content">iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！</span>
 						</p>	
 					</div>
 				</div>
@@ -152,10 +157,37 @@
 
 		<script>
 			let _author = document.querySelector('#author');
-			let _slogan = document.querySelector('#slogan');
+			
 			let _digitalRain = document.querySelector('#digitalRain');
 			let _fimawork_logo = document.querySelector('#fimawork_logo');
 			let _carousel = document.querySelector('#carousel');
+
+			let _slogan = document.getElementById('slogan');
+			let _configurator_title=document.getElementById("configurator_title");
+			let _configurator_content=document.getElementById("configurator_content");
+			let _showcase_title=document.getElementById("showcase_title");
+			let _showcase_content=document.getElementById("showcase_content");
+
+			let _web3D_title=document.getElementById("web3D_title");
+			let _web3D_content=document.getElementById("web3D_content");
+			let _integration_title=document.getElementById("integration_title");
+			let _integration_content=document.getElementById("integration_content");
+			let _empathy_title=document.getElementById("empathy_title");
+			let _empathy_content=document.getElementById("empathy_content");
+
+			let _code_info_title=document.getElementById("code_info_title");
+			let _code_info_content=document.getElementById("code_info_content");
+
+			let _title_01 = document.getElementById('title_01');
+			let _title_02 = document.getElementById('title_02');
+			let _title_03 = document.getElementById('title_03');
+			let _title_04 = document.getElementById('title_04');
+
+			let _main_btn_service=document.getElementById("main_btn_service");
+			let _main_btn_technicalEdge=document.getElementById("main_btn_technicalEdge");
+			let _main_btn_integration=document.getElementById("main_btn_integration");
+			let _main_btn_demo=document.getElementById("main_btn_demo");
+			let _language_btn=document.getElementById("language_btn");
 
 			let scroll=0;
 			let present_scroll=0;
@@ -169,10 +201,9 @@
 			const _title = document.querySelector('#title')
 
 			
-			let _title_01 = document.querySelector('#title_01');
-			let _title_02 = document.querySelector('#title_02');
-			let _title_03 = document.querySelector('#title_03');
-			let _title_04 = document.querySelector('#title_04');
+			
+
+			let isEnglish=false;
 
 			SloganRWD();
 
@@ -182,8 +213,8 @@
 
 				if(aspect<1.5)
 				{
-					_slogan.textContent=`用維度呈現深度\n讓產品自己說話`;
-					_title_04.textContent=`把品牌升級到下一個維度\n立即啟動你的3D轉型計畫`;
+					//_slogan.textContent=`用維度呈現深度\n讓產品自己說話`;
+					//_title_04.textContent=`把品牌升級到下一個維度\n立即啟動你的3D轉型計畫`;
 					_fimawork_logo.remove();
 					//_digitalRain.remove();
 				}
@@ -230,6 +261,22 @@
 				present_scroll=scroll;
 
 			});
+
+//			window.addEventListener("keydown",function (event) {
+//
+//			switch (event.code) 
+//			{
+//
+//				case "Space":
+//
+//				LanguageSwitch();
+//				
+//
+//				break;
+//
+//			}
+//		  
+//		});
 
 
 //			/////客製一個 addEventListener練習
@@ -368,6 +415,100 @@
 			function TriggerDigitalRainAnim()
 			{
 				_digitalRain.contentWindow.FectchScrollValue();
+			}
+
+
+			function LanguageSwitch()
+			{
+				
+
+				if(!isEnglish)
+				{
+					isEnglish=true;
+
+					blinking_text_anim(_main_btn_service,"Services");
+					blinking_text_anim(_main_btn_technicalEdge,"Prowess");
+					blinking_text_anim(_main_btn_integration,"Integration");
+					blinking_text_anim(_main_btn_demo,"Demos");
+					blinking_text_anim(_language_btn,"ZH_TW");
+
+					_slogan.textContent="Depth, through dimensions.";
+
+					_title_01.textContent="Services";
+
+					_configurator_title.textContent="3D Product Configurator";
+					_configurator_content.textContent="Bring your products to life with our interactive 3D platform. Let your customers rotate, zoom, and personalize every detail in real-time. By putting the design power in their hands, you create a deeper connection that drives higher conversions and showcases your brand's innovation.";
+
+					_showcase_title.textContent="3D Product Showcase";
+					_showcase_content.textContent="Bring the physical showroom experience to your screen. Allow customers to rotate, zoom, and explore every intricate detail of your products. By creating a lifelike viewing experience, you can dramatically improve interaction, keep visitors on your site longer, and drive higher sales.";
+
+
+					_title_02.textContent="Prowess";
+
+					_web3D_title.textContent="Web3D Technology";
+					_web3D_content.textContent="We specialize in Three.js and WebGL to bridge the gap between complex product details and intuitive interaction—turning diverse materials and features into immersive 3D web realities.";
+
+					_integration_title.textContent="Seamless CAD Integration";
+					_integration_content.textContent="Bridge the gap between engineering and the web. Our platform enables the swift import of IGES and STEP files, ensuring your CAD models transition smoothly into 3D web assets.";
+
+					_empathy_title.textContent="Technical Insight";
+					_empathy_content.textContent="With a decade of experience in product design and development, we possess a deep understanding of product DNA, allowing us to quickly identify and highlight key features and unique selling points.";
+
+
+					_title_03.textContent="Integration";
+
+					_code_info_title.textContent="<!-- Insert the 3D page link via iFrame -- >";
+					_code_info_content.textContent="Effortlessly embed your 3D interface into any layout using iFrames. Simply define your width and height for a perfect, integrated look.";
+
+					_title_04.textContent="Elevate your brand through dimensions.";
+
+					//_language_btn.textContent="ZH_TW";
+
+					
+				}
+
+				else
+				{
+					isEnglish=false;
+
+					blinking_text_anim(_main_btn_service,"服務項目");
+					blinking_text_anim(_main_btn_technicalEdge,"技術優勢");
+					blinking_text_anim(_main_btn_integration,"介面導入");
+					blinking_text_anim(_main_btn_demo,"範例展示");
+					blinking_text_anim(_language_btn,"EN");
+
+					_slogan.textContent="用維度呈現深度，讓產品自己說話";
+
+					_title_01.textContent="服務項目";
+					_configurator_title.textContent="3D產品配置器";
+					_configurator_content.textContent="互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。";
+
+					_showcase_title.textContent="3D產品櫥窗";
+					_showcase_content.textContent="在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。";
+
+					
+					_title_02.textContent="技術優勢";
+
+					_web3D_title.textContent="3D網頁技術";
+					_web3D_content.textContent="擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。";
+
+					_integration_title.textContent="高度整合性";
+					_integration_content.textContent="具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。";
+
+					_empathy_title.textContent="技術同理性";
+					_empathy_content.textContent="具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。";
+
+
+					_title_03.textContent="介面導入";
+					
+
+					_code_info_title.textContent="<!-- 利用iframe插入以下3D網頁頁面連結 -- >";
+					_code_info_content.textContent="iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！";
+
+					_title_04.textContent="把品牌升級到下一個維度—立即啟動你的3D轉型計畫";
+
+				}
+
 			}
 			
 		</script>
