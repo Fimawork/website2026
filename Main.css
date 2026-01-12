@@ -139,6 +139,7 @@ h3
 .profile_info:nth-child(3)
 {
 	font-size: 12px;
+	white-space:pre-line;
 }
 
 #slogan
@@ -666,7 +667,7 @@ i
 #profile_panel
 {
 	position:absolute;
-	top:438%;
+	top:432%;
 	left: 50%;
 	transform: translate(-50%,-50%);
 }
