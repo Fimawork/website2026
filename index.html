@@ -121,7 +121,8 @@
 						<p style="text-align: start;">
 							<span style="color: rgba(1, 199, 83, 0.658);" id="code_info_title">&lt;!-- 利用iframe插入以下3D網頁頁面連結 -- &gt;</span></br>
 						<span style="color: rgba(255, 255, 255, 0.5);">&lt;</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span> <span style="color: rgba(255, 255, 255, 0.5);">src</span>=<span style="color: rgba(231, 158, 0, 0.952);">"https://fimawork.tw/Sample.html"</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;&lt;/</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;</span></br></br>
-							<span id="code_info_content">iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！</span>
+							<span id="code_info_content">iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！</span></br></br></br>
+							<span id="demoInvitation" style="font-size:18px">歡迎試作我們的介面！</span>
 						</p>	
 					</div>
 				</div>
@@ -177,6 +178,7 @@
 
 			let _code_info_title=document.getElementById("code_info_title");
 			let _code_info_content=document.getElementById("code_info_content");
+			let _demoInvitation=document.getElementById("demoInvitation");
 
 			let _address=document.getElementById("address");
 
@@ -208,6 +210,7 @@
 			let isEnglish=false;
 
 			SloganRWD();
+			SetLanguage();
 
 			function SloganRWD()
 			{
@@ -222,7 +225,21 @@
 				}
 			}
 
-			//author_hud_effect();
+			function SetLanguage()
+			{
+				const lang = navigator.language || navigator.language?.[0] || 'en';
+
+				if(lang.startsWith('zh-TW')||lang.startsWith('zh-CN'))
+				{
+					console.log("你好");
+				}
+
+				else
+				{
+					LanguageSwitch();//轉為英文
+					console.log("Hello");
+				}
+			}
 
 			async function author_hud_effect()
 			{
@@ -461,6 +478,7 @@
 
 					_code_info_title.textContent="<!-- Insert the 3D page link via iFrame -- >";
 					_code_info_content.textContent="Effortlessly embed your 3D interface into any layout using iFrames. Simply define your width and height for a perfect, integrated look.";
+					_demoInvitation.textContent="Want to see it in action? Request a demo！";
 
 					_title_04.textContent="Elevate your brand through dimensions.";
 
@@ -506,6 +524,7 @@
 
 					_code_info_title.textContent="<!-- 利用iframe插入以下3D網頁頁面連結 -- >";
 					_code_info_content.textContent="iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！";
+					_demoInvitation.textContent="歡迎試作我們的介面！";
 
 					_title_04.textContent="把品牌升級到下一個維度—立即啟動你的3D轉型計畫";
 
