@@ -115,8 +115,9 @@ h3
 #profile_panel
 {
 	position:fixed;
-	bottom:3%;
-	right: 3%;
+	width: 15%;
+	bottom:6%;
+	right: 0%;
 }
 
 .profile_info
@@ -124,8 +125,8 @@ h3
 	font-family:"Inter", sans-serif;
     font-size: 15px;
     color: rgba(255, 255, 255, 1);
-	margin-bottom: 3px;
 	white-space: nowrap;
+	display: block;
 }
 
 
@@ -133,13 +134,24 @@ h3
 {
 	font-size: 18px;
 	font-weight: 600;
-	margin-bottom: 3px;
+	
+}
+.profile_info:nth-child(2)
+{
+	font-size: 12px;
+	white-space:pre-line;
 }
 
 .profile_info:nth-child(3)
 {
 	font-size: 12px;
 	white-space:pre-line;
+}
+
+#facebook_btn
+{
+	top:6%;
+	left: 30%;
 }
 
 #slogan
@@ -445,6 +457,16 @@ i
 	{
 	    width: 8%;
 	}
+
+	#profile_panel
+	{
+		right: 3%;
+	}
+
+	#facebook_btn
+	{
+		left: 50%;
+	}
 }
 
 
@@ -667,9 +689,16 @@ i
 #profile_panel
 {
 	position:absolute;
+	width: 60%;
 	top:455%;
 	left: 50%;
 	transform: translate(-50%,-50%);
+}
+
+#facebook_btn
+{
+	margin-top: 1.5%;
+	left: 39%;
 }
 
 #carousel
