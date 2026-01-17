@@ -119,10 +119,13 @@
 					<iframe id="web3d_window"  src="./Sample.html" frameborder="0"></iframe>	
 					<div id="code_content">
 						<p style="text-align: start;">
-							<span style="color: rgba(1, 199, 83, 0.658);" id="code_info_title">&lt;!-- 利用iframe插入以下3D網頁頁面連結 -- &gt;</span></br>
-						<span style="color: rgba(255, 255, 255, 0.5);">&lt;</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span> <span style="color: rgba(255, 255, 255, 0.5);">src</span>=<span style="color: rgba(231, 158, 0, 0.952);">"https://fimawork.tw/Sample.html"</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;&lt;/</span><span style="color: rgba(9, 124, 255, 0.9);">iframe</span><span style="color: rgba(255, 255, 255, 0.5);">&gt;</span></br></br>
-							<span id="code_info_content">iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！</span></br></br>
-							<span id="demoInvitation" style="font-size:18px">歡迎試作我們的介面！</span>
+							<span id="step_01_title" class="code_title">第一步：資產優化</span></br>
+							<span id="step_01_content">將工業設計的高精度模型（如 IGES或STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。</span></br></br>
+							<span id="step_02_title" class="code_title">第二步：環境與燈光配置</span></br>
+							<span id="step_02_content">在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。</span></br></br>
+							<span id="step_03_title" class="code_title">第三步：互動邏輯開發</span></br>
+							<span id="step_03_content">撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。</span></br></br>
+							<span id="demoInvitation" class="code_title">歡迎試作我們的介面！</span>
 						</p>	
 					</div>
 				</div>
@@ -187,6 +190,13 @@
 			let _title_02 = document.getElementById('title_02');
 			let _title_03 = document.getElementById('title_03');
 			let _title_04 = document.getElementById('title_04');
+
+			let _step_01_title = document.getElementById('step_01_title');
+			let _step_01_content = document.getElementById('step_01_content');
+			let _step_02_title = document.getElementById('step_02_title');
+			let _step_02_content = document.getElementById('step_02_content');
+			let _step_03_title = document.getElementById('step_03_title');
+			let _step_03_content = document.getElementById('step_03_content');
 
 			let _main_btn_service=document.getElementById("main_btn_service");
 			let _main_btn_technicalEdge=document.getElementById("main_btn_technicalEdge");
@@ -477,8 +487,13 @@
 
 					_title_03.textContent="Integration";
 
-					_code_info_title.textContent="<!-- Insert the 3D page link via iFrame -- >";
-					_code_info_content.textContent="Effortlessly embed your 3D interface into any layout using iFrames. Simply define your width and height for a perfect, integrated look.";
+					_step_01_title.textContent="Step 1: Asset Optimization";
+					_step_01_content.textContent="From High-Poly to Web-Ready We transform industrial design high-fidelity source files (such as IGES,STEP) into lightweight, web-optimized assets.";
+					_step_02_title.textContent="Step 2: Scene & Lighting Configuration";
+					_step_02_content.textContent="The Virtual Studio Setup We build a bespoke virtual environment for your product within the development framework. Fine-tuning lighting, shadows, and material properties to achieve a photorealistic and premium look.";
+					_step_03_title.textContent="Interactive Logic Development";
+					_step_03_content.textContent="User and Product We write custom code to create meaningful connections between users and 3D objects. Smooth   rotation, interactive hotspots for detailed info, and real-time configurators for colors or components.";
+
 					_demoInvitation.textContent="Want to see it in action? Request a demo！";
 
 					_title_04.textContent="Elevate your brand through dimensions.";
@@ -522,9 +537,13 @@
 
 					_title_03.textContent="介面導入";
 					
+					_step_01_title.textContent="第一步：資產優化";
+					_step_01_content.textContent="將工業設計的高精度模型（如 IGES或STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。";
+					_step_02_title.textContent="第二步：環境與燈光配置";
+					_step_02_content.textContent="在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。";
+					_step_03_title.textContent="第三步：互動邏輯開發";
+					_step_03_content.textContent="撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。";
 
-					_code_info_title.textContent="<!-- 利用iframe插入以下3D網頁頁面連結 -- >";
-					_code_info_content.textContent="iFrame（內嵌框架）是一個很強大的工具，只要設定適當的 width（寬度）和 height（高度），就能將3D介面完美融入你的版面了！";
 					_demoInvitation.textContent="歡迎試作我們的介面！";
 
 					_title_04.textContent="把品牌升級到下一個維度—立即啟動你的3D轉型計畫";
