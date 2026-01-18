@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
+		<meta name="viewport" content="width=device-width", initial-scale="1.0", maximum-scale="1.0", user-scalable="no"/>
+		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
+		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>3D網頁範例| 費馬工作室 | fimawork | 3D網頁設計、3D Website Design</title>
+		<link rel="stylesheet" type="text/css" href="Main.css">
+		<style type="text/css">
+
+			body
+			{
+				margin: 0;
+				padding:0; 
+			}
+			
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+			.web3d_icon
+			{
+				position:absolute;
+				top:6%;
+				right: 6%;
+				height: 12%;
+				aspect-ratio: 1/1;
+				background-image: url(./images/web3d_icon_gray.png);
+				background-size: 100% 100%;
+				opacity: 1;
+				z-index: 99;
+				user-select: none;
+			}
+
+		</style>
+
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+			  }
+			}
+		</script>
+
+	</head>
+	
+	<body>
+		<script type="module">
+
+import * as THREE from 'three';
+
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.7/fx_functions.js';
+import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import { Apple_MacBook_Air } from './models/Apple_MacBook_Air_slices.js';
+
+let scene, camera, renderer, stats, mixer,container;
+let controls;
+
+const clock = new THREE.Clock();
+
+const CameraDefaultPos=new THREE.Vector3(16.855,16.167,29.758);
+const ControlsTargetDefaultPos=new THREE.Vector3(-0.181,3.360,3.024);
+
+let keyboardModule = new THREE.Object3D();
+let screenModule = new THREE.Object3D();
+let RotatePivot = new THREE.Object3D();
+
+let idleTime=0;
+const hold_time=6;
+
+init();
+//FX.Camera_Inspector(camera,controls);
+
+function init()
+{
+	FX.SetupEnvironment("cloud");
+
+	container = document.createElement( 'div' );
+ 	document.body.appendChild( container );
+
+  	scene = new THREE.Scene();
+
+  	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );//非全螢幕比例設定
+  	renderer = new THREE.WebGLRenderer({ antialias: true });
+  	renderer.setSize( window.innerWidth, window.innerHeight);
+
+  	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+  	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  	renderer.toneMappingExposure = 0.9;
+  	document.body.appendChild( renderer.domElement );
+
+
+  	camera.position.copy(CameraDefaultPos);
+  
+  	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls.enablePan = true;//右鍵平移效果
+  	controls.panSpeed = 0.4;
+  	controls.enableDamping = true;
+  	controls.dampingFactor =0.015;
+  	controls.maxDistance = 100;
+	controls.minDistance = 30;
+  	controls.target.copy( ControlsTargetDefaultPos );
+  	controls.zoomSpeed=0.5;
+	controls.autoRotate=false;
+	controls.autoRotateSpeed=0.3;
+  	controls.update();
+
+  	///hdri 環境光源
+	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer);
+
+
+	///Apple Watch
+	const loader_Apple_MacBook_Air = new GLTFLoader();
+    loader_Apple_MacBook_Air.setDRACOLoader(FX.dracoLoader);
+	loader_Apple_MacBook_Air.parse(
+    FX.Base64ToArrayBuffer(Apple_MacBook_Air()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+
+		model.position.set(0,0,0);
+		model.rotation.set(FX.ToThreeEulerAngle(0),FX.ToThreeEulerAngle(90), FX.ToThreeEulerAngle(0));
+		model.scale.set(0.05,0.05,0.05);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("keyboard"),null,keyboardModule,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("screen"),null,screenModule,scene);
+
+		
+		
+		console.log(model);
+
+		model.traverse((child) => {
+
+			if (child.name.includes("mainbody_keyboard") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,keyboardModule,scene);
+			}
+
+			if (child.name.includes("touchPanel") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,keyboardModule,scene);
+			}
+
+			if (child.name.includes("mainbody_housing") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+			}
+
+			if (child.name.includes("logo") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+			}
+
+			if (child.name.includes("Pivot")) //螢幕轉軸
+			{
+				const box = new THREE.Box3().setFromObject(child); // 創建包圍盒
+				const center = new THREE.Vector3();
+				box.getCenter(center); // 計算中心點
+				RotatePivot.position.copy(center);
+				screenModule.position.set(-RotatePivot.position.x,-RotatePivot.position.y,-RotatePivot.position.z);
+			}
+
+		});
+
+		//scene.add(model);
+
+		RotatePivot.add(screenModule)
+		scene.add(RotatePivot);
+		scene.add(keyboardModule);
+
+		animate();
+
+		//console.log(scene);
+
+		
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+	///桌布
+	
+	let HUD = new THREE.Object3D();
+		
+	const loader_HUD = new TIFFLoader();
+		
+	const geometry_HUD = new THREE.PlaneGeometry();
+		
+	loader_HUD.load( './images/mac_wallpaper.tif', function ( texture ) {
+		
+		texture.colorSpace = THREE.SRGBColorSpace;
+		
+		const material_HUD = new THREE.MeshBasicMaterial( { map: texture, transparent: true,blending: THREE.AdditiveBlending,opacity:0.9 ,depthWrite: false } );
+		
+		const mesh_HUD = new THREE.Mesh( geometry_HUD, material_HUD );
+		const img_scale =0.052;
+		
+		mesh_HUD.position.set( -6.6, 5.1, 0);
+		mesh_HUD.scale.set(img_scale*19.2/0.068,img_scale*12/0.068,1);
+
+		mesh_HUD.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
+		
+		HUD.add(mesh_HUD);
+		//scene.add( HUD );
+
+		screenModule.add(HUD);
+	} );
+
+	
+
+	///EventListener
+  	window.addEventListener( 'resize', onWindowResize );  
+
+  		window.addEventListener("pointerdown", (event) => {
+
+		
+	});
+
+	window.addEventListener( 'pointermove', function(e) {
+
+		
+	});
+
+  	window.addEventListener("wheel", (event) => {
+		
+	});
+}
+
+
+function onWindowResize() 
+{
+    camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight);
+}
+
+function animate() 
+{
+  	requestAnimationFrame( animate );
+
+  	controls.update();
+  	renderer.render( scene, camera );
+  	//UpdateCameraPosition(camera,controls);
+	//FX.WebGLInspector(container, renderer);
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+	//if(RotatePivot.rotation.z>FX.ToThreeEulerAngle(-115))
+	//{
+	//	RotatePivot.rotation.z-=0.01;
+	//}
+	
+	//console.log(RotatePivot.rotation.z)
+
+}
+		</script>
+    </body>
+
+</html>

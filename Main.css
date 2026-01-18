@@ -68,10 +68,11 @@ main
 #web3d_window
 {
 	position: absolute;
-	top: 15%;
-	left: 5%;
-	height: 70%;
+	top: 50%;
+	left: 25%;
+	height: 150%;
 	aspect-ratio: 1/1;
+	transform: translate(-50%,-50%);
 }
 
 #code_content
@@ -735,11 +736,10 @@ i
 
 #web3d_window
 {
-	position: absolute;
-	top: 0%;
-	left: 5%;
-	width:90%;
-	height:50%;
+	top: 27%;
+	left: 50%;
+	height: 60%;
+	width: 120%;
 	z-index: 9;
 }
 .code_title
