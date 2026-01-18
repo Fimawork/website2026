@@ -56,7 +56,7 @@
 import * as THREE from 'three';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.7/fx_functions.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.8/fx_functions.js';
 import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -120,7 +120,6 @@ function init()
   	///hdri 環境光源
 	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer);
 
-
 	///Apple Watch
 	const loader_Apple_MacBook_Air = new GLTFLoader();
     loader_Apple_MacBook_Air.setDRACOLoader(FX.dracoLoader);
@@ -136,31 +135,39 @@ function init()
 		model.rotation.set(FX.ToThreeEulerAngle(0),FX.ToThreeEulerAngle(90), FX.ToThreeEulerAngle(0));
 		model.scale.set(0.05,0.05,0.05);
 
-		FX.ReturnBufferGeometry(model.getObjectByName("keyboard"),null,keyboardModule,scene);
+		const silver_paint_material=FXM.InstMaterial(0xe2e9ee,0.5,0.5,0,2.333,1,false,1,true);
+		const keyboard_material=FXM.InstMaterial(0x000000,0.5,0,0,2.333,1,false,1,true);
+		const touchPanel_material=FXM.InstMaterial(0xc0c6c9,0.5,0,0,2.333,1,false,1,true);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("keyboard"),keyboard_material,keyboardModule,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("screen"),null,screenModule,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("border"),null,screenModule,scene);
 
 		
 		
-		console.log(model);
-
 		model.traverse((child) => {
 
 			if (child.name.includes("mainbody_keyboard") ) 
 			{
-				FX.ReturnBufferGeometry(child,null,keyboardModule,scene);
+				FX.ReturnBufferGeometry(child,silver_paint_material,keyboardModule,scene);
 			}
 
 			if (child.name.includes("touchPanel") ) 
 			{
-				FX.ReturnBufferGeometry(child,null,keyboardModule,scene);
+				FX.ReturnBufferGeometry(child,touchPanel_material,keyboardModule,scene);
 			}
 
 			if (child.name.includes("mainbody_housing") ) 
 			{
-				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+				FX.ReturnBufferGeometry(child,silver_paint_material,screenModule,scene);
 			}
 
 			if (child.name.includes("logo") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+			}
+
+			if (child.name.includes("camera") ) 
 			{
 				FX.ReturnBufferGeometry(child,null,screenModule,scene);
 			}
@@ -181,11 +188,15 @@ function init()
 		RotatePivot.add(screenModule)
 		scene.add(RotatePivot);
 		scene.add(keyboardModule);
+		//scene.environment.rotation = FX.ToThreeEulerAngle(45);
+
+		scene.environmentRotation.y = FX.ToThreeEulerAngle(-60); 
+		//scene.backgroundRotation.y = FX.ToThreeEulerAngle(-45);
+
 
 		animate();
 
-		//console.log(scene);
-
+        //FX.Material_Inspector(scene);
 		
     },
     (error) => {
@@ -219,6 +230,34 @@ function init()
 		//scene.add( HUD );
 
 		screenModule.add(HUD);
+	} );
+
+	///桌布
+	
+	let keyboard_layout = new THREE.Object3D();
+		
+	const loader_keyboard_layout = new TIFFLoader();
+		
+	const geometry_keyboard_layout = new THREE.PlaneGeometry();
+		
+	loader_HUD.load( './images/mac_keyboard_layout.tif', function ( texture ) {
+		
+		texture.colorSpace = THREE.SRGBColorSpace;
+		
+		const material_HUD = new THREE.MeshBasicMaterial( {  map: texture,transparent: true,blending: THREE.AdditiveBlending,opacity:0.9 ,depthWrite: false  } );
+		
+		const mesh_HUD = new THREE.Mesh( geometry_HUD, material_HUD );
+		const img_scale =0.052;
+		
+		mesh_HUD.position.set( -0.74, 0.1, 0);
+		mesh_HUD.scale.set(img_scale*71.9/0.27,img_scale*28.3/0.27,1);
+
+		mesh_HUD.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(178.5), -Math.PI/2);
+		
+		keyboard_layout.add(mesh_HUD);
+		//scene.add( HUD );
+
+		keyboardModule.add(keyboard_layout);
 	} );
 
 	
