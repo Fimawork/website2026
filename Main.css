@@ -71,7 +71,7 @@ main
 	top: 50%;
 	left: 25%;
 	height: 150%;
-	aspect-ratio: 1/1;
+	aspect-ratio: 2/1;
 	transform: translate(-50%,-50%);
 }
 
@@ -374,6 +374,20 @@ button
 #gallery_btn
 {
 	display: none;
+}
+
+#web3d_icon
+{
+	position:absolute;
+	top:5%;
+	left: 42%;
+	height: 7.5%;
+	aspect-ratio: 1/1;
+	background-image: url(./images/web3d_icon_gray.png);
+	background-size: 100% 100%;
+	opacity: 1;
+	z-index: 99;
+	user-select: none;
 }
 
 
@@ -758,6 +772,20 @@ i
 	color: rgba(255, 255, 255, 1);
 	justify-content: end;
 	bottom: 3%;
+}
+
+#web3d_icon
+{
+	position:absolute;
+	top:3%;
+	left: 81%;
+	height: 6%;
+	aspect-ratio: 1/1;
+	background-image: url(./images/web3d_icon_gray.png);
+	background-size: 100% 100%;
+	opacity: 1;
+	z-index: 99;
+	user-select: none;
 }
 
 }
