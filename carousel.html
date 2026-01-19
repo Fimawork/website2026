@@ -114,6 +114,7 @@ function init()
  	document.body.appendChild( container );
 
   	camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 8, 30 );
+	camera.layers.set(1);
   	renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
   	renderer.setPixelRatio( window.devicePixelRatio );
   	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -160,8 +161,9 @@ function init()
   ///主要物件
 	const defaultScenes = 
     [
-		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();resolve(); }, 100)), 
+		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
 		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
+		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 1000)),
 	];
 
 	async function SetupDefaultScene() 
@@ -379,22 +381,6 @@ function init()
 
 	function SetupItemGroup()
 	{
-		//3D
-		//item_list.push(item_01);
-		//item_list.push(item_02);
-		//item_list.push(item_03);
-		//item_list.push(item_04);
-		//item_list.push(item_05);
-		//item_list.push(item_06);
-			
-	
-		//item_01_object = scene.getObjectByName("item_01");
-		//item_02_object = scene.getObjectByName("item_02");
-		//item_03_object = scene.getObjectByName("item_03");
-		//item_04_object = scene.getObjectByName("item_04");
-		//item_05_object = scene.getObjectByName("item_05");
-		//item_06_object = scene.getObjectByName("item_06");
-
 		item_object_list.push(item_01_object)
 		item_object_list.push(item_02_object)
 		item_object_list.push(item_03_object)
