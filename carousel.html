@@ -163,7 +163,7 @@ function init()
     [
 		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
 		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
-		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 1000)),
+		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 500)),
 	];
 
 	async function SetupDefaultScene() 
