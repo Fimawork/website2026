@@ -42,9 +42,49 @@
 	</head>
 	
 	<body>   
-	
-	</script>
+		<!-- 3-Second Countdown Overlay -->
+		<div id="countdown-overlay">
+			<div class="countdown-circle">
+				<svg>
+					<circle cx="70" cy="70" r="60"></circle>
+					<circle cx="70" cy="70" r="60" id="progress-circle"></circle>
+				</svg>
+				<div id="countdown-number">3</div>
+			</div>
+			<div class="countdown-text-container">
+				<div class="countdown-text">fimawork</div>
+			</div>
+		</div>
 
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				let count = 3;
+				const numberEl = document.getElementById("countdown-number");
+				const overlayEl = document.getElementById("countdown-overlay");
+				
+				// 鎖定背景滾動
+				document.body.style.overflow = "hidden";
+
+				const interval = setInterval(() => {
+					count--;
+					if (count > 0) {
+						numberEl.textContent = count;
+					} else {
+						clearInterval(interval);
+						// 倒數結束，觸發進場動畫
+						setTimeout(() => {
+							if (overlayEl) {
+								overlayEl.classList.add("countdown-overlay-hide");
+								document.body.style.overflow = ""; // 恢復背景滾動
+								setTimeout(() => {
+									overlayEl.remove();
+								}, 800);
+							}
+						}, 900); // 在數字1完整顯示近一秒後才隱藏
+					}
+				}, 1000);
+			});
+		</script>
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
 		<div class="background"></div>
 
