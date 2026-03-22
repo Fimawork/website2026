@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-TW">
+	<head>
+		<meta charset="utf-8">
+		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
+		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>作品展示 | 費馬工作室 | Fimawork</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="Main.css">
+		<style type="text/css">
+			:root {
+				--bg-color:rgba(52, 50, 50, 1);
+				--card-bg: rgba(255, 255, 255, 0.05);
+				--glass-bg: rgba(255, 255, 255, 0.1);
+				--accent-color: #ffffff;
+				--text-color: #e0e0e0;
+				--text-muted: #ffffff;
+				--spacing: 20px;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+				background-color: var(--bg-color);
+				font-family: 'Outfit', sans-serif;
+				color: var(--text-color);
+				overflow-x: hidden;
+				background-color: rgba(52, 50, 50, 1);
+			}
+
+			header {
+				position: sticky;
+				top: 0;
+				z-index: 1000;
+				background: rgba(10, 10, 10, 0.8);
+				backdrop-filter: blur(20px);
+				-webkit-backdrop-filter: blur(20px);
+				padding: 20px 40px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			}
+
+			.sample_logo {
+				font-size: 1.5rem;
+				font-weight: 600;
+				letter-spacing: 2px;
+				color: var(--accent-color);
+				text-decoration: none;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+
+
+			#title_showroom
+			{
+				position: absolute;
+				top: 120px;
+				left: 50%;
+				transform: translate(-50%,0%);
+			}
+			
+			.container {
+				max-width: 1400px;
+				margin: 0px auto;
+				padding: 240px var(--spacing);
+			}
+
+			.masonry {
+				column-count: 3;
+				column-gap: var(--spacing);
+			}
+
+			.showcase-item {
+				break-inside: avoid;
+				margin-bottom: var(--spacing);
+				position: relative;
+				border-radius: 16px;
+				overflow: hidden;
+				background: var(--card-bg);
+				transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+				cursor: pointer;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.showcase-item:hover {
+				transform: translateY(-8px) scale(1.02);
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+				border-color: rgba(255, 255, 255, 0.15);
+			}
+
+			.showcase-item img {
+				width: 100%;
+				display: block;
+				transition: transform 0.6s ease;
+			}
+
+			.showcase-item:hover img {
+				transform: scale(1.1);
+			}
+
+			.overlay {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				padding: 30px;
+				background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+				opacity: 0;
+				transition: opacity 0.4s ease;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+			}
+
+			.showcase-item:hover .overlay {
+				opacity: 1;
+			}
+
+			.item-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				margin-bottom: 4px;
+				color: #fff;
+			}
+
+			.item-category {
+				font-size: 0.85rem;
+				color: var(--text-muted);
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			.view-btn {
+				margin-top: 15px;
+				padding: 8px 20px;
+				background: var(--glass-bg);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				color: #fff;
+				border-radius: 30px;
+				font-size: 0.8rem;
+				width: fit-content;
+				transition: all 0.3s ease;
+			}
+
+			.view-btn:hover {
+				background: #fff;
+				color: #000;
+			}
+
+			@media (max-width: 1024px) {
+				.masonry { column-count: 2; }
+			}
+
+			@media (max-width: 600px) {
+				.masonry { column-count: 1; }
+				header { padding: 15px 20px; }
+			}
+
+			/* Utility Animations */
+			.fade-in {
+				animation: fadeIn 1s ease forwards;
+				opacity: 0;
+			}
+
+			@keyframes fadeIn {
+				from { opacity: 0; transform: translateY(20px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+		</style>
+	</head>
+	
+	<body>
+		<iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
+		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
+		<div class="logo" onclick="scrollToPosition(0)">
+			<h3>費馬工作室</h3>
+		</div>
+
+		<nav>
+			<button onclick="parent.open('./index.html')">
+				<div class="btn_text" id="main_btn_demo">回首頁</div>
+				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
+			</button>
+			<button onclick="">
+				<div class="btn_text" id="language_btn">EN</div>
+			</button>
+		</nav>
+
+		<h1 id="title_showroom">範例展示</h1>
+		
+		<div class="container fade-in">
+			<div class="masonry">
+				<div class="showcase-item" onclick="window.location.href='Apple_MacBook_Air.html'">
+					<img src="images/iPhone17ProConept_20260321.gif" alt="MacBook Air 3D">
+					<div class="overlay">
+						<div class="item-category">Product Design</div>
+						<div class="item-title">Apple MacBook Air</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="window.location.href='lamborghini_centenario_roadster.html'">
+					<img src="images/lamborghini_showcase.png" alt="Lamborghini Centenario">
+					<div class="overlay">
+						<div class="item-category">Automotive</div>
+						<div class="item-title">Lamborghini Centenario</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="window.location.href='Apple_Watch.html'">
+					<img src="images/apple_watch_showcase.png" alt="Apple Watch Ultra">
+					<div class="overlay">
+						<div class="item-category">Wearable Tech</div>
+						<div class="item-title">Apple Watch Ultra</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="window.location.href='Juicy_Salif.html'">
+					<img src="images/F0042_Showcase3DDemo_20260322.gif" alt="Juicy Salif">
+					<div class="overlay">
+						<div class="item-category">Industrial Design</div>
+						<div class="item-title">Alessi Juicy Salif</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="window.location.href='Eames_Lounge_Chair.html'">
+					<img src="images/OfficeChair_S1R_20260320.gif" alt="Eames Lounge Chair">
+					<div class="overlay">
+						<div class="item-category">Furniture</div>
+						<div class="item-title">Eames Lounge Chair</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="window.location.href='S1R.html'">
+					<img src="images/lumix_s1r_showcase.png" alt="Lumix S1R">
+					<div class="overlay">
+						<div class="item-category">Photography</div>
+						<div class="item-title">Panasonic Lumix S1R</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+		<aside id="profile_panel">
+				<div class="profile_info">
+					Contact
+				</div>
+				<div class="profile_info">
+					hello@fimawork.tw
+				</div>
+				<div class="profile_info" id="address">
+					臺北市士林區前港街68巷3號
+				</div>
+				<i id="facebook_btn" class="fa-brands fa-square-facebook fa-2x" onclick="parent.open('https://www.facebook.com/profile.php?id=61586592837868')"></i>
+			</aside>
+	</body>
+</html>
