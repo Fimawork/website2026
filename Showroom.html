@@ -182,16 +182,16 @@
 	<body>
 		<iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="./title3D.html" frameborder="0"></iframe>
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
-		<div class="logo" onclick="scrollToPosition(0)">
+		<div class="logo" onclick="window.location.href='index.html'">
 			<h3>費馬工作室</h3>
 		</div>
 
 		<nav>
-			<button onclick="parent.open('./index.html')">
-				<div class="btn_text" id="main_btn_demo">回首頁</div>
+			<button onclick="window.location.href='index.html'">
+				<div class="btn_text" id="main_btn_home">回首頁</div>
 				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
 			</button>
-			<button onclick="">
+			<button onclick="LanguageSwitch()">
 				<div class="btn_text" id="language_btn">EN</div>
 			</button>
 		</nav>
@@ -200,60 +200,32 @@
 		
 		<div class="container fade-in">
 			<div class="masonry">
-				<div class="showcase-item" onclick="window.location.href='Apple_MacBook_Air.html'">
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/iphone_17_pro.html')">
 					<img src="images/iPhone17ProConept_20260321.gif" alt="MacBook Air 3D">
 					<div class="overlay">
-						<div class="item-category">Product Design</div>
-						<div class="item-title">Apple MacBook Air</div>
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Consumer Electronics</div>
 						<div class="view-btn">View Experience</div>
 					</div>
 				</div>
 
-				<div class="showcase-item" onclick="window.location.href='lamborghini_centenario_roadster.html'">
-					<img src="images/lamborghini_showcase.png" alt="Lamborghini Centenario">
-					<div class="overlay">
-						<div class="item-category">Automotive</div>
-						<div class="item-title">Lamborghini Centenario</div>
-						<div class="view-btn">View Experience</div>
-					</div>
-				</div>
-
-				<div class="showcase-item" onclick="window.location.href='Apple_Watch.html'">
-					<img src="images/apple_watch_showcase.png" alt="Apple Watch Ultra">
-					<div class="overlay">
-						<div class="item-category">Wearable Tech</div>
-						<div class="item-title">Apple Watch Ultra</div>
-						<div class="view-btn">View Experience</div>
-					</div>
-				</div>
-
-				<div class="showcase-item" onclick="window.location.href='Juicy_Salif.html'">
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/CabinetHandle.html')">
 					<img src="images/F0042_Showcase3DDemo_20260322.gif" alt="Juicy Salif">
 					<div class="overlay">
-						<div class="item-category">Industrial Design</div>
-						<div class="item-title">Alessi Juicy Salif</div>
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Home & Furniture</div>
 						<div class="view-btn">View Experience</div>
 					</div>
 				</div>
 
-				<div class="showcase-item" onclick="window.location.href='Eames_Lounge_Chair.html'">
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/S1R.html')">
 					<img src="images/OfficeChair_S1R_20260320.gif" alt="Eames Lounge Chair">
 					<div class="overlay">
-						<div class="item-category">Furniture</div>
-						<div class="item-title">Eames Lounge Chair</div>
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Office Furniture</div>
 						<div class="view-btn">View Experience</div>
 					</div>
 				</div>
-
-				<div class="showcase-item" onclick="window.location.href='S1R.html'">
-					<img src="images/lumix_s1r_showcase.png" alt="Lumix S1R">
-					<div class="overlay">
-						<div class="item-category">Photography</div>
-						<div class="item-title">Panasonic Lumix S1R</div>
-						<div class="view-btn">View Experience</div>
-					</div>
-				</div>
-
 
 			</div>
 		</div>
@@ -271,4 +243,56 @@
 				<i id="facebook_btn" class="fa-brands fa-square-facebook fa-2x" onclick="parent.open('https://www.facebook.com/profile.php?id=61586592837868')"></i>
 			</aside>
 	</body>
+
+	<script>
+
+		let _main_btn_home=document.getElementById("main_btn_home");
+		let _address=document.getElementById("address");
+		let _title_showroom=document.getElementById("title_showroom");
+		let _language_btn=document.getElementById("language_btn");
+		let isEnglish=false;
+
+		SetLanguage();
+
+		function SetLanguage()
+		{
+			const lang = navigator.language || navigator.language?.[0] || 'en';
+
+			if(lang.startsWith('zh-TW')||lang.startsWith('zh-CN'))
+			{
+				console.log("你好");
+			}
+
+			else
+			{
+				LanguageSwitch();//轉為英文
+				console.log("Hello");
+			}
+		}
+
+
+		function LanguageSwitch()
+		{
+			if(!isEnglish)
+			{
+				isEnglish=true;
+
+				_main_btn_home.textContent="Home";
+				_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
+				_title_showroom.textContent="Demos";
+				_language_btn.textContent="ZH_TW";
+			}
+
+			else
+			{
+				isEnglish=false;
+
+				_main_btn_home.textContent="回首頁";
+				_address.textContent="臺北市士林區前港街68巷3號";
+				_title_showroom.textContent="範例展示";
+				_language_btn.textContent="EN";
+			}
+
+		}
+	</script>
 </html>
