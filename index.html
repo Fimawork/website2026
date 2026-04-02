@@ -49,16 +49,18 @@
 					<circle cx="70" cy="70" r="60"></circle>
 					<circle cx="70" cy="70" r="60" id="progress-circle"></circle>
 				</svg>
-				<div id="countdown-number">3</div>
+				<div id="countdown-number">f</div>
 			</div>
-			<div class="countdown-text-container">
+			<!--<div class="countdown-text-container">
 				<div class="countdown-text">fimawork</div>
-			</div>
+			</div>-->
 		</div>
 
 		<script>
 			document.addEventListener("DOMContentLoaded", () => {
-				let count = 3;
+				let count = 7;
+				let hold_time = 0;
+				let title="";
 				const numberEl = document.getElementById("countdown-number");
 				const overlayEl = document.getElementById("countdown-overlay");
 				
@@ -68,21 +70,41 @@
 				const interval = setInterval(() => {
 					count--;
 					if (count > 0) {
-						numberEl.textContent = count;
-					} else {
+			
+						if(count==7)title="i";
+						if(count==6)title="m";
+						if(count==5)title="a";
+						if(count==4)title="w";
+						if(count==3)title="o";
+						if(count==2)title="r";
+						if(count==1)title="k";
+
+						//numberEl.textContent = count;
+						numberEl.textContent = title;
+					}
+					
+					else if(count === 0)
+					{
+						numberEl.textContent = "fimawork";
+						hold_time=1000;
+					}
+
+					else {	
 						clearInterval(interval);
+						numberEl.textContent = "3D Website Desing";
 						// 倒數結束，觸發進場動畫
 						setTimeout(() => {
 							if (overlayEl) {
 								overlayEl.classList.add("countdown-overlay-hide");
 								document.body.style.overflow = ""; // 恢復背景滾動
+								
 								setTimeout(() => {
 									overlayEl.remove();
-								}, 800);
+								}, 800*0.25);
 							}
-						}, 900); // 在數字1完整顯示近一秒後才隱藏
+						}, 900*0.25+hold_time); // 在數字1完整顯示近一秒後才隱藏
 					}
-				}, 1000);
+				}, 1000*0.25);
 			});
 		</script>
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
