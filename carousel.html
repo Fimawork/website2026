@@ -151,7 +151,7 @@ function init()
 	gridWall.material.depthWrite = false;
 	gridWall.material.transparent = true;
 
-	scene.add(gridWall);
+	//scene.add(gridWall);
 	gridWall.position.set(60,0,5);
 	gridWall.rotation.x=Math.PI/2;
 	gridWall.visible=false;
@@ -427,10 +427,10 @@ function animate()
 		isRotateOn=true;
 	}
 
-	if(isRotateOn)
-	{
-		GridWallEffect();
-	}
+	//if(isRotateOn)
+	//{
+	//	GridWallEffect();
+	//}
 
 	//FX.WebGLInspector(container , renderer);
 }
