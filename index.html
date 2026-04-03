@@ -111,53 +111,6 @@
 				}, 1000*0.25);
 			});
 
-			// 1. 定義一個處理回傳資料的函式
-  function updateCounter(data) {
-    document.getElementById('busuanzi_value_site_pv').innerText = data.count;
-    console.log("目前的總人數是：" + data.count);
-  }
-
-			// 當網頁載入完成時
-  window.onload = function() {
-	// 儲存國家資訊以便除錯
-
-	fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(geoData => {
-        window.userCountry = geoData.country_name;
-
-    var gasUrl = "https://script.google.com/macros/s/AKfycbw2OxPC1odHpovNDZINBhMox9MoX5z594xtv6K7LjSiIh5-Syy7uUROXOCe_ZcCsqoD1g/exec";
-
-	var script = document.createElement('script');
-    
-    // 告訴 GAS 執行完後呼叫 updateCounter 這個 function
-    script.src = gasUrl + "?callback=updateCounter"+ 
-                     "&country=" + encodeURIComponent(geoData.country_name) + 
-                     "&city=" + encodeURIComponent(geoData.city) +
-                     "&t=" + new Date().getTime();;
-    
-    document.body.appendChild(script);
-
-	})
-      .catch(error => {
-        console.error("無法取得地理位置", error);
-        // 如果 API 失效，還是要執行計數器（標記為 Unknown）
-        // ...這裡可以補一個保險的 GAS 呼叫
-      });
-
-//   // 發送請求到 Google 試算表
-//   fetch(gasUrl, {
-//     method: "GET",
-//     mode: "no-cors", // 關鍵：加入這一行
-//     headers: {
-//       "Content-Type": "application/json"
-//     }
-//   })
-//     .then(response => console.log("記錄成功"))
-//     .catch(error => console.error("記錄失敗", error));
-  };
-
-  
 		</script>
 		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
 		<div class="background"></div>
@@ -665,6 +618,40 @@
 				}
 
 			}
+
+						// 1. 定義一個處理回傳資料的函式
+  			function updateCounter(data) 
+			{
+    			document.getElementById('busuanzi_value_site_pv').innerText = data.count;
+    			console.log("目前的總人數是：" + data.count);
+  			}
+
+			// 當網頁載入完成時
+  			window.onload = function() 
+			{
+			// 儲存國家資訊以便除錯
+				fetch('https://ipapi.co/json/')
+      			.then(response => response.json())
+      			.then(geoData => {
+        			window.userCountry = geoData.country_name;
+    				var gasUrl = "https://script.google.com/macros/s/AKfycbw2OxPC1odHpovNDZINBhMox9MoX5z594xtv6K7LjSiIh5-Syy7uUROXOCe_ZcCsqoD1g/exec";
+					var script = document.createElement('script');
+    
+    			// 告訴 GAS 執行完後呼叫 updateCounter 這個 function
+    			script.src = gasUrl + "?callback=updateCounter"+ 
+                     "&country=" + encodeURIComponent(geoData.country_name) + 
+                     "&city=" + encodeURIComponent(geoData.city) +
+                     "&t=" + new Date().getTime();
+	
+    			document.body.appendChild(script);
+
+				})
+    			.catch(error => {
+    			   console.error("無法取得地理位置", error);
+    			   // 如果 API 失效，還是要執行計數器（標記為 Unknown）
+    			   // ...這裡可以補一個保險的 GAS 呼叫
+      			});
+  			};
 			
 		</script>
 		
