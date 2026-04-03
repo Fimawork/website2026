@@ -549,6 +549,15 @@ i
 	animation: slide-up 1s ease-out forwards;
 }
 
+#busuanzi_container_site_pv
+{
+	position: absolute;
+	left: 50%;
+	top: 0%;
+	z-index: 999;
+	opacity: 0;
+}
+
 @keyframes slide-up {
 	0% { transform: translateY(20px); opacity: 0; }
 	100% { transform: translateY(0); opacity: 1; }
