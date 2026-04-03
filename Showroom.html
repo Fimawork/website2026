@@ -58,8 +58,6 @@
 				gap: 10px;
 			}
 
-
-
 			#title_showroom
 			{
 				position: absolute;
@@ -195,9 +193,19 @@
 				<div class="btn_text" id="main_btn_home">回首頁</div>
 				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
 			</button>
-			<button onclick="LanguageSwitch()">
-				<div class="btn_text" id="language_btn">EN</div>
-			</button>
+			<div class="lang-dropdown">
+				<button class="lang-dropbtn">
+					<div class="btn_text" id="language_btn">中文</div>
+				</button>
+				<div class="lang-dropdown-content">
+					<a href="javascript:void(0)" onclick="SetLanguageTo('ZH')">中文</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('EN')">EN</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('JP')">JP</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('KR')">KR</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('DE')">DE</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('FR')">FR</a>
+				</div>
+			</div>
 		</nav>
 
 		<h1 id="title_showroom">範例展示</h1>
@@ -246,57 +254,122 @@
 				</div>
 				<i id="facebook_btn" class="fa-brands fa-square-facebook fa-2x" onclick="parent.open('https://www.facebook.com/profile.php?id=61586592837868')"></i>
 			</aside>
+
+		<script>
+			let currentLang = 'ZH'; // 'ZH', 'EN', 'JP', 'KR', 'DE', 'FR'
+
+			SetLanguage();
+
+			function SetLanguage()
+			{
+				const lang = navigator.language || 'en';
+
+				if(lang.startsWith('zh'))
+				{
+					currentLang = 'ZH';
+					console.log("你好");
+				}
+				else if(lang.startsWith('ja'))
+				{
+					currentLang = 'JP';
+					UpdateContent();
+					console.log("こんにちは");
+				}
+				else if(lang.startsWith('ko'))
+				{
+					currentLang = 'KR';
+					UpdateContent();
+					console.log("안녕하세요");
+				}
+				else if(lang.startsWith('de'))
+				{
+					currentLang = 'DE';
+					UpdateContent();
+					console.log("Guten Tag");
+				}
+				else if(lang.startsWith('fr'))
+				{
+					currentLang = 'FR';
+					UpdateContent();
+					console.log("Bonjour");
+				}
+				else
+				{
+					currentLang = 'EN';
+					UpdateContent();
+					console.log("Hello");
+				}
+			}
+
+
+			function LanguageSwitch()
+			{
+				if (currentLang === 'ZH') currentLang = 'EN';
+				else if (currentLang === 'EN') currentLang = 'JP';
+				else if (currentLang === 'JP') currentLang = 'KR';
+				else if (currentLang === 'KR') currentLang = 'DE';
+				else if (currentLang === 'DE') currentLang = 'FR';
+				else currentLang = 'ZH';
+
+				UpdateContent();
+			}
+
+			function SetLanguageTo(lang)
+			{
+				currentLang = lang;
+				UpdateContent();
+			}
+
+			function UpdateContent()
+			{
+				let _main_btn_home=document.getElementById("main_btn_home");
+				let _address=document.getElementById("address");
+				let _title_showroom=document.getElementById("title_showroom");
+				let _language_btn=document.getElementById("language_btn");
+
+				if(currentLang === 'EN')
+				{
+					_main_btn_home.textContent="Home";
+					_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
+					_title_showroom.textContent="Demos";
+					_language_btn.textContent="EN";
+				}
+				else if(currentLang === 'JP')
+				{
+					_main_btn_home.textContent="ホーム";
+					_address.textContent="台湾台北市士林区前港街68巷3号";
+					_title_showroom.textContent="デモ展示";
+					_language_btn.textContent="JP";
+				}
+				else if(currentLang === 'KR')
+				{
+					_main_btn_home.textContent="홈";
+					_address.textContent="대만 타이베이시 스린구 첸강가 68번길 3호";
+					_title_showroom.textContent="데모 전시";
+					_language_btn.textContent="KR";
+				}
+				else if(currentLang === 'DE')
+				{
+					_main_btn_home.textContent="Startseite";
+					_address.textContent="Nr. 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taiwan (R.O.C.)";
+					_title_showroom.textContent="Demos";
+					_language_btn.textContent="DE";
+				}
+				else if(currentLang === 'FR')
+				{
+					_main_btn_home.textContent="Accueil";
+					_address.textContent="N° 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taïwan (R.O.C.)";
+					_title_showroom.textContent="Demos";
+					_language_btn.textContent="FR";
+				}
+				else // ZH
+				{
+					_main_btn_home.textContent="回首頁";
+					_address.textContent="臺北市士林區前港街68巷3號";
+					_title_showroom.textContent="範例展示";
+					_language_btn.textContent="中文";
+				}
+			}
+		</script>
 	</body>
-
-	<script>
-
-		let _main_btn_home=document.getElementById("main_btn_home");
-		let _address=document.getElementById("address");
-		let _title_showroom=document.getElementById("title_showroom");
-		let _language_btn=document.getElementById("language_btn");
-		let isEnglish=false;
-
-		SetLanguage();
-
-		function SetLanguage()
-		{
-			const lang = navigator.language || navigator.language?.[0] || 'en';
-
-			if(lang.startsWith('zh-TW')||lang.startsWith('zh-CN'))
-			{
-				console.log("你好");
-			}
-
-			else
-			{
-				LanguageSwitch();//轉為英文
-				console.log("Hello");
-			}
-		}
-
-
-		function LanguageSwitch()
-		{
-			if(!isEnglish)
-			{
-				isEnglish=true;
-
-				_main_btn_home.textContent="Home";
-				_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
-				_title_showroom.textContent="Demos";
-				_language_btn.textContent="ZH_TW";
-			}
-
-			else
-			{
-				isEnglish=false;
-
-				_main_btn_home.textContent="回首頁";
-				_address.textContent="臺北市士林區前港街68巷3號";
-				_title_showroom.textContent="範例展示";
-				_language_btn.textContent="EN";
-			}
-
-		}
-	</script>
 </html>

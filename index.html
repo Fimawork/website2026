@@ -1,6 +1,6 @@
 <!doctype html>
-<html>
-	<head>	
+<html lang="zh-TW">
+	<head>
 		<meta charset="utf-8">
 		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
 		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
@@ -38,11 +38,11 @@
 			}
 
 		</style>
-
 	</head>
 	
-	<body>   
-		<!-- 3-Second Countdown Overlay -->
+	<body>
+        
+	<!-- 3-Second Countdown Overlay -->
 		<div id="countdown-overlay">
 			<div class="countdown-circle">
 				<svg>
@@ -120,10 +120,8 @@
 			<h3>費馬工作室</h3>
 		</div>
 
-
-	
 		<nav>
-			<button  onclick="scrollToPosition(1)">
+			<button onclick="scrollToPosition(1)">
 				<div class="btn_text" id="main_btn_service">服務項目</div>
 			</button>
 			<button onclick="scrollToPosition(2)">
@@ -136,9 +134,19 @@
 				<div class="btn_text" id="main_btn_demo">範例展示</div>
 				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
 			</button>
-			<button onclick="LanguageSwitch()">
-				<div class="btn_text" id="language_btn">EN</div>
-			</button>
+			<div class="lang-dropdown">
+				<button class="lang-dropbtn">
+					<div class="btn_text" id="language_btn">中文</div>
+				</button>
+				<div class="lang-dropdown-content">
+					<a href="javascript:void(0)" onclick="SetLanguageTo('ZH')">中文</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('EN')">EN</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('JP')">JP</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('KR')">KR</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('DE')">DE</a>
+					<a href="javascript:void(0)" onclick="SetLanguageTo('FR')">FR</a>
+				</div>
+			</div>
 		</nav>
 
         <main>
@@ -280,11 +288,8 @@
 			let text_num=0;
 			const _title = document.querySelector('#title')
 
+			let currentLang = 'ZH'; // 'ZH', 'EN', 'JP', 'KR', 'DE', 'FR'
 			
-			
-
-			let isEnglish=false;
-
 			SloganRWD();
 			SetLanguage();
 
@@ -294,188 +299,90 @@
 
 				if(aspect<1.5)
 				{
-					//_slogan.textContent=`用維度呈現深度\n讓產品自己說話`;
-					//_title_04.textContent=`把品牌升級到下一個維度\n立即啟動你的3D轉型計畫`;
 					_fimawork_logo.remove();
-					//_digitalRain.remove();
 				}
 			}
 
 			function SetLanguage()
 			{
-				const lang = navigator.language || navigator.language?.[0] || 'en';
+				const lang = navigator.language || 'en';
 
-				if(lang.startsWith('zh-TW')||lang.startsWith('zh-CN'))
+				if(lang.startsWith('zh'))
 				{
+					currentLang = 'ZH';
 					console.log("你好");
 				}
-
+				else if(lang.startsWith('ja'))
+				{
+					currentLang = 'JP';
+					UpdateContent();
+					console.log("こんにちは");
+				}
+				else if(lang.startsWith('ko'))
+				{
+					currentLang = 'KR';
+					UpdateContent();
+					console.log("안녕하세요");
+				}
+				else if(lang.startsWith('de'))
+				{
+					currentLang = 'DE';
+					UpdateContent();
+					console.log("Guten Tag");
+				}
+				else if(lang.startsWith('fr'))
+				{
+					currentLang = 'FR';
+					UpdateContent();
+					console.log("Bonjour");
+				}
 				else
 				{
-					LanguageSwitch();//轉為英文
+					currentLang = 'EN';
+					UpdateContent();
 					console.log("Hello");
 				}
 			}
 
 			async function author_hud_effect()
 			{
-			    setTimeout(() => {_author.classList.toggle("hauthor_hud_effect_anim");}, 6000);//1000=1sec}
-				setTimeout(() => {_author.classList.remove("hauthor_hud_effect_anim");}, 6900);//1000=1sec}
+			    setTimeout(() => {_author.classList.toggle("hauthor_hud_effect_anim");}, 6000);
+				setTimeout(() => {_author.classList.remove("hauthor_hud_effect_anim");}, 6900);
 				setTimeout(() => {author_hud_effect();}, 15000);
 			}
 
-
-			window.addEventListener("scroll", (event) => {
-    		scroll = this.scrollY;
-
-	
-				const aspect = window.innerWidth / window.innerHeight;
-
-				if(aspect>1.5)
-				{
-					updateScrollValue(scroll);
-					let value=scroll*0.001;
-					_slogan.style.opacity=1-value;
-				}
-
-				//if(value>0.45&&value<=0.5)
-				//{
-				//	blinking_text_anim(_title_01,"服務項目");
-				//}
-//
-//
-				//if(value>1.45&&value<=1.5)
-				//{
-				//	blinking_text_anim(_title_02,"技術優勢");
-				//}
-	
-			});
-
-			window.addEventListener("pointerdown", (event) => {
-
-				present_scroll=scroll;
-
-			});
-
-//			window.addEventListener("keydown",function (event) {
-//
-//			switch (event.code) 
-//			{
-//
-//				case "Space":
-//
-//				LanguageSwitch();
-//				
-//
-//				break;
-//
-//			}
-//		  
-//		});
-
-
-//			/////客製一個 addEventListener練習
-//
-//			document.addEventListener('custom_event_name', e => {
-//				console.log(e.detail); // => 可以傳出去的值
-//			});
-			
-
-			const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-			const element_1 = document.querySelector('#anchor_01')
-			const rect_1 = element_1.getBoundingClientRect() // get rects(width, height, top, etc)
-			const element_2 = document.querySelector('#anchor_02')
-			const rect_2 = element_2.getBoundingClientRect() // get rects(width, height, top, etc)
-			const element_3 = document.querySelector('#anchor_03')
-			const rect_3 = element_3.getBoundingClientRect() // get rects(width, height, top, etc)
-
-			function titleHoverEvent(i)
+			function scrollToPosition(value) 
 			{
-				switch(i)
+				const rect_1 = document.getElementById('content_01').getBoundingClientRect();
+				const rect_2 = document.getElementById('content_02').getBoundingClientRect();
+				const rect_3 = document.getElementById('content_03').getBoundingClientRect();
+				const viewHeight = window.innerHeight;
+
+				switch(value)
 				{
 					case 1:
-						blinking_text_anim(_title_01,"服務項目");
-					break;
-
-					case 2:
-						blinking_text_anim(_title_02,"技術優勢");
-					break;
-
-					case 3:
-						blinking_text_anim(_title_03,"介面導入");
-					break;
-				}
-			}
-
-			function scrollToPosition(index) 
-			{
-				
-				switch(index)
-				{
-					case 0:
-					window.scrollTo({
-					  top: 0,
-					  left: 0,
-					  behavior: "smooth",
-					});
-					
-					break;
-
-					case 1:
-
 					window.scroll({
 					  top: rect_1.top + rect_1.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' // smooth scroll
+					  behavior: 'smooth' 
 					});
-					
 					break;
 
 					case 2:
-
 					window.scroll({
 					  top: rect_2.top + rect_2.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' // smooth scroll
+					  behavior: 'smooth' 
 					});
-					
 					break;
 
 					case 3:
-
 					window.scroll({
 					  top: rect_3.top + rect_3.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' // smooth scroll
+					  behavior: 'smooth' 
 					});
-					
 					break;
 				}
-
 			}
 
-			function updateScrollValue(value)
-			{
-			    delta_value=(value-present_scroll)/window.innerHeight;//正，往下滑;負 往上滑
-			    position_ratio=value/window.innerHeight;//桌機 3;手機 2.7
-
-//				const aspect = window.innerWidth / window.innerHeight;
-//
-//				if(aspect>1.5)
-//				{
-//					TriggerDigitalRainAnim();
-//				}
-
-
-				
-			}
-
-			//_title.textContent=null;
-
-			//setTimeout(() => {blinking_text_anim();}, 3000);//1000=1sec}
-			//blinking_text_anim();
-
-			
-
-			//blinking_text_anim(_title_01,"服務項目")
-			
 			function blinking_text_anim(targetCSS,content)
 			{
 				let target_content=content;
@@ -491,7 +398,7 @@
 						index++;
 						current_content=target_content.substring(0, index);
 						targetCSS.textContent=current_content;
-						setTimeout(() => {TriggerBlink();}, 80);//1000=1sec}
+						setTimeout(() => {TriggerBlink();}, 80);
 						targetCSS.style.color="rgba(255, 255, 255, 0.3);"
 						targetCSS.style.textDecorationLine = "underline";
 						targetCSS.style.textUnderlineOffset = "10px";
@@ -507,129 +414,229 @@
 				}	
 			}
 
-			function TriggerDigitalRainAnim()
-			{
-				_digitalRain.contentWindow.FectchScrollValue();
-			}
-
-
 			function LanguageSwitch()
 			{
-				
+				if (currentLang === 'ZH') currentLang = 'EN';
+				else if (currentLang === 'EN') currentLang = 'JP';
+				else if (currentLang === 'JP') currentLang = 'KR';
+				else if (currentLang === 'KR') currentLang = 'DE';
+				else if (currentLang === 'DE') currentLang = 'FR';
+				else currentLang = 'ZH';
 
-				if(!isEnglish)
+				UpdateContent();
+			}
+
+			function SetLanguageTo(lang)
+			{
+				currentLang = lang;
+				UpdateContent();
+			}
+
+			function UpdateContent()
+			{
+				if(currentLang === 'EN')
 				{
-					isEnglish=true;
-
 					blinking_text_anim(_main_btn_service,"Services");
 					blinking_text_anim(_main_btn_technicalEdge,"Prowess");
 					blinking_text_anim(_main_btn_integration,"Integration");
 					blinking_text_anim(_main_btn_demo,"Demos");
-					blinking_text_anim(_language_btn,"ZH_TW");
+					blinking_text_anim(_language_btn,"EN");
 
 					_slogan.textContent="Depth, through dimensions.";
-
 					_title_01.textContent="Services";
-
 					_configurator_title.textContent="3D Product Configurator";
 					_configurator_content.textContent="Bring your products to life with our interactive 3D platform. Let your customers rotate, zoom, and personalize every detail in real-time. By putting the design power in their hands, you create a deeper connection that drives higher conversions and showcases your brand's innovation.";
-
 					_showcase_title.textContent="3D Product Showcase";
 					_showcase_content.textContent="Bring the physical showroom experience to your screen. Allow customers to rotate, zoom, and explore every intricate detail of your products. By creating a lifelike viewing experience, you can dramatically improve interaction, keep visitors on your site longer, and drive higher sales.";
-
-
 					_title_02.textContent="Prowess";
-
 					_web3D_title.textContent="Web3D Technology";
 					_web3D_content.textContent="We specialize in Three.js and WebGL to bridge the gap between complex product details and intuitive interaction—turning diverse materials and features into immersive 3D web realities.";
-
 					_integration_title.textContent="Seamless CAD Integration";
 					_integration_content.textContent="Bridge the gap between engineering and the web. Our platform enables the swift import of IGES and STEP files, ensuring your CAD models transition smoothly into 3D web assets.";
-
 					_empathy_title.textContent="Technical Insight";
 					_empathy_content.textContent="With a decade of experience in product design and development, we possess a deep understanding of product DNA, allowing us to quickly identify and highlight key features and unique selling points.";
-
-
 					_title_03.textContent="Integration";
-
 					_step_01_title.textContent="Step 1: Asset Optimization";
 					_step_01_content.textContent="From High-Poly to Web-Ready We transform industrial design high-fidelity source files (such as IGES,STEP) into lightweight, web-optimized assets.";
 					_step_02_title.textContent="Step 2: Scene & Lighting Configuration";
 					_step_02_content.textContent="The Virtual Studio Setup We build a bespoke virtual environment for your product within the development framework. Fine-tuning lighting, shadows, and material properties to achieve a photorealistic and premium look.";
 					_step_03_title.textContent="Interactive Logic Development";
-					_step_03_content.textContent="User and Product We write custom code to create meaningful connections between users and 3D objects. Smooth   rotation, interactive hotspots for detailed info, and real-time configurators for colors or components.";
-
+					_step_03_content.textContent="User and Product We write custom code to create meaningful connections between users and 3D objects. Smooth rotation, interactive hotspots for detailed info, and real-time configurators for colors or components.";
 					_demoInvitation.textContent="Want to see it in action? Request a demo！";
-
 					_title_04.textContent="Elevate your brand through dimensions.";
-
-					//_language_btn.textContent="ZH_TW";
-
 					_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
 				}
-
-				else
+				else if(currentLang === 'JP')
 				{
-					isEnglish=false;
+					blinking_text_anim(_main_btn_service,"サービス項目");
+					blinking_text_anim(_main_btn_technicalEdge,"技術の強み");
+					blinking_text_anim(_main_btn_integration,"インターフェース導入");
+					blinking_text_anim(_main_btn_demo,"デモ展示");
+					blinking_text_anim(_language_btn,"JP");
 
+					_slogan.textContent="次元で深さを表現し、製品に語らせる";
+					_title_01.textContent="サービス項目";
+					_configurator_title.textContent="3D製品コンフィギュレーター";
+					_configurator_content.textContent="インタラクティブな3D構成プラットフォームにより、ユーザーはブラウザ内で製品を回転、ズーム、自由に構成できます。注文前に顧客が「自分の手で」欲しい製品を作れるようにすることで、コンバージョン率とブランドのプロ意識を高めます。";
+					_showcase_title.textContent="3D製品ショーケース";
+					_showcase_content.textContent="ウェブページ内で自由に回転、ズーム、細部を間近で確認でき、実物展示のような臨場感を得られます。ブラウジングの相互作用、滯在時間、購入意欲を大幅に向上させます。";
+					_title_02.textContent="技術の強み";
+					_web3D_title.textContent="Web3D技術";
+					_web3D_content.textContent="Three.js/WebGL技術を駆使し、製品の多様な質感、機能、特徴を直感的に操作できる3Dウェブページに変換することに長けています。";
+					_integration_title.textContent="高い整合性";
+					_integration_content.textContent="高度なエンジニアリングCAD統合能力を備え、IGESやSTEPなどのファイルを迅速に導入できます。";
+					_empathy_title.textContent="技術的共感";
+					_empathy_content.textContent="10年にわたる製品設計と開発の経験を持ち、製品の特徴や重點を迅速に把握できます。";
+					_title_03.textContent="インターフェース導入";
+					_step_01_title.textContent="ステップ1：アセットの最適化";
+					_step_01_content.textContent="工業デザインの高精度モデル（IGESやSTEPなど）をウェブ專用の軽量モデルに変換し、スマートフォンでも高速に読み込めるようにします。";
+					_step_02_title.textContent="ステップ2：環境と照明の設定";
+					_step_02_content.textContent="開発環境内にバーチャルスタジオを構築し、光影や質感の調整を行い、製品がリアルで精緻に見えるようにします。";
+					_step_03_title.textContent="ステップ3：インタラクティブ・ロジックの開発";
+					_step_03_content.textContent="コードを記述して、ユーザーが3Dオブジェクトと対話できるようにします。360度回転、ホットスポットのクリックによる情報表示、リアルタイムでの製品カラーやコンポーネントの変更など。";
+					_demoInvitation.textContent="インターフェースの試作を歓迎します！";
+					_title_04.textContent="ブランドを次の次元へアップグレード — 今すぐ3Dトランスフォーメーション計画を始動しましょう";
+					_address.textContent="台湾台北市士林区前港街68巷3号";
+				}
+				else if(currentLang === 'KR')
+				{
+					blinking_text_anim(_main_btn_service,"서비스 항목");
+					blinking_text_anim(_main_btn_technicalEdge,"기술적 강점");
+					blinking_text_anim(_main_btn_integration,"인터페이스 도입");
+					blinking_text_anim(_main_btn_demo,"데모 전시");
+					blinking_text_anim(_language_btn,"KR");
+
+					_slogan.textContent="차원으로 깊이를 표현하고, 제품이 스스로 말하게 하세요";
+					_title_01.textContent="서비스 항목";
+					_configurator_title.textContent="3D 제품 컨피규레이터";
+					_configurator_content.textContent="대화형 3D 구성 플랫폼을 통해 사용자는 브라우저에서 제품을 회전, 확대/축소 및 자유롭게 구성할 수 있습니다. 고객이 주문하기 전에 원하는 제품을 '직접' 만들 수 있도록 하여 전환율과 브랜드 전문성을 높입니다.";
+					_showcase_title.textContent="3D 제품 쇼케이스";
+					_showcase_content.textContent="웹 페이지에서 자유롭게 회전, 확대/축소, 세부 사항을 가까이에서 확인할 수 있어 실제 전시와 같은 리얼한 느낌을 줍니다. 탐색 상호 작용, 체류 시간 및 구매 의사를 크게 높입니다.";
+					_title_02.textContent="기술적 강점";
+					_web3D_title.textContent="Web3D 기술";
+					_web3D_content.textContent="Three.js/WebGL 기술을 활용하여 제품의 다양한 재질, 기능 또는 특징을 직관적이고 상호 작용 가능한 3D 웹 페이지로 변환하는 데 능숙합니다.";
+					_integration_title.textContent="높은 통합성";
+					_integration_content.textContent="고도로 통합된 엔지니어링 CAD 기능을 갖추고 있어 IGES 또는 STEP과 같은 파일을 신속하게 가져올 수 있습니다.";
+					_empathy_title.textContent="기술적 통찰력";
+					_empathy_content.textContent="10년 육박하는 제품 설계 및 개발 경험을 바탕으로 제품의 특징과 핵심을 신속하게 파악할 수 있습니다.";
+					_title_03.textContent="인터페이스 도입";
+					_step_01_title.textContent="1단계: 자산 최적화";
+					_step_01_content.textContent="산업 디자인의 고정밀 모델(IGES 또는 STEP 등)을 웹 전용 경량 모델로 변환하여 모바일에서도 빠르게 로드되도록 합니다.";
+					_step_02_title.textContent="2단계: 환경 및 조명 구성";
+					_step_02_content.textContent="개발 환경 내에 가상 스튜디오를 구축하고 빛과 그림자, 재질의 질감을 조정하여 제품이 실제처럼 정교하게 보이도록 합니다.";
+					_step_03_title.textContent="3단계: 상호 작용 로직 개발";
+					_step_03_content.textContent="코드를 작성하여 사용자가 3D 개체와 연결될 수 있도록 합니다. 360도 회전, 핫스팟 클릭 시 정보 표시, 실시간 제품 색상 또는 부품 변경 등.";
+					_demoInvitation.textContent="우리의 인터페이스 시제품 제작을 환영합니다!";
+					_title_04.textContent="브랜드를 다음 차원으로 업그레이드하세요 — 지금 바로 3D 전환 계획을 시작하세요.";
+					_address.textContent="대만 타이베이시 스린구 첸강가 68번길 3호";
+				}
+				else if(currentLang === 'DE')
+				{
+					blinking_text_anim(_main_btn_service,"Dienstleistungen");
+					blinking_text_anim(_main_btn_technicalEdge,"Fachkenntnis");
+					blinking_text_anim(_main_btn_integration,"Integration");
+					blinking_text_anim(_main_btn_demo,"Demos");
+					blinking_text_anim(_language_btn,"DE");
+
+					_slogan.textContent="Tiefe durch Dimensionen, die Produkte für sich selbst sprechen lassen.";
+					_title_01.textContent="Dienstleistungen";
+					_configurator_title.textContent="3D-Produktkonfigurator";
+					_configurator_content.textContent="Interaktive 3D-Konfigurationsplattform, mit der Benutzer Produkte im Browser drehen, zoomen und frei konfigurieren können. Ermöglichen Sie es Kunden, ihr Wunschprodukt vor der Bestellung „selbst“ zu erstellen, was die Konversionsraten und die Markenprofessionalität steigert.";
+					_showcase_title.textContent="3D-Produktschaufenster";
+					_showcase_content.textContent="Im Webbrowser können Details frei gedreht, gezoomt und aus der Nähe betrachtet werden, was ein realistisches Gefühl wie bei einer physischen Ausstellung vermittelt. Dies erhöht die Interaktion beim Browsen, die Verweildauer und die Kaufabsicht erheblich.";
+					_title_02.textContent="Fachkenntnis";
+					_web3D_title.textContent="Web3D-Technologie";
+					_web3D_content.textContent="Wir sind Experten in der Nutzung von Three.js/WebGL-Technologie, um vielfältige Materialien, Funktionen oder Merkmale von Produkten in intuitive, interaktive 3D-Webseiten zu verwandeln.";
+					_integration_title.textContent="Hohe Integrationsfähigkeit";
+					_integration_content.textContent="Verfügt über hohe Integrationsfähigkeiten für technische CAD-Daten und kann Dateien wie IGES oder STEP schnell importieren.";
+					_empathy_title.textContent="Technisches Einfühlungsvermögen";
+					_empathy_content.textContent="Verfügt über zehn Jahre Erfahrung in Produktdesign und -entwicklung und kann Produktmerkmale und -schwerpunkte schnell erfassen.";
+					_title_03.textContent="Integration";
+					_step_01_title.textContent="Schritt 1: Asset-Optimierung";
+					_step_01_content.textContent="Konvertiert hochpräzise Modelle aus dem Industriedesign (wie IGES oder STEP) in leichtgewichtige Modelle für das Web, um ein schnelles Laden auf Mobiltelefonen zu gewährleisten.";
+					_step_02_title.textContent="Schritt 2: Umgebungs- und Lichtkonfiguration";
+					_step_02_content.textContent="Aufbau eines virtuellen Studios in der Entwicklungsumgebung, Anpassung von Licht und Schatten sowie Materialtexturen, um sicherzustellen, dass das Produkt realistisch und exquisit aussieht.";
+					_step_03_title.textContent="Schritt 3: Interaktionslogik-Entwicklung";
+					_step_03_content.textContent="Schreiben von Code, der es Benutzern ermöglicht, mit 3D-Objekten in Verbindung zu treten, z. B. 360-Grad-Rotation, Klick auf Hotspots zum Einblenden von Informationen, sofortiger Wechsel der Produktfarben oder Komponenten.";
+					_demoInvitation.textContent="Willkommen zum Prototyping unserer Schnittstelle!";
+					_title_04.textContent="Heben Sie Ihre Marke auf die nächste Dimension – starten Sie jetzt Ihren 3D-Transformationsplan.";
+					_address.textContent="Nr. 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taiwan (R.O.C.)";
+				}
+				else if(currentLang === 'FR')
+				{
+					blinking_text_anim(_main_btn_service,"Services");
+					blinking_text_anim(_main_btn_technicalEdge,"Prouesse");
+					blinking_text_anim(_main_btn_integration,"Intégration");
+					blinking_text_anim(_main_btn_demo,"Demos");
+					blinking_text_anim(_language_btn,"FR");
+
+					_slogan.textContent="La profondeur par les dimensions, laisser les produits s'exprimer.";
+					_title_01.textContent="Services";
+					_configurator_title.textContent="Configurateur de produits 3D";
+					_configurator_content.textContent="Plateforme de configuration 3D interactive permettant aux utilisateurs de faire pivoter, de zoomer et de configurer librement les produits dans le navigateur. Permettez aux clients de créer « personnellement » le produit qu'ils souhaitent avant de commander, augmentant ainsi les taux de conversion et le professionnalisme de la marque.";
+					_showcase_title.textContent="Vitrine de produits 3D";
+					_showcase_content.textContent="Dans le navigateur web, les détails peuvent être librement pivotés, zoomés et examinés de près, offrant une sensation réaliste comme lors d'une exposition physique. Cela améliore considérablement l'interaction de navigation, le temps de visite et l'intention d'achat.";
+					_title_02.textContent="Prouesse";
+					_web3D_title.textContent="Technologie Web3D";
+					_web3D_content.textContent="Nous sommes experts dans l'utilisation de la technologie Three.js/WebGL pour transformer les divers matériaux, fonctions ou caractéristiques des produits en pages web 3D intuitives et interactives.";
+					_integration_title.textContent="Haute intégration";
+					_integration_content.textContent="Dispose de hautes capacités d'intégration CAO technique et peut importer rapidement des fichiers de type IGES ou STEP.";
+					_empathy_title.textContent="Empathie technique";
+					_empathy_content.textContent="Dispose de dix ans d'expérience dans la conception et le développement de produits et peut rapidement saisir les caractéristiques et les points forts des produits.";
+					_title_03.textContent="Intégration";
+					_step_01_title.textContent="Étape 1 : Optimisation des actifs";
+					_step_01_content.textContent="Convertit les modèles haute précision issus du design industriel (tels que IGES ou STEP) en modèles légers dédiés au web, garantissant un chargement rapide sur les téléphones mobiles.";
+					_step_02_title.textContent="Étape 2 : Configuration de l'environnement et de l'éclairage";
+					_step_02_content.textContent="Mise en place d'un studio virtuel dans l'environnement de développement, ajustement de la lumière et de l'ombre ainsi que des textures de matériaux pour garantir que le produit paraisse réaliste et raffiné.";
+					_step_03_title.textContent="Étape 3 : Développement de la logique interactive";
+					_step_03_content.textContent="Écriture de code permettant aux utilisateurs d'interagir avec les objets 3D, par exemple rotation à 360 degrés, clic sur des points chauds pour afficher des informations, changement instantané des couleurs ou des composants du produit.";
+					_demoInvitation.textContent="Bienvenue pour prototyper notre interface !";
+					_title_04.textContent="Élevez votre marque vers la dimension supérieure — lancez dès maintenant votre plan de transformation 3D.";
+					_address.textContent="N° 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taïwan (R.O.C.)";
+				}
+				else // ZH
+				{
 					blinking_text_anim(_main_btn_service,"服務項目");
 					blinking_text_anim(_main_btn_technicalEdge,"技術優勢");
 					blinking_text_anim(_main_btn_integration,"介面導入");
 					blinking_text_anim(_main_btn_demo,"範例展示");
-					blinking_text_anim(_language_btn,"EN");
+					blinking_text_anim(_language_btn,"中文");
 
 					_slogan.textContent="用維度呈現深度，讓產品自己說話";
-
 					_title_01.textContent="服務項目";
 					_configurator_title.textContent="3D產品配置器";
 					_configurator_content.textContent="互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。";
-
 					_showcase_title.textContent="3D產品櫥窗";
 					_showcase_content.textContent="在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。";
-
-					
 					_title_02.textContent="技術優勢";
-
 					_web3D_title.textContent="3D網頁技術";
 					_web3D_content.textContent="擅長運用Three.js/WebGL技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。";
-
 					_integration_title.textContent="高度整合性";
 					_integration_content.textContent="具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。";
-
 					_empathy_title.textContent="技術同理性";
 					_empathy_content.textContent="具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。";
-
-
 					_title_03.textContent="介面導入";
-					
 					_step_01_title.textContent="第一步：資產優化";
 					_step_01_content.textContent="將工業設計的高精度模型（如 IGES或STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。";
 					_step_02_title.textContent="第二步：環境與燈光配置";
 					_step_02_content.textContent="在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。";
 					_step_03_title.textContent="第三步：互動邏輯開發";
 					_step_03_content.textContent="撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。";
-
 					_demoInvitation.textContent="歡迎試作我們的介面！";
-
 					_title_04.textContent="把品牌升級到下一個維度—立即啟動你的3D轉型計畫";
-
 					_address.textContent="臺北市士林區前港街68巷3號";
-
 				}
-
 			}
 
-						// 1. 定義一個處理回傳資料的函式
   			function updateCounter(data) 
 			{
-    			document.getElementById('busuanzi_value_site_pv').innerText = data.count;
+				const counterElem = document.getElementById('busuanzi_value_site_pv');
+				if (counterElem) counterElem.innerText = data.count;
     			console.log("目前的總人數是：" + data.count);
   			}
 
-			// 當網頁載入完成時
   			window.onload = function() 
 			{
-			// 儲存國家資訊以便除錯
 				fetch('https://ipapi.co/json/')
       			.then(response => response.json())
       			.then(geoData => {
@@ -637,7 +644,6 @@
     				var gasUrl = "https://script.google.com/macros/s/AKfycbw2OxPC1odHpovNDZINBhMox9MoX5z594xtv6K7LjSiIh5-Syy7uUROXOCe_ZcCsqoD1g/exec";
 					var script = document.createElement('script');
     
-    			// 告訴 GAS 執行完後呼叫 updateCounter 這個 function
     			script.src = gasUrl + "?callback=updateCounter"+ 
                      "&country=" + encodeURIComponent(geoData.country_name) + 
                      "&city=" + encodeURIComponent(geoData.city) +
@@ -648,14 +654,8 @@
 				})
     			.catch(error => {
     			   console.error("無法取得地理位置", error);
-    			   // 如果 API 失效，還是要執行計數器（標記為 Unknown）
-    			   // ...這裡可以補一個保險的 GAS 呼叫
       			});
   			};
-			
 		</script>
-		
-
-        
     </body>
-    </html>
+</html>
