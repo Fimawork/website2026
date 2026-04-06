@@ -975,4 +975,9 @@ i
     .lang-dropdown-content {
         min-width: 80px;
     }
+
+	#language_manu_btn
+	{
+		display: block;
+	}
 }
