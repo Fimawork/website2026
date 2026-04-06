@@ -188,6 +188,10 @@
 			<h3>費馬工作室</h3>
 		</div>
 
+		<span id="busuanzi_container_site_pv">
+  本站總訪問量 <span id="busuanzi_value_site_pv"></span> 次
+		</span>
+
 		<nav>
 			<button onclick="window.location.href='index.html'">
 				<div class="btn_text" id="main_btn_home">回首頁</div>
@@ -379,6 +383,35 @@
 					_language_btn.textContent="中文";
 				}
 			}
+
+			function updateCounter(data) 
+			{
+				const counterElem = document.getElementById('busuanzi_value_site_pv');
+				if (counterElem) counterElem.innerText = data.count;
+    			console.log("目前的總人數是：" + data.count);
+  			}
+
+  			window.onload = function() 
+			{
+				fetch('https://ipapi.co/json/')
+      			.then(response => response.json())
+      			.then(geoData => {
+        			window.userCountry = geoData.country_name;
+    				var gasUrl = "https://script.google.com/macros/s/AKfycbyQp7ED_VstSj03vHZWl591aE-GRZLlXtN0NwQNbvExvPAWj5FFRpctpFphf-N3v2d-/exec";
+					var script = document.createElement('script');
+    
+    			script.src = gasUrl + "?callback=updateCounter"+ 
+                     "&country=" + encodeURIComponent(geoData.country_name) + 
+                     "&city=" + encodeURIComponent(geoData.city) +
+                     "&t=" + new Date().getTime();
+	
+    			document.body.appendChild(script);
+
+				})
+    			.catch(error => {
+    			   console.error("無法取得地理位置", error);
+      			});
+  			};
 		</script>
 	</body>
 </html>
