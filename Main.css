@@ -165,6 +165,12 @@ h3
 	left: 30%;
 }
 
+#instagram_btn
+{
+	top: 6%;
+	left: 40%;
+}
+
 #slogan
 {
 	position: absolute;
@@ -606,6 +612,11 @@ i
 	{
 		left: 50%;
 	}
+
+	#instagram_btn
+	{
+		left:67%;
+	}
 }
 
 
@@ -839,6 +850,12 @@ i
 {
 	margin-top: 1.5%;
 	left: 39%;
+}
+
+#instagram_btn
+{
+	margin-top: 1.5%;
+	left: 51%;
 }
 
 #carousel
