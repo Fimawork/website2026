@@ -125,50 +125,66 @@ h3
 
 #profile_panel
 {
-	position:fixed;
-	width: 15%;
-	bottom:6%;
-	right: 0%;
+	position: fixed;
+	width: auto;
+	bottom: 5%;
+	right: 4%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 6px;
+	z-index: 10;
 }
 
 .profile_info
 {
-	font-family:"Inter", sans-serif;
-    font-size: 15px;
-    color: rgba(255, 255, 255, 1);
+	font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
 	white-space: nowrap;
-	display: block;
+	text-align: right;
+	transition: color 0.3s ease;
 }
-
 
 .profile_info:nth-child(1)
 {
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 600;
-	
-}
-.profile_info:nth-child(2)
-{
-	font-size: 12px;
-	white-space:pre-line;
+	color: rgba(255, 255, 255, 1);
+	letter-spacing: 1px;
+	margin-bottom: 2px;
 }
 
-.profile_info:nth-child(3)
+#address 
 {
-	font-size: 12px;
-	white-space:pre-line;
+	font-size: 11px;
+	opacity: 0.7;
+	line-height: 1.4;
 }
 
-#facebook_btn
+.social_links
 {
-	top:6%;
-	left: 30%;
+	display: flex;
+	gap: 15px;
+	margin-top: 8px;
+	align-items: center;
 }
 
-#instagram_btn
+.social_links i
 {
-	top: 6%;
-	left: 40%;
+	position: static; /* Override absolute-like positioning if any */
+	display: flex !important; /* Override global display: none */
+	transform: none;
+	color: rgba(255, 255, 255, 0.7);
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	font-size: 1.5rem;
+}
+
+.social_links i:hover
+{
+	color: rgba(255, 255, 255, 1);
+	transform: translateY(-3px);
 }
 
 #slogan
@@ -607,16 +623,6 @@ i
 	{
 		right: 3%;
 	}
-
-	#facebook_btn
-	{
-		left: 50%;
-	}
-
-	#instagram_btn
-	{
-		left:67%;
-	}
 }
 
 
@@ -839,23 +845,37 @@ i
 
 #profile_panel
 {
-	position:absolute;
-	width: 60%;
-	top:465%;
+	position: absolute;
+	width: 90%;
+	top: 485%;
 	left: 50%;
-	transform: translate(-50%,-50%);
+	transform: translateX(-50%);
+	align-items: center;
+	text-align: center;
+	gap: 10px;
 }
 
-#facebook_btn
+.profile_info
 {
-	margin-top: 1.5%;
-	left: 39%;
+	text-align: center;
+	white-space: normal;
 }
 
-#instagram_btn
+#address
 {
-	margin-top: 1.5%;
-	left: 51%;
+	font-size: 13px;
+}
+
+.social_links
+{
+	justify-content: center;
+	gap: 30px;
+	margin-top: 15px;
+}
+
+.social_links i
+{
+	font-size: 2.2rem;
 }
 
 #carousel
