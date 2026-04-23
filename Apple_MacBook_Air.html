@@ -225,9 +225,11 @@ function init()
 		mesh_HUD.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
 		
 		HUD.add(mesh_HUD);
-		//scene.add( HUD );改為影片
 
-		//screenModule.add(HUD);
+		if(FX.isMobile())//手持裝置顯示圖片
+		{
+			screenModule.add(HUD);
+		}
 	} );
 
 	///css3d
@@ -251,8 +253,11 @@ function init()
 	css3dObject.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
 	css3dObject.scale.set(s,s,s);
 
-	screenModule.add(css3dObject);
-
+	if(!FX.isMobile())//電腦顯示影片
+	{
+		screenModule.add(css3dObject);
+	}
+	
 	///鍵盤
 	
 	let keyboard_layout = new THREE.Object3D();
@@ -326,14 +331,17 @@ function animate()
 
 	//模型無法遮擋CSS3D物件，若攝影機位置在螢幕後方則影藏CSS3D
 	
-	if(camera.position.x<-8)
+	if(css3dObject!=null)
 	{
-		css3dObject.visible=false;
-	}
+		if(camera.position.x<-8)
+		{
+			css3dObject.visible=false;
+		}
 
-	else
-	{
-		css3dObject.visible=true;
+		else
+		{
+			css3dObject.visible=true;
+		}
 	}
 
 }
