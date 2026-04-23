@@ -49,8 +49,10 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { Apple_MacBook_Air } from './models/Apple_MacBook_Air_slices.js';
+import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
 let scene, camera, renderer, stats, mixer,container;
+let renderer_css3d;
 let controls;
 
 const clock = new THREE.Clock();
@@ -64,6 +66,8 @@ let RotatePivot = new THREE.Object3D();
 
 let idleTime=0;
 const hold_time=6;
+
+let css3dObject;
 
 init();
 //FX.Camera_Inspector(camera,controls);
@@ -86,11 +90,17 @@ function init()
   	renderer.toneMappingExposure = 0.9;
   	document.body.appendChild( renderer.domElement );
 
+	renderer_css3d = new CSS3DRenderer();
+	renderer_css3d.domElement.style.position = 'absolute';
+	renderer_css3d.domElement.style.top = '0px';
+	renderer_css3d.setSize( window.innerWidth, window.innerHeight );
+	document.body.appendChild( renderer_css3d.domElement );
+
 
   	camera.position.copy(CameraDefaultPos);
   
   	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
-  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls = new OrbitControls( camera, renderer_css3d.domElement );
   	controls.enablePan = true;//右鍵平移效果
   	controls.panSpeed = 0.4;
   	controls.enableDamping = true;
@@ -101,6 +111,7 @@ function init()
   	controls.zoomSpeed=0.5;
 	controls.autoRotate=false;
 	controls.autoRotateSpeed=0.3;
+	controls.maxPolarAngle=FX.ToThreeEulerAngle(96);
   	controls.update();
 
   	///hdri 環境光源
@@ -124,6 +135,7 @@ function init()
 		const silver_paint_material=FXM.InstMaterial(0xe2e9ee,0.5,0.5,0,2.333,1,false,1,true);
 		const keyboard_material=FXM.InstMaterial(0x000000,0.5,0,0,2.333,1,false,1,true);
 		const touchPanel_material=FXM.InstMaterial(0xc0c6c9,0.5,0,0,2.333,1,false,1,true);
+
 
 		FX.ReturnBufferGeometry(model.getObjectByName("keyboard"),keyboard_material,keyboardModule,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("screen"),null,screenModule,scene);
@@ -213,12 +225,35 @@ function init()
 		mesh_HUD.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
 		
 		HUD.add(mesh_HUD);
-		//scene.add( HUD );
+		//scene.add( HUD );改為影片
 
-		screenModule.add(HUD);
+		//screenModule.add(HUD);
 	} );
 
-	///桌布
+	///css3d
+
+	const videoClip = document.createElement( 'video' );
+	videoClip.style.width = '1920px';
+	videoClip.style.height = '1080px';
+	videoClip.style.backgroundColor = '#000';
+	videoClip.src = './videos/ending_20260422.mp4';
+	videoClip.autoplay=true;
+	videoClip.loop=true;
+	videoClip.muted=true;
+	videoClip.style.opacity=0.95;
+
+	videoClip.play();
+
+	css3dObject = new CSS3DObject( videoClip );
+
+	const s = 0.0076;
+	css3dObject.position.set( -6.6, 5.1, 0);
+	css3dObject.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
+	css3dObject.scale.set(s,s,s);
+
+	screenModule.add(css3dObject);
+
+	///鍵盤
 	
 	let keyboard_layout = new THREE.Object3D();
 		
@@ -272,6 +307,7 @@ function onWindowResize()
     camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight);
+	renderer_css3d.setSize( window.innerWidth, window.innerHeight );
 }
 
 function animate() 
@@ -280,6 +316,7 @@ function animate()
 
   	controls.update();
   	renderer.render( scene, camera );
+	renderer_css3d.render( scene, camera );
   	//UpdateCameraPosition(camera,controls);
 	//FX.WebGLInspector(container, renderer);
 
@@ -287,12 +324,17 @@ function animate()
 
 	if ( mixer ) mixer.update( delta );
 
-	//if(RotatePivot.rotation.z>FX.ToThreeEulerAngle(-115))
-	//{
-	//	RotatePivot.rotation.z-=0.01;
-	//}
+	//模型無法遮擋CSS3D物件，若攝影機位置在螢幕後方則影藏CSS3D
 	
-	//console.log(RotatePivot.rotation.z)
+	if(camera.position.x<-8)
+	{
+		css3dObject.visible=false;
+	}
+
+	else
+	{
+		css3dObject.visible=true;
+	}
 
 }
 		</script>
