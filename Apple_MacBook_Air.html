@@ -253,10 +253,14 @@ function init()
 	css3dObject.rotation.set(Math.PI/2,FX.ToThreeEulerAngle(113.6), -Math.PI/2);
 	css3dObject.scale.set(s,s,s);
 
-	if(!FX.isMobile())//電腦顯示影片
+	const isMobileSize = window.matchMedia("(max-width: 768px)").matches;//目前的螢幕寬度小於或等於 768px
+
+	if(!FX.isMobile()||!isMobileSize)//電腦顯示影片
 	{
 		screenModule.add(css3dObject);
 	}
+
+	
 	
 	///鍵盤
 	
