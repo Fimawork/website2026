@@ -155,6 +155,13 @@
 				color: #000;
 			}
 
+			video {
+  			width: 100%;
+  			height: 100%;
+  			object-fit: cover; /* 確保填滿磚塊，不留白 */
+  			object-position: center 20%; /* 視產品位置調整，讓它保持在視窗內 */
+			}
+
 			@media (max-width: 1024px) {
 				.masonry { column-count: 2; }
 			}
@@ -217,7 +224,9 @@
 		<div class="container fade-in">
 			<div class="masonry">
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/iphone_17_pro.html')">
-					<img src="images/iPhone17ProConept_20260321.gif" alt="MacBook Air 3D">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/iPhone17ProConept_20260321_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Showcase</div>
 						<div class="item-title">Consumer Electronics</div>
@@ -226,7 +235,9 @@
 				</div>
 
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/CabinetHandle.html')">
-					<img src="images/F0042_Showcase3DDemo_20260322.gif" alt="Juicy Salif">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/F0042_Showcase3DDemo_20260322_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Showcase</div>
 						<div class="item-title">Home & Furniture</div>
@@ -235,7 +246,9 @@
 				</div>
 
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/S1R.html')">
-					<img src="images/OfficeChair_S1R_20260320.gif" alt="Eames Lounge Chair">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos//OfficeChair_S1R_20260320_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Configurator</div>
 						<div class="item-title">Office Furniture</div>
@@ -244,7 +257,9 @@
 				</div>
 
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Harley_Davidson_vRoad.html')">
-					<img src="images/Harley_Davidson_vRoad_20260405.gif" alt="Harley Davidson vRoad">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/Harley_Davidson_vRoad_20260405_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Showcase</div>
 						<div class="item-title">Motorcycle</div>
@@ -253,7 +268,9 @@
 				</div>
 
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Keyboard_2026.html')">
-					<img src="images/keyboard_2026.gif" alt="Gaming Keyboard">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/keyboard_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Showcase</div>
 						<div class="item-title">Consumer Electronics</div>
@@ -262,10 +279,23 @@
 				</div>
 
 				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Diamond_2026.html')">
-					<img src="images/diamond_2026.gif" alt="Gaming Keyboard">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/diamond_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
 					<div class="overlay">
 						<div class="item-category">3D Product Showcase</div>
 						<div class="item-title">Boutique</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Chevrolet_350_Twin_Turbo_2026.html')">
+					<video autoplay loop muted playsinline poster="fallback-image.jpg">
+  					<source src="videos/Chevrolet_350_Twin_Turbo_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Configurator</div>
+						<div class="item-title">Industry</div>
 						<div class="view-btn">View Experience</div>
 					</div>
 				</div>
