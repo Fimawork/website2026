@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>fimawork_title</title>
+		<link rel="stylesheet" type="text/css" href="./Main.css">
+		<style type="text/css">
+			
+			body
+			{
+				margin: 0;
+				padding:0; 
+			}
+			
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+			#threeContainer
+			{
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 1;
+			}
+
+		</style>
+
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+			  }
+			}
+		</script>
+
+	</head>
+	
+	<body>  
+		<div id="threeContainer"></div> 
+		<video id="video_1" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/diamond_2026_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<video id="video_2" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/iPhone17ProConept_20260321_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<video id="video_3" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/OfficeChair_S1R_20260320_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<video id="video_4" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/Chevrolet_350_Twin_Turbo_2026_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<video id="video_5" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/keyboard_2026_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<video id="video_6" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
+			<source src="videos/F0042_Showcase3DDemo_20260322_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+		</video>
+		<script type="module">
+		import * as THREE from 'three';
+		import Stats from 'three/addons/libs/stats.module.js';
+		import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+		import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+		import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+		import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+		import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+		import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+		import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+		import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.8/fx_functions.js';
+		import { screen } from './models/screen_slices.js';
+	
+let scene, camera, renderer, stats, mixer;
+let controls;
+let deltaTime=0;
+
+const clock = new THREE.Clock();
+
+let item_01 = new THREE.Object3D();
+let item_02 = new THREE.Object3D();
+let item_03 = new THREE.Object3D();
+let item_04 = new THREE.Object3D();
+let item_05 = new THREE.Object3D();
+let item_06 = new THREE.Object3D();
+let carouselManu = new THREE.Object3D();
+
+let CameraDefaultPos=new THREE.Vector3(0,0,10);
+let ControlsTargetDefaultPos=new THREE.Vector3(0,0,0);
+
+init();
+animate();
+//FX.Camera_Inspector(camera,controls);
+
+function init()
+{
+	FX.SetupEnvironment("cloud");
+
+  	scene = new THREE.Scene();
+
+  	camera = new THREE.PerspectiveCamera( 24, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000 );//非全螢幕比例設定
+  	renderer = new THREE.WebGLRenderer({ antialias: true });
+  	renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+
+  	renderer.setClearColor(0x000000, 0.0);//需加入這一條，否則看不到CSS的底圖
+  	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  	renderer.toneMappingExposure = 0.9;
+  	//document.body.appendChild( renderer.domElement );
+  	threeContainer.appendChild( renderer.domElement );
+
+  	camera.position.copy(CameraDefaultPos);
+  
+  	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls.enablePan = false;//禁止鏡頭旋轉平移
+	controls.enableRotate = false;//禁止鏡頭旋轉
+  	controls.panSpeed = 0.4;
+  	controls.enableDamping = true;
+  	controls.dampingFactor =0.015;
+  	controls.maxDistance = 500;
+  	controls.target.copy( ControlsTargetDefaultPos );
+  	controls.zoomSpeed=0.5;
+	controls.autoRotate=true;
+	controls.autoRotateSpeed=0.45;
+  	controls.update();
+
+  	///hdri 環境光源
+	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer);
+
+	function InstVideoMesh(video_id,thisParent)
+	{
+		const loader_screen = new GLTFLoader();
+    	loader_screen.setDRACOLoader(FX.dracoLoader);
+		loader_screen.parse(
+    	FX.Base64ToArrayBuffer(screen()),
+    	'',
+    	(gltf) => {
+        
+			const model = gltf.scene;
+			const newScale=0.03;
+			model.position.set(0,0,-100);
+			model.scale.set(newScale,newScale,newScale);
+
+			///video
+			const video = document.getElementById(video_id);
+				video.play();
+				video.addEventListener( 'play', function () {
+				this.currentTime = 3;
+			} );
+
+			const texture = new THREE.VideoTexture( video );
+			texture.colorSpace = THREE.SRGBColorSpace;
+			texture.repeat.y = -1;
+			// 🛠️ 修正顛倒的核心程式碼：
+			texture.wrapS = THREE.RepeatWrapping; // 允許水平方向重複/翻轉
+			texture.wrapT = THREE.RepeatWrapping; // 允許垂直方向重複/翻轉
+
+			// 2. 建立材質（Material），並將影片紋理帶入 map 屬性
+			const material = new THREE.MeshStandardMaterial( { 
+			    map: texture,
+			    side: THREE.DoubleSide, // 讓正面跟反面都能看到影片（選填）
+				emissiveMap: texture, 
+    			emissive: new THREE.Color(0x666666), // 設定自發光的顏色與強度（白色代表完全顯色，2.0 代表兩倍亮度）
+    			emissiveIntensity: 3,
+				transparent:true,
+				opacity:0.9
+			} );
+
+			model.traverse( function ( object ) {	
+				// 找到模型裡面的 Mesh (幾何體物件)
+        		if ( object.isMesh ) {
+        		    // 替換該 Mesh 的材質為你的影片材質
+        		    object.material = material; 
+        		}	
+        })
+
+			thisParent.add(model);
+    	},
+
+    	(error) => {
+    	    console.error('Failed to load model:', error);
+    	});
+	}
+	
+	function SetupCarousel()
+	{
+		const divisionAngle=FX.ToThreeEulerAngle(60)
+		item_01.rotation.y=divisionAngle*6;
+		item_02.rotation.y=divisionAngle*5;
+		item_03.rotation.y=divisionAngle*4;
+		item_04.rotation.y=divisionAngle*3;
+		item_05.rotation.y=divisionAngle*2;
+		item_06.rotation.y=divisionAngle*1;
+
+		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06);
+		scene.add(carouselManu);
+	}
+
+	///主要物件
+	const defaultScenes = 
+    [
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_1',item_01);resolve(); }, 10)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_2',item_02);resolve(); }, 20)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_3',item_03);resolve(); }, 30)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_4',item_04);resolve(); }, 40)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_5',item_05);resolve(); }, 50)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_6',item_06);resolve(); }, 60)), 
+		() => new Promise((resolve) => setTimeout(() => { SetupCarousel();resolve(); }, 70)), 
+		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 100)),
+	];
+
+	async function SetupScene() 
+  	{
+		for (const task of defaultScenes) 
+    	{
+			await task(); // 確保每個任務依次完成
+		}
+		
+    	console.log('All scenes loaded');
+	}
+
+	SetupScene();
+
+
+	
+
+	///EventListener
+  	window.addEventListener( 'resize', onWindowResize );  
+
+}
+
+
+function onWindowResize() 
+{
+    camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;//非全螢幕比例設定
+	camera.updateProjectionMatrix();
+    renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight);
+}
+
+function animate() 
+{
+  	requestAnimationFrame( animate );
+
+  	controls.update();
+  	renderer.render( scene, camera );
+  	//UpdateCameraPosition(camera,controls);
+
+
+	const delta = clock.getDelta();
+
+	if ( mixer ) mixer.update( delta );
+
+}
+		</script>
+    </body>
+
+</html>
