@@ -451,6 +451,10 @@ button
 	user-select: none;
 }
 
+#contact_us_btn
+{
+	cursor: pointer;
+}
 
 @keyframes SceneCrossEffect 
 {
@@ -645,6 +649,11 @@ video
 	}
 
 	.demo_movie:hover
+	{
+		opacity: 0.5;
+	}
+
+	#contact_us_btn:hover
 	{
 		opacity: 0.5;
 	}
