@@ -206,7 +206,26 @@
 							<span id="step_03_title" class="code_title">第三步：互動邏輯開發</span></br>
 							<span id="step_03_content">撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。</span></br></br>
 							<span id="demoInvitation" class="code_title">歡迎試作我們的介面！</span>
-						</p>	
+						</p>
+						<div class="code_snippet_box">
+							<div class="code_snippet_header">
+								<div class="code_dots">
+									<span class="dot dot_red"></span>
+									<span class="dot dot_yellow"></span>
+									<span class="dot dot_green"></span>
+								</div>
+								<span class="code_lang_label">HTML</span>
+								<button class="code_copy_btn" onclick="copyCodeSnippet()" title="複製程式碼">
+									<span id="copy_btn_text">Copy</span>
+								</button>
+							</div>
+							<div class="code_snippet_body">
+								<code>
+    <span class="code_comment" id="code_snippet_comment">&lt;!-- Use it like any other HTML element --&gt;</span>
+    <span class="code_tag">&lt;<span class="code_tag_name">iframe</span> <span class="code_attr">style</span>=<span class="code_string">"width: 100%; height: 500px; border: none;"</span> <span class="code_attr">src</span>=<span class="code_string">"https://fimawork.tw/Apple_MacBook_Air.html"</span>&gt;&lt;/<span class="code_tag_name">iframe</span>&gt;</span>
+								</code>
+							</div>
+						</div>	
 					</div>
 					<div id="web3d_icon"></div>
 				</div>	
@@ -654,6 +673,19 @@
 				if (counterElem) counterElem.innerText = data.count;
     			//console.log("目前的總人數是：" + data.count);
   			}
+
+			function copyCodeSnippet()
+			{
+
+				const sample_link = `<iframe style="width: 100%; height: 500px; border: none;" src="https://fimawork.tw/Apple_MacBook_Air.html"></iframe>`;
+
+            	// 調用剪貼簿 API
+            	navigator.clipboard.writeText(sample_link).then(() => {
+            	    console.log('連結已複製到剪貼簿:', sample_link);
+            	}).catch(err => {
+            	    console.error('複製失敗', err);
+            	});
+			}
 
   			window.onload = function() 
 			{

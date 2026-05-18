@@ -97,6 +97,117 @@ main
 	font-weight: 500;
 }
 
+.code_snippet_box {
+    margin-top: 20px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.code_snippet_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(40, 40, 40, 0.9);
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code_dots {
+    display: flex;
+    gap: 6px;
+}
+
+.code_dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot_red { background-color: #ff5f56; }
+.dot_yellow { background-color: #ffbd2e; }
+.dot_green { background-color: #27c93f; }
+
+.code_lang_label {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.code_copy_btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease;
+}
+
+.code_copy_btn:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+.code_snippet_body {
+    padding: 20px;
+    background: rgba(10, 10, 10, 0.9);
+    max-height: 300px; /* 💡 限制程式碼區塊最大高度，超過才會觸發垂直捲軸 */
+    overflow-x: auto;  /* 程式碼太長時可以左右滑動 */
+    overflow-y: auto;  /* 內容太多時可以上下滑動 */
+    -webkit-overflow-scrolling: touch; /* 讓 iOS 裝置滑動更流暢 */
+}
+
+/* 🛠️ 核心修正：強制在手機上顯示出捲軸軌道與滑塊 */
+.code_snippet_body::-webkit-scrollbar {
+    width: 6px;  /* 垂直捲軸寬度 */
+    height: 6px; /* 水平捲軸高度 */
+    display: block !important; /* 強制顯示 */
+}
+
+/* 捲軸內部的滑塊（可以拖動的部分） */
+.code_snippet_body::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3); /* 白色半透明，在深色背景很醒目 */
+    border-radius: 4px;
+}
+
+/* 捲軸的軌道背景 */
+.code_snippet_body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.code_snippet_body code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e6e6e6;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+#code_snippet_comment{
+	position: absolute;
+	left: 20px;
+}
+
+.code_comment { color: #6a9955; font-style: italic; }
+.code_tag { 
+	position: absolute;
+	left: 20px;
+	padding-right: 20px;
+	color: #808080; 
+}
+.code_tag_name { color: #569cd6; }
+.code_attr { color: #9cdcfe; }
+.code_string { color: #ce9178; }
+
 .logo
 {
 	position:fixed;
@@ -820,7 +931,7 @@ p
 #content_02
 {
 	position: absolute;
-	top: 210%;
+	top: 200%;
 	right: 0%;
 	width: 100%;
 	height: 100%;
@@ -830,10 +941,10 @@ p
 #content_03
 {
 	position: absolute;
-	top: 347%;
+	top: 320%;
 	right: 0%;
 	width: 100%;
-	height: 125%;
+	height: 150%;
 }
 
 #content_04
@@ -963,9 +1074,9 @@ i
 
 #web3d_window
 {
-	top: 27%;
+	top: 20%;
 	left: 50%;
-	height: 60%;
+	height: 50%;
 	width: 120%;
 	z-index: 9;
 }
