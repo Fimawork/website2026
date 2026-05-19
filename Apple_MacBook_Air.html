@@ -239,6 +239,8 @@ function init()
 	videoClip.style.height = '1080px';
 	videoClip.style.backgroundColor = '#000';
 	videoClip.src = './videos/ending_20260422_720p_5Mb.mp4';
+	// 讓影片在手機網頁內播放，不彈出全螢幕播放器
+	videoClip.setAttribute('playsinline', '');
 	videoClip.autoplay=true;
 	videoClip.loop=true;
 	videoClip.muted=true;
