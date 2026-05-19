@@ -674,17 +674,61 @@
     			//console.log("目前的總人數是：" + data.count);
   			}
 
-			function copyCodeSnippet()
+			async function copyCodeSnippet()
 			{
 
 				const sample_link = `<iframe style="width: 100%; height: 500px; border: none;" src="https://fimawork.tw/Apple_MacBook_Air.html"></iframe>`;
 
-            	// 調用剪貼簿 API
+            	// 1.調用剪貼簿 API
             	navigator.clipboard.writeText(sample_link).then(() => {
             	    console.log('連結已複製到剪貼簿:', sample_link);
             	}).catch(err => {
             	    console.error('複製失敗', err);
             	});
+
+				// 2. 同步發送紀錄到 Google 試算表 (不影響複製速度)
+			    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxK3AOGluqtjfJHxkOzoKnsgDnzTj7AQiiDjIRZOMWnNVtmD3bw0wTfEBNeXRRfe26A/exec';
+
+			    try {
+			        // 使用免費的 ipapi.co 取得訪客的地理資訊
+			        const ipResponse = await fetch('https://ipapi.co/json/');
+			        const ipData = await ipResponse.json();
+
+			        // 提取國家名稱與城市名稱（例如：Taiwan, Taipei）
+			        const country = ipData.country_name || '未知國家';
+			        const city = ipData.city || '未知城市';
+
+			        // 將數據發送到 Google 試算表
+			        fetch(GAS_URL, {
+			            method: 'POST',
+			            mode: 'no-cors',
+			            headers: {
+			                'Content-Type': 'application/json'
+			            },
+			            body: JSON.stringify({
+			                action: 'MacBook 3D介面連結複製',
+			                country: country,
+			                city: city
+			            })
+			        });
+				
+			        console.log(`位置紀錄已送出: ${country}, ${city}`);
+				
+			    } catch (err) {
+			        // 如果客人裝了 AdBlock 阻擋了 IP API，或者網路異常，則發送未知資訊，確保統計不中斷
+			        console.warn('無法取得地理位置，改發送預設值。', err);
+				
+			        fetch(GAS_URL, {
+			            method: 'POST',
+			            mode: 'no-cors',
+			            headers: { 'Content-Type': 'application/json' },
+			            body: JSON.stringify({
+			                action: 'MacBook 3D 連結複製',
+			                country: '查詢失敗',
+			                city: '查詢失敗'
+			            })
+			        });
+			    }
 			}
 
   			window.onload = function() 
