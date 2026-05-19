@@ -79,9 +79,10 @@ main
 #code_content
 {
 	position: absolute;
+	margin-top: 30px;
 	left: 45%;
 	height: 100%;
-	width: 50%;
+	width: 55%;
 	font-family:"Inter", sans-serif;
 	text-align: start;
 	font-size: 12px;
@@ -98,12 +99,12 @@ main
 }
 
 .code_snippet_box {
-    margin-top: 20px;
+    margin-top: 0px;
     background: rgba(20, 20, 20, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    width: 100%;
+    width: 95%;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
 }
@@ -157,7 +158,7 @@ main
 }
 
 .code_snippet_body {
-    padding: 20px;
+    padding-bottom: 20px;
     background: rgba(10, 10, 10, 0.9);
     max-height: 300px; /* 💡 限制程式碼區塊最大高度，超過才會觸發垂直捲軸 */
     overflow-x: auto;  /* 程式碼太長時可以左右滑動 */
@@ -185,7 +186,7 @@ main
 
 .code_snippet_body code {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
     color: #e6e6e6;
     white-space: pre-wrap;
@@ -1096,6 +1097,14 @@ i
 	color: rgba(255, 255, 255, 1);
 	justify-content: end;
 	bottom: 3%;
+}
+
+.code_snippet_body code {
+    font-size: 12px;
+}
+
+.code_snippet_body {
+    padding-bottom: 50px;
 }
 
 #web3d_icon
