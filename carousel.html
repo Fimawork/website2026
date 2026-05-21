@@ -161,6 +161,7 @@ function init()
   ///主要物件
 	const defaultScenes = 
     [
+		() => new Promise((resolve) => setTimeout(() => { InstantModel();resolve(); }, 10)), 
 		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
 		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
 		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 500)),
@@ -178,48 +179,48 @@ function init()
 
 	SetupDefaultScene();
 
-	
+	function InstantModel()
+	{
+		///Apple Watch
+		const loader_apple_watch = new GLTFLoader();
+	    loader_apple_watch.setDRACOLoader(FX.dracoLoader);
+		loader_apple_watch.parse(
+	    FX.Base64ToArrayBuffer(apple_watch_series8_45mm_20251217()),
+	    '',
+	    (gltf) => {
+		
+			const model = gltf.scene;
+			//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
 
-	///Apple Watch
-	const loader_apple_watch = new GLTFLoader();
-    loader_apple_watch.setDRACOLoader(FX.dracoLoader);
-	loader_apple_watch.parse(
-    FX.Base64ToArrayBuffer(apple_watch_series8_45mm_20251217()),
-    '',
-    (gltf) => {
-        
-		const model = gltf.scene;
-//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+			const main_case_material=FXM.InstMaterial(0xe3bea1,0.27,0.7,0,2.333,1,false,1,true);
+			const rear_case_material=FXM.InstMaterial(0x1f1f1f,0.05,0,0,2.333,0.75,false,1,true);
 
-		const main_case_material=FXM.InstMaterial(0xe3bea1,0.27,0.7,0,2.333,1,false,1,true);
-		const rear_case_material=FXM.InstMaterial(0x1f1f1f,0.05,0,0,2.333,0.75,false,1,true);
+			const winder_surface_material=FXM.InstMaterial(0x9c8181,0.5,0.75,0,2.333,1,false,1,true);
 
-		const winder_surface_material=FXM.InstMaterial(0x9c8181,0.5,0.75,0,2.333,1,false,1,true);
+			const belt_material=FXM.InstEtchingMaterial(0xfff2f0,1,1,1,false,1,'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),new THREE.Vector2(0, 0),'./textures/	Light_Gravel.png',new THREE.Vector2(400, 400),15);
 
-		const belt_material=FXM.InstEtchingMaterial(0xfff2f0,1,1,1,false,1,'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),new THREE.Vector2(0, 0),'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),15);
+			const pin_surface_material=FXM.InstEtchingMaterial(0xdedede,0.75,1,1,false,1,'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1,1),new THREE.Vector2(-0.27,0.35),'./	textures/Radial_Brush_01.jpg',new THREE.Vector2(1, 1),0);
 
-		const pin_surface_material=FXM.InstEtchingMaterial(0xdedede,0.75,1,1,false,1,'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1,1),new THREE.Vector2(-0.27,0.35),'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1, 1),0);
+			const window_material=FXM.InstMaterial(0x000000,0,0,1,1.5,0.5,true,0.9,false);
 
-		const window_material=FXM.InstMaterial(0x000000,0,0,1,1.5,0.5,true,0.9,false);
+			FX.ReturnBufferGeometry(model.getObjectByName("window"),window_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("main_case"),main_case_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("rear_case"),rear_case_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("winder"),main_case_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("winder_surface"),winder_surface_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("belt"),belt_material,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("pin"),null,item_01_object,scene);
+			FX.ReturnBufferGeometry(model.getObjectByName("pin_surface"),pin_surface_material,item_01_object,scene);
 
-		FX.ReturnBufferGeometry(model.getObjectByName("window"),window_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("main_case"),main_case_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("rear_case"),rear_case_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("winder"),main_case_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("winder_surface"),winder_surface_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("belt"),belt_material,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("pin"),null,item_01_object,scene);
-		FX.ReturnBufferGeometry(model.getObjectByName("pin_surface"),pin_surface_material,item_01_object,scene);
+			item_01_object.position.set(60,2,-3);
+			item_01_object.rotation.set(Math.PI,Math.PI, Math.PI/2);
+			item_01_object.scale.set(0.06,0.06,0.06);
 
-		item_01_object.position.set(60,2,-3);
-		item_01_object.rotation.set(Math.PI,Math.PI, Math.PI/2);
-		item_01_object.scale.set(0.06,0.06,0.06);
-
-		item_01.add(item_01_object)
-    },
-    (error) => {
-        console.error('Failed to load model:', error);
-    }
+			item_01.add(item_01_object)
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
 	);
 
 	///eames-chair
@@ -266,10 +267,10 @@ function init()
 		item_02_object.scale.set(0.004,0.004,0.004);
 
 		item_02.add(item_02_object);
-    },
-    (error) => {
-        console.error('Failed to load model:', error);
-    }
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
 	);
 
 
@@ -331,11 +332,14 @@ function init()
 		item_03.add(item_03_object);
 
 		//FX.Material_Inspector(scene);
-    },
-    (error) => {
-        console.error('Failed to load model:', error);
-    }
-	);
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
+		);
+	}
+
+	
 
 		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06);
 	item_01.rotation.y=divisionAngle*6;
