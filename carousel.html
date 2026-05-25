@@ -24,12 +24,14 @@
 		</style>
 
 		<script type="importmap">
-			{
-			  "imports": {
-				"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-				"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
-			  }
-			}
+				{
+				  "imports": {
+				    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
+				    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
+				    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/",
+				    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js"
+				  }
+				}
 		</script>
 
 	</head>
@@ -40,7 +42,7 @@
 			import * as THREE from 'three';
 
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_functions.js';
+import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v2.2/fx_functions.js';
 import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -102,7 +104,7 @@ const hold_time=15;
 init();
 
 
-function init()
+async function init()
 {
 	FX.SetupEnvironment("cloud");
 
@@ -115,13 +117,20 @@ function init()
 
   	camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 8, 30 );
 	camera.layers.set(1);
-  	renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
+  	//renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
+	renderer = new THREE.WebGPURenderer( { alpha: true, antialias: true } );
   	renderer.setPixelRatio( window.devicePixelRatio );
   	renderer.setSize( window.innerWidth, window.innerHeight );
 
   	renderer.toneMapping = THREE.ACESFilmicToneMapping;
   	renderer.toneMappingExposure = 0.9;
   	document.body.appendChild( renderer.domElement );
+
+	// 1. 先等待 Renderer 初始化完成
+	await renderer.init(); // 記得 r184 一定要加上這行非同步初始化！
+	// 2. 初始化完成後，再啟動動畫循環（這行會自己一直跑，不用手動 call 第一次）
+	renderer.setAnimationLoop( animate );
+	
 
   	camera.position.copy(CameraDefaultPos);
   	FX.posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
@@ -143,8 +152,9 @@ function init()
   	controls.update();
 
   	///hdri 環境光源
-	FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer) 
+	//FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer) 
 
+	FX.LoadUltraHDRForWebGPU('./textures/hdri/studio_small_09_2k.jpg',scene);
 	
 
 	gridWall.material.opacity = 0.3;
@@ -163,8 +173,9 @@ function init()
     [
 		() => new Promise((resolve) => setTimeout(() => { InstantModel();resolve(); }, 10)), 
 		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
-		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
+		//() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
 		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 500)),
+		//() => new Promise((resolve) => setTimeout(() => { FX.Material_Inspector(scene);resolve();}, 1000)),
 	];
 
 	async function SetupDefaultScene() 
@@ -201,7 +212,7 @@ function init()
 
 			const pin_surface_material=FXM.InstEtchingMaterial(0xdedede,0.75,1,1,false,1,'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1,1),new THREE.Vector2(-0.27,0.35),'./	textures/Radial_Brush_01.jpg',new THREE.Vector2(1, 1),0);
 
-			const window_material=FXM.InstMaterial(0x000000,0,0,1,1.5,0.5,true,0.9,false);
+			const window_material=FXM.InstMaterial(0x000000,0,0,1,2.1250000000000004,0.9000000000000001,true,0.96,false);
 
 			FX.ReturnBufferGeometry(model.getObjectByName("window"),window_material,item_01_object,scene);
 			FX.ReturnBufferGeometry(model.getObjectByName("main_case"),main_case_material,item_01_object,scene);
@@ -370,7 +381,7 @@ function init()
 		const mesh_HUD = new THREE.Mesh( geometry_HUD, material_HUD );
 		const img_scale =0.052;
 		
-		mesh_HUD.position.set( 0.5, 9.5, -1);
+		mesh_HUD.position.set( 0.5, 10.5, -1);
 		mesh_HUD.scale.set(img_scale*44/0.06,img_scale*48.8/0.06,1);
 		//mesh_HUD.rotation.y=Math.PI/2;
 
@@ -408,7 +419,7 @@ function onWindowResize()
 
 function animate() 
 {
-  	requestAnimationFrame( animate );
+  	//requestAnimationFrame( animate );
 
 
   	//controls.update();
