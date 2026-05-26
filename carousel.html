@@ -58,7 +58,11 @@ let scene, camera, renderer, stats, mixer,container;
 let controls;
 let idleTime=0;
 
-const clock = new THREE.Clock();
+
+//const clock = new THREE.Clock();
+
+// 2. 建立新版的 Timer（取代舊的 Clock）
+const timer = new THREE.Timer();
 
 const modelPosition=new THREE.Vector3(60,0,0);
 const modelRotation=new THREE.Vector3(0,Math.PI, 0);
@@ -417,10 +421,11 @@ function onWindowResize()
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
-function animate() 
+function animate(timestamp) 
 {
   	//requestAnimationFrame( animate );
 
+	
 
   	//controls.update();
   	renderer.render( scene, camera );
@@ -429,7 +434,11 @@ function animate()
 
 	UpdateRotationManu();
 
-	const delta = clock.getDelta();
+	//const delta = clock.getDelta();
+
+	// 自動更新時間（用來計算移動速度、旋轉等）
+    timer.update( timestamp );
+	const delta = timer.getDelta();// 兩幀之間的時間差
 
 	if ( mixer ) mixer.update( delta );
 
