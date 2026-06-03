@@ -52,7 +52,7 @@ import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeeze
 import { chair_20251216 } from './models/chair_20251216_slices.js';
 import { apple_watch_series8_45mm_20251217 } from './models/apple_watch_series8_45mm_20251217_slices.js';
 import { JEEP_COMPASS_2021_20251217 } from './models/JEEP_COMPASS_2021_20251217_slices.js';
-import { Lamborghini_Centenario_roadster_20251218 } from './models/Lamborghini_Centenario_roadster_20251218_slices.js';
+import { car_20260604 } from './models/car_20260604_slices.js';
 
 let scene, camera, renderer, stats, mixer,container;
 let controls;
@@ -289,11 +289,11 @@ async function init()
 	);
 
 
-	///Lamborghini_Centenario_roadster
-	const loader_Lamborghini_Centenario_roadster = new GLTFLoader();
-    loader_Lamborghini_Centenario_roadster.setDRACOLoader(FX.dracoLoader);
-	loader_Lamborghini_Centenario_roadster.parse(
-    FX.Base64ToArrayBuffer(Lamborghini_Centenario_roadster_20251218()),
+	///car
+	const loader_car_20260604 = new GLTFLoader();
+    loader_car_20260604.setDRACOLoader(FX.dracoLoader);
+	loader_car_20260604.parse(
+    FX.Base64ToArrayBuffer(car_20260604()),
     '',
     (gltf) => {
         
@@ -334,7 +334,7 @@ async function init()
 		FX.ReturnBufferGeometry(model.getObjectByName("inner_silver"),silver_paint_material,item_03_object,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("other"),other_material,item_03_object,scene);
 
-		item_03_object.add(model.getObjectByName("logo"));
+		//item_03_object.add(model.getObjectByName("logo"));
 
 		//item_02_object.add(model);
 
