@@ -193,16 +193,16 @@ function init()
 	
 	function SetupCarousel()
 	{
-		const divisionAngle=FX.ToThreeEulerAngle(360/7)
+		const divisionAngle=FX.ToThreeEulerAngle(360/6)
 		item_01.rotation.y=divisionAngle*6;
 		item_02.rotation.y=divisionAngle*5;
 		item_03.rotation.y=divisionAngle*4;
 		item_04.rotation.y=divisionAngle*3;
 		item_05.rotation.y=divisionAngle*2;
 		item_06.rotation.y=divisionAngle*1;
-		item_07.rotation.y=divisionAngle*7;
+		//item_07.rotation.y=divisionAngle*7;
 
-		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06).add(item_07);
+		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06);
 		scene.add(carouselManu);
 	}
 
@@ -215,7 +215,7 @@ function init()
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_4',item_04);resolve(); }, 40)), 
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_5',item_05);resolve(); }, 50)), 
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_6',item_06);resolve(); }, 60)), 
-		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_7',item_07);resolve(); }, 70)), 
+		//() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_7',item_07);resolve(); }, 70)), 
 		() => new Promise((resolve) => setTimeout(() => { SetupCarousel();resolve(); }, 70)), 
 		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 100)),
 	];
