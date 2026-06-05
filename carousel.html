@@ -50,7 +50,7 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
 import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeezer_Juicy_Salif_slices.js';
 import { chair_20251216 } from './models/chair_20251216_slices.js';
-import { apple_watch_series8_45mm_20251217 } from './models/apple_watch_series8_45mm_20251217_slices.js';
+import { eBike_2026 } from './models/eBike_2026_slices.js';
 import { JEEP_COMPASS_2021_20251217 } from './models/JEEP_COMPASS_2021_20251217_slices.js';
 import { car_20260604 } from './models/car_20260604_slices.js';
 
@@ -196,40 +196,132 @@ async function init()
 
 	function InstantModel()
 	{
-		///Apple Watch
-		const loader_apple_watch = new GLTFLoader();
-	    loader_apple_watch.setDRACOLoader(FX.dracoLoader);
-		loader_apple_watch.parse(
-	    FX.Base64ToArrayBuffer(apple_watch_series8_45mm_20251217()),
+		///E Bike
+		const loader_eBike = new GLTFLoader();
+	    loader_eBike.setDRACOLoader(FX.dracoLoader);
+		loader_eBike.parse(
+	    FX.Base64ToArrayBuffer(eBike_2026()),
 	    '',
 	    (gltf) => {
 		
 			const model = gltf.scene;
-			//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+			
+			const saddle_back_01_material=FXM.InstEtchingMaterial(0x080808,0.4,0.3,0.75,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./	textures/Leather.png',new THREE.Vector2(15, 15),0);
 
-			const main_case_material=FXM.InstMaterial(0xe3bea1,0.27,0.7,0,2.333,1,false,1,true);
-			const rear_case_material=FXM.InstMaterial(0x1f1f1f,0.05,0,0,2.333,0.75,false,1,true);
+			const tire_material=FXM.InstEtchingMaterial(0x292929,0.7,0.35,1,false,1,"./textures/Leather.png",new THREE.Vector2(10,10),new THREE.Vector2(0,0),"./textures/	Leather.png",new THREE.Vector2(50,100),30);
 
-			const winder_surface_material=FXM.InstMaterial(0x9c8181,0.5,0.75,0,2.333,1,false,1,true);
+			const black_housing_material=FXM.InstEtchingMaterial(0x363636,0.35,0.5,0.75,false,1,'./textures/Gravel.png',new THREE.Vector2(100, 100),new THREE.Vector2(0, 0),	'./textures/Gravel.png',new THREE.Vector2(600, 600),2);
 
-			const belt_material=FXM.InstEtchingMaterial(0xfff2f0,1,1,1,false,1,'./textures/Light_Gravel.png',new THREE.Vector2(400, 400),new THREE.Vector2(0, 0),'./textures/	Light_Gravel.png',new THREE.Vector2(400, 400),15);
+			const metal_housing_material=FXM.InstEtchingMaterial(0x737373,0.3,0.5,1,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./	textures/Gravel.png",new THREE.Vector2(50,50),2);
 
-			const pin_surface_material=FXM.InstEtchingMaterial(0xdedede,0.75,1,1,false,1,'./textures/Radial_Brush_01.jpg',new THREE.Vector2(1,1),new THREE.Vector2(-0.27,0.35),'./	textures/Radial_Brush_01.jpg',new THREE.Vector2(1, 1),0);
+			const lightLens_material=FXM.InstMaterial(0x183A25,0,0.5,1,2.4,1,true,0.9,true);
 
-			const window_material=FXM.InstMaterial(0x000000,0,0,1,2.1250000000000004,0.9000000000000001,true,0.96,false);
+			const brake_material=FXM.InstMaterial(0x919191,0.3,0.9,0,1.27,0,false,1,true);
 
-			FX.ReturnBufferGeometry(model.getObjectByName("window"),window_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("main_case"),main_case_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("rear_case"),rear_case_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("winder"),main_case_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("winder_surface"),winder_surface_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("belt"),belt_material,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("pin"),null,item_01_object,scene);
-			FX.ReturnBufferGeometry(model.getObjectByName("pin_surface"),pin_surface_material,item_01_object,scene);
+			const fork_material=FXM.InstMaterial(0x4F4F4F,0.3,0.9,0,2.3333333333333335,1,false,1,true);
 
-			item_01_object.position.set(60,2,-3);
-			item_01_object.rotation.set(Math.PI,Math.PI, Math.PI/2);
-			item_01_object.scale.set(0.06,0.06,0.06);
+			const wheel_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const logo_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const freeWheel_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const frame_material=FXM.InstMaterial(0x4F4F4F,0.3,0.9,0,2.3333333333333335,1,false,1,true);
+
+			model.traverse( function ( object ) {	
+                  
+        	    if(object.name.includes("wheel"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,wheel_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("tire"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,tire_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("saddle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,saddle_back_01_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("frame"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,frame_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("plasticHousing"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,black_housing_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("cable"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("fork"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,fork_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("metalHousing"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,metal_housing_material,item_01_object,scene);
+        	    }
+
+				//if(object.name.includes("light"))
+        	    //{
+        	    //  FX.ReturnBufferGeometry(object,null,null,scene);
+        	    //}
+
+				if(object.name.includes("lightLens"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,lightLens_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("handle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,tire_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("screw"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("spoke"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("freeWheel"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("brake"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("axle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("logo"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,logo_material,item_01_object,scene);
+        	    }
+			})
+
+			const scale =0.004;
+			item_01_object.position.set(60,0,-3);
+			item_01_object.rotation.set(0,FX.ToThreeEulerAngle(180), 0);
+			item_01_object.scale.set(scale,scale,scale);
+
+			//FX.ToThreeEulerAngle(90),FX.ToThreeEulerAngle(-90), FX.ToThreeEulerAngle(90)
 
 			item_01.add(item_01_object)
 	    },
@@ -368,36 +460,6 @@ async function init()
 	scene.add(carouselManu);
 
 
-	///桌布
-	
-	let HUD = new THREE.Object3D();
-		
-	const loader_HUD = new TIFFLoader();
-		
-	const geometry_HUD = new THREE.PlaneGeometry();
-		
-	loader_HUD.load( './images/apple_watch_wallpaper.tif', function ( texture ) {
-		
-		texture.colorSpace = THREE.SRGBColorSpace;
-		
-		const material_HUD = new THREE.MeshBasicMaterial( { map: texture, transparent: true,blending: THREE.AdditiveBlending,opacity:0.9 ,depthWrite: false } );
-		
-		const mesh_HUD = new THREE.Mesh( geometry_HUD, material_HUD );
-		const img_scale =0.052;
-		
-		mesh_HUD.position.set( 0.5, 10.5, -1);
-		mesh_HUD.scale.set(img_scale*44/0.06,img_scale*48.8/0.06,1);
-		//mesh_HUD.rotation.y=Math.PI/2;
-
-		mesh_HUD.rotation.set(Math.PI/2,-Math.PI, -Math.PI/2);
-		
-		HUD.add(mesh_HUD);
-		//scene.add( HUD );
-
-		item_01_object.add(HUD);
-	} );
-
-
 	function SetupItemGroup()
 	{
 		item_object_list.push(item_01_object)
@@ -495,15 +557,7 @@ function UpdateRotationManu()
 	{
 		if(item_object_list[i]!=null)
 		{
-			if(i===0)
-			{
-				item_object_list[i].rotation.y-=rpm;
-			}
-
-			else
-			{
-				item_object_list[i].rotation.y+=rpm;
-			}
+			item_object_list[i].rotation.y+=rpm;
 		}
 
 		else
