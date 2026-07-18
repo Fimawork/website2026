@@ -375,7 +375,7 @@
         /* =============================================
            Integration
         ============================================= */
-        #integration { background: var(--bg-deep); }
+        #integration { background: var(--bg-deep);}
         .integration-inner { max-width: 1200px; margin: 0 auto; }
         .integration-header { margin-bottom: 60px; }
 
@@ -408,12 +408,22 @@
         }
         .integration-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
         .iframe-preview {
-            width: 100%; aspect-ratio: 16/9; border: 1px solid var(--border);
-            border-radius: var(--radius-lg); overflow: hidden;
+            width: 100%; 
+			max-width: 100%;
+			aspect-ratio: 16/9; 
+			border: 1px solid var(--border);
+            border-radius: var(--radius-lg); 
+			overflow: hidden;
         }
         .iframe-preview iframe { width: 100%; height: 100%; border: none; }
 
-        .code-panel { background: rgba(6,8,14,0.95); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+        .code-panel { 
+			background: rgba(6,8,14,0.95); 
+			border: 1px solid var(--border); border-radius: var(--radius-lg); 
+			overflow: hidden; 
+			width: 100%;
+    		min-width: 0; /* 關鍵：允許 Grid 子元素縮小到小於內容寬度 */
+		}
         .code-panel-header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 14px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
@@ -431,16 +441,28 @@
             font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
         }
         .code-copy-btn:hover { background: rgba(0,212,255,0.16); }
-        .code-body { padding: 24px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.9; color: #c9d1d9; overflow-x: auto; }
+        .code-body { 
+			padding: 24px;
+			font-family: 'Courier New', monospace; font-size: 13px; 
+			line-height: 1.9; 
+			color: #c9d1d9; 
+			overflow-x: auto; 
+			white-space: pre-wrap; /* 額外保險：如果字串太長自動換行，或維持 pre 配合 overflow */
+            word-break: break-all; /* 防止長網址撐破邊框 */
+		}
         .code-comment { color: #6a9955; font-style: italic; }
         .code-tag { color: #7ee787; }
         .code-attr { color: #79c0ff; }
         .code-str { color: #ffa657; }
         .demo-invite {
-            display: block; margin-top: 16px; padding: 14px 18px;
+            display: block; 
+			margin-top: 16px; 
+			padding: 14px 18px;
             background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(79,143,255,0.06));
             border: 1px solid rgba(0,212,255,0.15); border-radius: 10px;
-            font-family: var(--font-body); font-size: 13px; color: var(--accent-cyan); text-align: center;
+            font-family: var(--font-body); 
+			font-size: 13px; color: var(--accent-cyan); text-align: center;
+			word-break: break-word; /* 避免英文在小螢幕被擠壓破版 */
         }
 
         /* =============================================
@@ -567,7 +589,12 @@
             .prowess-inner { grid-template-columns: 1fr; gap: 48px; }
             .steps-row { grid-template-columns: 1fr; }
             .step-card::after { display: none; }
-            .integration-demo { grid-template-columns: 1fr; }
+            .integration-demo { 
+				grid-template-columns: 1fr; 
+				width: 100%;
+        		max-width: 100%;
+        		overflow: hidden; /* 防止子元件陰影或邊框溢出 */
+			}
             .gallery-grid { grid-template-columns: 1fr 1fr; }
             .gallery-item:nth-child(n) { grid-column: auto; grid-row: auto; aspect-ratio: 4/3; }
         }
