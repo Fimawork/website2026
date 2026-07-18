@@ -1,757 +1,1256 @@
 <!doctype html>
 <html lang="zh-TW">
-	<head>
-		<meta charset="utf-8">
-		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
-		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
-		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
-		<meta name="description" content="fimawork - Interactive 3D Web UI/UX & WebGPU Solutions.">
-		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
-		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-		<meta property="og:title" content="fimawork | Interactive 3D Web UI/UX & WebGPU Solutions.">
-		<meta property="og:description" content="3D網頁設計工作室">
-		<meta property="og:image" content="https://fimawork.tw/images/fimawork_OG_Image.png">
-		<meta property="og:image:width" content="1200">
-		<meta property="og:image:height" content="630">
-		<meta property="og:image:type" content="image/png">
-		<meta property="og:url" content="https://fimawork.tw/">
-		<meta property="og:type" content="website">
-		<title>費馬工作室 | fimawork | 3D網頁設計、3D Website Design</title>
-	
-		<link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
-		<link rel="stylesheet" type="text/css" href="Main.css">
-		<style type="text/css">
-			
-			body
-			{
-				margin: 0;
-				padding:0; 
-				background-color: rgba(52, 50, 50, 1);
-			}
-			
-			canvas
-			{
-				width: 100%;
-   				height: 100%;
-			}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="費馬工作室 — 專注於3D網頁介面與使用者體驗設計。Interactive 3D Web UI/UX & WebGPU Solutions.">
+    <meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design,Three.js,WebGPU">
+    <meta property="og:title" content="fimawork | Interactive 3D Web UI/UX & WebGPU Solutions.">
+    <meta property="og:description" content="費馬工作室 — 用維度呈現深度，讓產品自己說話">
+    <meta property="og:image" content="https://fimawork.tw/images/fimawork_OG_Image.png">
+    <meta property="og:url" content="https://fimawork.tw/">
+    <meta property="og:type" content="website">
+    <title>費馬工作室 | fimawork | 3D網頁設計、3D Website Design</title>
 
-		</style>
-	</head>
-	
-	<body>
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon-16x16.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* =============================================
+           CSS Custom Properties
+        ============================================= */
+        :root {
+            --bg-deep:       #080b10;
+            --bg-surface:    #0d1117;
+            --bg-card:       rgba(255,255,255,0.04);
+            --bg-card-hover: rgba(255,255,255,0.07);
+            --border:        rgba(255,255,255,0.08);
+            --border-bright: rgba(255,255,255,0.18);
+            --accent-cyan:   #00d4ff;
+            --accent-blue:   #4f8fff;
+            --accent-purple: #a855f7;
+            --text-primary:  rgba(255,255,255,0.95);
+            --text-secondary:rgba(255,255,255,0.55);
+            --text-tertiary: rgba(255,255,255,0.30);
+            --font-main:     'Space Grotesk', 'Inter', sans-serif;
+            --font-body:     'Inter', sans-serif;
+            --radius-sm:     8px;
+            --radius-md:     16px;
+            --radius-lg:     24px;
+            --transition:    0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* =============================================
+           Particle Canvas
+        ============================================= */
+        #ambient-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .grid-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+        }
+
+        /* =============================================
+           Navigation
+        ============================================= */
+        #navbar {
+            position: fixed; top: 0; left: 0;
+            width: 100%; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; height: 68px;
+            transition: background var(--transition), backdrop-filter var(--transition);
+        }
+        #navbar.scrolled {
+            background: rgba(8,11,16,0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+        .nav-logo img { height: 22px; opacity: 0.95; }
+        .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+        .nav-links a {
+            display: block; padding: 8px 16px;
+            font-family: var(--font-body); font-size: 14px; font-weight: 400;
+            color: var(--text-secondary); text-decoration: none;
+            border-radius: 8px; transition: color var(--transition), background var(--transition);
+        }
+        .nav-links a:hover { color: var(--text-primary); background: rgba(255,255,255,0.07); }
+
+        .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+        /* Language dropdown */
+        .lang-drop { position: relative; }
+        .lang-drop-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 7px 12px;
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text-secondary); font-size: 13px;
+            cursor: pointer; transition: all var(--transition); font-family: var(--font-body);
+        }
+        .lang-drop-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .lang-drop-content {
+            display: none; position: absolute; top: calc(100% + 2px); right: 0;
+            background: rgba(12,15,22,0.97); backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+            min-width: 100px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .lang-drop:hover .lang-drop-content { display: block; }
+        .lang-drop-content a {
+            display: block; padding: 10px 16px; font-size: 13px;
+            color: var(--text-secondary); text-decoration: none;
+            transition: all 0.2s; text-align: center;
+        }
+        .lang-drop-content a:hover { background: rgba(255,255,255,0.07); color: var(--text-primary); }
+
+        .btn-nav-demo {
+            display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 10px; font-size: 14px; font-weight: 500; color: #fff;
+            cursor: pointer; transition: all var(--transition); border: none;
+            font-family: var(--font-body); letter-spacing: 0.3px;
+        }
+        .btn-nav-demo:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+
+        /* =============================================
+           Hero
+        ============================================= */
+        #hero {
+            position: relative; min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 120px 5% 80px;
+            z-index: 1; overflow: hidden;
+        }
+        #hero-carousel {
+            position: absolute; 
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            z-index: 0; 
+            pointer-events: none; 
+            /*opacity: 0.55;*/
+            border: none;
+            z-index: 3;
+        }
+
+        .hero-badge {
+            position: relative; z-index: 1;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 100px; font-size: 11px; font-weight: 600;
+            color: var(--accent-cyan); background: rgba(0,212,255,0.06);
+            letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 28px;
+            animation: fadeSlideDown 0.9s ease both; animation-delay: 0.1s;
+        }
+        .hero-badge .pulse-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--accent-cyan); animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { opacity:1; transform:scale(1); }
+            50%      { opacity:0.4; transform:scale(0.7); }
+        }
+
+        .hero-title {
+            position: relative; z-index: 1;
+            font-family: var(--font-main);
+            font-size: clamp(2.4rem, 6.5vw, 6rem);
+            font-weight: 700; line-height: 1.1; letter-spacing: -1.5px;
+            color: var(--text-primary); margin-bottom: 24px;
+            animation: fadeSlideDown 0.9s ease both; animation-delay: 0.25s;
+        }
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-blue) 50%, var(--accent-purple) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .hero-subtitle {
+            position: relative; z-index: 4;
+            font-size: clamp(0.95rem, 1.8vw, 1.2rem); font-weight: 300;
+            color: var(--text-secondary); max-width: 600px; margin: 0 auto 48px; line-height: 1.9;
+            animation: fadeSlideDown 0.9s ease both; animation-delay: 0.4s;
+        }
+        .hero-actions {
+            position: relative; z-index: 1;
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; flex-wrap: wrap;
+            animation: fadeSlideDown 0.9s ease both; animation-delay: 0.55s;
+        }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: var(--radius-md); font-size: 15px; font-weight: 600; color: #fff;
+            cursor: pointer; border: none; font-family: var(--font-body); transition: all var(--transition);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,212,255,0.35); }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 10px; padding: 13px 32px;
+            background: transparent; border: 1px solid var(--border-bright); border-radius: var(--radius-md);
+            font-size: 15px; font-weight: 400; color: var(--text-primary);
+            cursor: pointer; font-family: var(--font-body); transition: all var(--transition);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.07); border-color: var(--accent-cyan); transform: translateY(-3px); }
+
+        .hero-stats {
+            position: relative; z-index: 4;
+            display: flex; align-items: center; justify-content: center;
+            gap: 48px; margin-top: 72px;
+            animation: fadeSlideDown 0.9s ease both; animation-delay: 0.7s;
+        }
+        .stat-item { text-align: center; }
+        .stat-num {
+            font-family: var(--font-main); font-size: 2rem; font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .stat-label { font-size: 11px; color: var(--text-tertiary); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+        .stat-divider { width: 1px; height: 36px; background: var(--border); }
+
+        .scroll-indicator {
+            position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            color: var(--text-tertiary); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+            animation: fadeSlideDown 0.9s ease both, float 3s ease-in-out infinite;
+            animation-delay: 1s, 1s; cursor: pointer; z-index: 1;
+        }
+        .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, transparent, var(--accent-cyan)); }
+
+        /* =============================================
+           Sections Common
+        ============================================= */
+        section { position: relative; z-index: 1; padding: 100px 5%; }
+
+        .section-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 11px; font-weight: 600; color: var(--accent-cyan);
+            letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 20px;
+        }
+        .section-label::before { content: ''; width: 20px; height: 1px; background: var(--accent-cyan); }
+        .section-title {
+            font-family: var(--font-main); font-size: clamp(1.8rem, 3.5vw, 3rem);
+            font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; margin-bottom: 16px;
+        }
+        .section-desc { font-size: 1rem; font-weight: 300; color: var(--text-secondary); max-width: 560px; line-height: 1.8; }
+
+        /* =============================================
+           Services
+        ============================================= */
+        #services { background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-surface) 100%); }
+
+        .services-header { text-align: center; margin-bottom: 64px; }
+        .services-header .section-label { justify-content: center; }
+        .services-header .section-label::before { display: none; }
+        .services-header .section-desc { margin: 0 auto; }
+
+        .services-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+            gap: 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .service-card {
+            position: relative; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 36px 32px; cursor: pointer; overflow: hidden;
+            transition: all var(--transition);
+        }
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            opacity: 0; transition: opacity var(--transition);
+        }
+        .service-card:hover { background: var(--bg-card-hover); border-color: rgba(0,212,255,0.25); transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.4); }
+        .service-card:hover::before { opacity: 1; }
+
+        .service-video-wrap {
+            position: relative; width: 100%; border-radius: var(--radius-md);
+            overflow: hidden; margin-bottom: 24px; aspect-ratio: 16/9;
+            background: rgba(0,0,0,0.3);
+        }
+        .service-video-wrap video { width: 100%; height: 100%; object-fit: cover; }
+        .service-video-badge {
+            position: absolute; top: 12px; right: 12px;
+            display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            border-radius: 100px; font-size: 11px; font-weight: 500;
+            color: var(--accent-cyan); border: 1px solid rgba(0,212,255,0.2);
+        }
+        .svc-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 44px; height: 44px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.12), rgba(79,143,255,0.12));
+            border: 1px solid rgba(0,212,255,0.15); margin-bottom: 16px;
+            font-size: 18px; color: var(--accent-cyan);
+        }
+        .service-card h2 {
+            all: unset; display: block; font-family: var(--font-main);
+            font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px;
+        }
+        .service-card p {
+            all: unset; display: block; font-size: 0.88rem;
+            font-weight: 300; color: var(--text-secondary); line-height: 1.8;
+        }
+        .svc-link {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 20px;
+            font-size: 13px; font-weight: 500; color: var(--accent-cyan);
+            cursor: pointer; transition: gap var(--transition);
+        }
+        .svc-link:hover { gap: 10px; }
+        .tech-pill {
+            display: inline-block; padding: 5px 12px; margin: 4px 4px 0 0;
+            background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.18);
+            border-radius: 100px; font-size: 11px; font-weight: 500; color: var(--accent-cyan);
+        }
+
+        /* =============================================
+           Prowess
+        ============================================= */
+        #prowess { background: var(--bg-surface); }
+        .prowess-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+        }
+        .prowess-tech-list { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+        .tech-item {
+            display: flex; align-items: flex-start; gap: 18px; padding: 20px 24px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); transition: all var(--transition);
+        }
+        .tech-item:hover { background: var(--bg-card-hover); border-color: rgba(0,212,255,0.2); transform: translateX(8px); }
+        .tech-icon {
+            display: flex; align-items: center; justify-content: center;
+            width: 42px; height: 42px; flex-shrink: 0; border-radius: 10px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(79,143,255,0.1));
+            border: 1px solid rgba(0,212,255,0.12); font-size: 16px; color: var(--accent-cyan);
+        }
+        .tech-info h3 {
+            all: unset; display: block; font-family: var(--font-main);
+            font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;
+        }
+        .tech-info p {
+            all: unset; display: block; font-size: 0.84rem;
+            font-weight: 300; color: var(--text-secondary); line-height: 1.7;
+        }
+        /* Skill bars */
+        .prowess-right { display: flex; flex-direction: column; gap: 28px; }
+        .skill-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .skill-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+        .skill-pct { font-size: 12px; font-weight: 400; color: var(--accent-cyan); }
+        .skill-track { width: 100%; height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 100px; width: 0%;
+            transition: width 1.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .prowess-badges { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        .prowess-badges .tech-pill { margin: 0; }
+
+        /* =============================================
+           Integration
+        ============================================= */
+        #integration { background: var(--bg-deep); }
+        .integration-inner { max-width: 1200px; margin: 0 auto; }
+        .integration-header { margin-bottom: 60px; }
+
+        .steps-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-bottom: 60px; }
+        .step-card {
+            position: relative; padding: 36px 28px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); transition: all var(--transition);
+        }
+        .step-card::after {
+            content: ''; position: absolute; top: 50%; right: -13px;
+            transform: translateY(-50%); width: 26px; height: 1px;
+            background: linear-gradient(90deg, var(--accent-cyan), transparent);
+        }
+        .step-card:last-child::after { display: none; }
+        .step-card:hover { border-color: rgba(0,212,255,0.25); background: var(--bg-card-hover); transform: translateY(-4px); }
+        .step-num {
+            font-family: var(--font-main); font-size: 3.2rem; font-weight: 700;
+            background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(79,143,255,0.15));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            line-height: 1; margin-bottom: 20px;
+        }
+        .step-card h3 {
+            all: unset; display: block; font-family: var(--font-main);
+            font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 12px;
+        }
+        .step-card p {
+            all: unset; display: block; font-size: 0.86rem;
+            font-weight: 300; color: var(--text-secondary); line-height: 1.8;
+        }
+        .integration-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+        .iframe-preview {
+            width: 100%; aspect-ratio: 16/9; border: 1px solid var(--border);
+            border-radius: var(--radius-lg); overflow: hidden;
+        }
+        .iframe-preview iframe { width: 100%; height: 100%; border: none; }
+
+        .code-panel { background: rgba(6,8,14,0.95); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+        .code-panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 20px; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border);
+        }
+        .mac-dots { display: flex; gap: 7px; }
+        .mac-dots span { width: 11px; height: 11px; border-radius: 50%; }
+        .d-red { background: #ff5f56; }
+        .d-yellow { background: #ffbd2e; }
+        .d-green { background: #27c93f; }
+        .code-lang-tag { font-size: 11px; font-weight: 500; color: var(--text-tertiary); letter-spacing: 1.5px; text-transform: uppercase; }
+        .code-copy-btn {
+            display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+            background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 6px; color: var(--accent-cyan); font-size: 12px;
+            font-family: var(--font-body); cursor: pointer; transition: all 0.2s;
+        }
+        .code-copy-btn:hover { background: rgba(0,212,255,0.16); }
+        .code-body { padding: 24px; font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.9; color: #c9d1d9; overflow-x: auto; }
+        .code-comment { color: #6a9955; font-style: italic; }
+        .code-tag { color: #7ee787; }
+        .code-attr { color: #79c0ff; }
+        .code-str { color: #ffa657; }
+        .demo-invite {
+            display: block; margin-top: 16px; padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(79,143,255,0.06));
+            border: 1px solid rgba(0,212,255,0.15); border-radius: 10px;
+            font-family: var(--font-body); font-size: 13px; color: var(--accent-cyan); text-align: center;
+        }
+
+        /* =============================================
+           Gallery
+        ============================================= */
+        #showcase { background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-deep) 100%); }
+        .showcase-header { text-align: center; max-width: 700px; margin: 0 auto 64px; }
+        .showcase-header .section-label { justify-content: center; }
+        .showcase-header .section-label::before { display: none; }
+        .showcase-header .section-desc { margin: 0 auto; }
+
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 20px; max-width: 1200px; margin: 0 auto;
+        }
+        .gallery-item {
+            position: relative; border-radius: var(--radius-md);
+            overflow: hidden; cursor: pointer; aspect-ratio: 4/3;
+            background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+        .gallery-item:nth-child(1) { grid-column: 1; grid-row: 1; }
+        .gallery-item:nth-child(2) { grid-column: 2 / 4; grid-row: 1; aspect-ratio: 8/3; }
+        .gallery-item:nth-child(3) { grid-column: 1 / 3; grid-row: 2; aspect-ratio: 8/3; }
+        .gallery-item:nth-child(4) { grid-column: 3; grid-row: 2; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.23,1,0.32,1); }
+        .gallery-item:hover { border-color: rgba(0,212,255,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .gallery-item:hover img { transform: scale(1.06); }
+        .gallery-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            transform: translateY(30%); opacity: 0; transition: all var(--transition);
+        }
+        .gallery-item:hover .gallery-overlay { transform: translateY(0); opacity: 1; }
+        .gallery-overlay-title { font-family: var(--font-main); font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+        .gallery-overlay-tag { font-size: 12px; color: var(--accent-cyan); }
+
+        /* =============================================
+           CTA
+        ============================================= */
+        #cta { background: var(--bg-deep); padding: 100px 5%; }
+        .cta-card {
+            max-width: 900px; margin: 0 auto; text-align: center;
+            padding: 72px 60px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.045), rgba(79,143,255,0.045));
+            border: 1px solid rgba(0,212,255,0.12); border-radius: 32px;
+            position: relative; overflow: hidden;
+        }
+        .cta-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(ellipse at center, rgba(0,212,255,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .cta-card .section-label { justify-content: center; }
+        .cta-card .section-label::before { display: none; }
+        .cta-card .section-desc { margin: 0 auto 48px; max-width: 480px; }
+        .cta-actions { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+        /* =============================================
+           Footer
+        ============================================= */
+        #footer { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 48px 5%; }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 24px;
+        }
+        .footer-brand img { height: 20px; opacity: 0.65; }
+        .footer-info { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+        .footer-info span { font-size: 13px; color: var(--text-tertiary); }
+        .footer-info a { color: var(--text-secondary); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+        .footer-info a:hover { color: var(--accent-cyan); }
+        .footer-social { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            z-index: 9;
+        }
+        .footer-social a {
+            display: flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 10px;
+            color: var(--text-secondary); text-decoration: none; font-size: 15px; transition: all var(--transition);
+        }
+        .footer-social a:hover { border-color: rgba(0,212,255,0.3); color: var(--accent-cyan); background: rgba(0,212,255,0.06); }
+
+        /* =============================================
+           Vignette + Animations
+        ============================================= */
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: 0 0 280px rgba(0,0,0,0.95) inset; pointer-events: none; z-index: 0;
+        }
+
+        #web3d_threater
+        {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
         
-	<!-- 3-Second Countdown Overlay -->
-		<div id="countdown-overlay">
-			<div class="countdown-circle">
-				<svg>
-					<circle cx="70" cy="70" r="60"></circle>
-					<circle cx="70" cy="70" r="60" id="progress-circle"></circle>
-				</svg>
-				<div id="countdown-number">f</div>
-			</div>
-			<!--<div class="countdown-text-container">
-				<div class="countdown-text">fimawork</div>
-			</div>-->
-		</div>
+        @keyframes fadeSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%,100% { transform: translateX(-50%) translateY(0); }
+            50%      { transform: translateX(-50%) translateY(-8px); }
+        }
 
-		<span id="busuanzi_container_site_pv">
-  本站總訪問量 <span id="busuanzi_value_site_pv"></span> 次
-		</span>
+        /* Scroll reveal */
+        .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-stagger > * { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.23,1,0.32,1); }
+        .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.05s; }
+        .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.15s; }
+        .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.25s; }
+        .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.35s; }
 
-		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				let count = 8;
-				let hold_time = 0;
-				let title="";
-				const numberEl = document.getElementById("countdown-number");
-				const overlayEl = document.getElementById("countdown-overlay");
-				
-				// 鎖定背景滾動
-				document.body.style.overflow = "hidden";
+        /* =============================================
+           Responsive
+        ============================================= */
+        @media (max-width: 1024px) {
+            .prowess-inner { grid-template-columns: 1fr; gap: 48px; }
+            .steps-row { grid-template-columns: 1fr; }
+            .step-card::after { display: none; }
+            .integration-demo { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; }
+            .gallery-item:nth-child(n) { grid-column: auto; grid-row: auto; aspect-ratio: 4/3; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-stats { gap: 20px; flex-wrap: wrap; }
+            .stat-divider { display: none; }
+            .services-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .cta-card { padding: 48px 24px; }
+            .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .hero-actions { flex-direction: column; width: 100%; }
+            .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
 
-				const interval = setInterval(() => {
-					count--;
-					if (count > 0) {
-			
-						if(count==7)title="i";
-						if(count==6)title="m";
-						if(count==5)title="a";
-						if(count==4)title="w";
-						if(count==3)title="o";
-						if(count==2)title="r";
-						if(count==1)title="k";
+<body>
+    <canvas id="ambient-canvas"></canvas>
+    <div class="grid-overlay"></div>
+    <div class="vignette"></div>
 
-						//numberEl.textContent = count;
-						numberEl.textContent = title;
-					}
-					
-					else if(count === 0)
-					{
-						numberEl.textContent = "fimawork";
-						hold_time=1000;
-					}
+    <!-- ===== NAVBAR ===== -->
+    <nav id="navbar">
+        <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+            <img src="./images/fimawork_logo_C_white.png" alt="fimawork logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="#services" id="nav-services">服務項目</a></li>
+            <li><a href="#prowess" id="nav-prowess">技術優勢</a></li>
+            <li><a href="#integration" id="nav-integration">介面導入</a></li>
+        </ul>
+        <div class="nav-cta">
+            <div class="lang-drop">
+                <button class="lang-drop-btn">
+                    <i class="fa-solid fa-globe" style="font-size:12px"></i>
+                    <span id="lang-label">中文</span>
+                </button>
+                <div class="lang-drop-content">
+                    <a href="#" onclick="setLang('ZH');return false;">中文</a>
+                    <a href="#" onclick="setLang('EN');return false;">EN</a>
+                    <a href="#" onclick="setLang('JP');return false;">JP</a>
+                    <a href="#" onclick="setLang('KR');return false;">KR</a>
+                    <a href="#" onclick="setLang('DE');return false;">DE</a>
+                    <a href="#" onclick="setLang('FR');return false;">FR</a>
+                </div>
+            </div>
+            <button class="btn-nav-demo" onclick="window.location.href='Showroom.html'">
+                <i class="fa-solid fa-play" style="font-size:11px"></i>
+                <span id="nav-demo-label">範例展示</span>
+            </button>
+        </div>
+    </nav>
 
-					else {	
-						clearInterval(interval);
-						numberEl.textContent = "3D Website Design";
-						// 倒數結束，觸發進場動畫
-						setTimeout(() => {
-							if (overlayEl) {
-								overlayEl.classList.add("countdown-overlay-hide");
-								document.body.style.overflow = ""; // 恢復背景滾動
-								
-								setTimeout(() => {
-									overlayEl.remove();
-								}, 800*0.25);
-							}
-						}, 900*0.25+hold_time); // 在數字1完整顯示近一秒後才隱藏
-					}
-				}, 1000*0.25);
-			});
+    <!-- ===== HERO ===== -->
+    <section id="hero">
+        <iframe id="hero-carousel" src="carousel.html" frameborder="0" loading="eager" title="3D background"></iframe>
 
-		</script>
-		<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
-		<script async src="https://tally.so/widgets/embed.js"></script>
-		<div class="background"></div>
+        <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            <span id="hero-badge-text">3D Web Design Studio</span>
+        </div>
 
+        <h1 class="hero-title" id="hero-title">
+            用維度呈現深度<br>讓產品<span class="highlight">自己說話</span>
+        </h1>
 
-		<div class="logo" onclick="scrollToPosition(0)">
-			<h3>費馬工作室</h3>
-		</div>
+        <p class="hero-subtitle" id="hero-subtitle">
+            費馬工作室 — 融合工業設計 × Three.js × WebGPU，<br>
+            為你打造最懂產品的沉浸式3D網頁體驗。
+        </p>
 
-		<nav>
-			<!--<button onclick="scrollToPosition(1)" type="manu">
-				<div class="btn_text" id="main_btn_service">服務項目</div>
-			</button>
-			<button onclick="scrollToPosition(2)" type="manu">
-				<div class="btn_text" id="main_btn_technicalEdge">技術優勢</div>
-			</button>
-			<button onclick="scrollToPosition(3)" type="manu">
-				<div class="btn_text" id="main_btn_integration">介面導入</div>
-			</button>-->
-			<button onclick="window.location.href='Showroom.html'">
-				<div class="btn_text" id="main_btn_demo">範例展示</div>
-				<i id="gallery_btn" class="fa-solid fa-list fa-2x"></i>
-			</button>
-			<div class="lang-dropdown">
-				<button class="lang-dropbtn" id="language_manu_btn">
-					<div class="btn_text" id="language_btn">中文</div>
-				</button>
-				<div class="lang-dropdown-content">
-					<a href="javascript:void(0)" onclick="SetLanguageTo('ZH')">中文</a>
-					<a href="javascript:void(0)" onclick="SetLanguageTo('EN')">EN</a>
-					<a href="javascript:void(0)" onclick="SetLanguageTo('JP')">JP</a>
-					<a href="javascript:void(0)" onclick="SetLanguageTo('KR')">KR</a>
-					<a href="javascript:void(0)" onclick="SetLanguageTo('DE')">DE</a>
-					<a href="javascript:void(0)" onclick="SetLanguageTo('FR')">FR</a>
-				</div>
-			</div>
-		</nav>
+        <!--<div class="hero-actions">
+            <button class="btn-primary" onclick="window.location.href='Showroom.html'">
+                <i class="fa-solid fa-cube"></i>
+                <span id="hero-btn-primary">探索範例作品</span>
+            </button>
+            <a href="#cta" class="btn-secondary">
+                <span id="hero-btn-secondary">聯絡我們</span>
+                <i class="fa-solid fa-arrow-right" style="font-size:12px"></i>
+            </a>
+        </div>-->
 
-        <main>
-			<!--<iframe id="digitalRain"  src="./digitalRainEffect.html" frameborder="0"></iframe>-->
-            <iframe id="fimawork_logo" class="SceneCrossEffect_anim" src="title3D.html" frameborder="0"></iframe>
-			<iframe id="carousel"  src="carousel.html" frameborder="0"></iframe>
-			<header id="slogan" >用維度呈現深度，讓產品自己說話</header>
-			<section id="content_01">
-				<h1 id="title_01">服務項目</h1>
-				<article class="demo_window">
-					<video autoplay loop muted playsinline poster="images/F0002_recording_20260603.jpg" title="點擊前往範例展示頁面" onclick="window.location.href='Showroom.html'" class="demo_movie">
-  					<source src="videos/F0002_recording_20260603_720p_cropped_29s_5Mb.mp4" type="video/mp4">
-					</video>
-					<h2 id="configurator_title">3D產品配置器</h2>
-					<p id="configurator_content">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。</p>
-				</article>
-				<article class="demo_window" >
-					<video autoplay loop muted playsinline poster="images/eBike_2026.jpg" title="點擊前往範例展示頁面" onclick="window.location.href='https://fimawork.github.io/Showcase/eBike_2026.html'" class="demo_movie">
-  					<source src="videos/eBike_2026_5mb.mp4" type="video/mp4">
-					</video>
-					<h2 id="showcase_title">3D產品櫥窗</h2>
-					<p id="showcase_content">在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。</p>
-				</article>
-			</section>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-num">10+</div>
+                <div class="stat-label" id="stat-years">Years Exp.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">Three.js</div>
+                <div class="stat-label" id="stat-tech">Core Tech</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">CAD</div>
+                <div class="stat-label" id="stat-cad">IGES / STEP</div>
+            </div>
+            <!--<div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">6</div>
+                <div class="stat-label" id="stat-lang">Languages</div>
+            </div>-->
+        </div>
 
-			<section id="content_02">
-				<h1 id="title_02">技術優勢</h1>
-				<article class="tech_window">
-					<div class="tech_img"><i class="fa-solid fa-cube fa-8x"></i></div>
-					<h2 id="web3D_title">3D網頁技術</h2>
-					<p id="web3D_content">擅長運用Three.js/WebGPU技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</p>
-				</article>	
-				<article class="tech_window">
-					<div class="tech_img"><i class="fa-solid fa-circle-nodes fa-8x"></i></div>
-					<h2 id="integration_title">高度整合性</h2>
-					<p id="integration_content">具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</p>
-				</article>
-				<article class="tech_window">
-					<div class="tech_img"><i class="fa-solid fa-link fa-8x"></i></div>
-					<h2 id="empathy_title">技術同理性</h2>
-					<p id="empathy_content">具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</p>
-				</article>
-				
-			</section>
+        <div class="scroll-indicator" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
+            <span>scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
 
-			<section id="content_03">
-				<h1 id="title_03">介面導入</h1>
-				<div id="code_info">
-					<iframe id="web3d_window"  loading="lazy" src="Laptop.html" frameborder="0"></iframe>	
-					<div id="code_content">
-						<p style="text-align: start;">
-							<span id="step_01_title" class="code_title">第一步：資產優化</span></br>
-							<span id="step_01_content">將工業設計的高精度模型（如 IGES或STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。</span></br></br>
-							<span id="step_02_title" class="code_title">第二步：環境與燈光配置</span></br>
-							<span id="step_02_content">在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。</span></br></br>
-							<span id="step_03_title" class="code_title">第三步：互動邏輯開發</span></br>
-							<span id="step_03_content">撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。</span></br></br>
-							<span id="demoInvitation" class="code_title">歡迎試作我們的介面！</span>
-						</p>
-						<div class="code_snippet_box">
-							<div class="code_snippet_header">
-								<div class="code_dots">
-									<span class="dot dot_red"></span>
-									<span class="dot dot_yellow"></span>
-									<span class="dot dot_green"></span>
-								</div>
-								<span class="code_lang_label">HTML</span>
-								<button class="code_copy_btn" onclick="copyCodeSnippet()" title="複製程式碼">
-									<span id="copy_btn_text">Copy</span>
-								</button>
-							</div>
-							<div class="code_snippet_body">
-								<code>
-    <span class="code_comment" id="code_snippet_comment">&lt;!-- Use it like any other HTML element --&gt;</span>
-    <span class="code_tag">&lt;<span class="code_tag_name">iframe</span> <span class="code_attr">style</span>=<span class="code_string">"width: 100%; height: 500px; border: none;"</span> <span class="code_attr">src</span>=<span class="code_string">"https://fimawork.tw/Laptop.html"</span>&gt;&lt;/<span class="code_tag_name">iframe</span>&gt;</span>
-								</code>
-							</div>
-						</div>	
-					</div>
-					<div id="web3d_icon"></div>
-				</div>	
-			</section>
+    <!-- ===== SERVICES ===== -->
+    <section id="services">
+        <div class="services-header reveal">
+            <div class="section-label" id="services-label">Services</div>
+            <h2 class="section-title" id="services-title">服務項目</h2>
+            <p class="section-desc" id="services-desc">
+                從工業CAD資產到沉浸式互動體驗，端對端的3D網頁設計服務。
+            </p>
+        </div>
+        <div class="services-grid reveal-stagger">
+            <!-- Card 1 -->
+            <article class="service-card">
+                <div class="service-video-wrap">
+                    <video autoplay loop muted playsinline poster="images/F0002_recording_20260603.jpg"
+                           onclick="window.location.href='Showroom.html'" style="cursor:pointer">
+                        <source src="videos/F0002_recording_20260603_720p_cropped_29s_5Mb.mp4" type="video/mp4">
+                    </video>
+                    <div class="service-video-badge">
+                        <span style="width:5px;height:5px;border-radius:50%;background:var(--accent-cyan);display:inline-block"></span>
+                        Live Demo
+                    </div>
+                </div>
+                <div class="svc-icon"><i class="fa-solid fa-sliders"></i></div>
+                <h2 id="svc-cfg-title">3D產品配置器</h2>
+                <p id="svc-cfg-desc">互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品，提升轉換率與品牌專業度。</p>
+                <div class="svc-link" onclick="window.location.href='Showroom.html'">
+                    <span id="svc-cfg-link">查看範例</span>
+                    <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                </div>
+            </article>
+            <!-- Card 2 -->
+            <article class="service-card">
+                <div class="service-video-wrap">
+                    <video autoplay loop muted playsinline poster="images/eBike_2026.jpg"
+                           onclick="window.location.href='https://fimawork.github.io/Showcase/eBike_2026.html'" style="cursor:pointer">
+                        <source src="videos/eBike_2026_5mb.mp4" type="video/mp4">
+                    </video>
+                    <div class="service-video-badge">
+                        <span style="width:5px;height:5px;border-radius:50%;background:var(--accent-cyan);display:inline-block"></span>
+                        Live Demo
+                    </div>
+                </div>
+                <div class="svc-icon"><i class="fa-solid fa-eye"></i></div>
+                <h2 id="svc-show-title">3D產品櫥窗</h2>
+                <p id="svc-show-desc">在網頁中旋轉、縮放、近距離查看細節，如實體展示般的感受，大幅提高瀏覽互動與購買意願。</p>
+                <div class="svc-link" onclick="window.location.href='https://fimawork.github.io/Showcase/eBike_2026.html'">
+                    <span id="svc-show-link">查看範例</span>
+                    <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                </div>
+            </article>
+            <!-- Card 3 -->
+            <article class="service-card">
+                <div class="svc-icon" style="margin-bottom:20px"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <h2 id="svc-custom-title">客製化3D體驗</h2>
+                <p id="svc-custom-desc">結合工業設計與Web開發，量身打造符合品牌調性的互動體驗——從概念發想到上線部署，全程協助。</p>
+                <div style="margin-top:20px">
+                    <span class="tech-pill">Three.js</span>
+                    <span class="tech-pill">WebGPU</span>
+                    <span class="tech-pill">IGES/STEP</span>
+                    <span class="tech-pill">glTF</span>
+                </div>
+                <div class="svc-link" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})" style="margin-top:24px">
+                    <span id="svc-custom-link">了解更多</span>
+                    <i class="fa-solid fa-arrow-right" style="font-size:11px"></i>
+                </div>
+            </article>
+        </div>
+    </section>
 
-			<iframe id="web3d_threater"  loading="lazy" src="theater.html" frameborder="0"></iframe>	
+    <!-- ===== PROWESS ===== -->
+    <section id="prowess">
+        <div class="prowess-inner">
+            <div class="prowess-left">
+                <div class="section-label reveal" id="prowess-label">Technical Prowess</div>
+                <h2 class="section-title reveal" id="prowess-title">技術優勢</h2>
+                <p class="section-desc reveal" id="prowess-desc">
+                    十年工業設計×前端開發的跨域積累，讓我們能在最短時間內掌握產品DNA，以最精準的技術呈現。
+                </p>
+                <div class="prowess-tech-list reveal-stagger">
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fa-solid fa-cube"></i></div>
+                        <div class="tech-info">
+                            <h3 id="tech-web3d-title">3D網頁技術</h3>
+                            <p id="tech-web3d-desc">擅長運用Three.js/WebGPU技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。</p>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                        <div class="tech-info">
+                            <h3 id="tech-int-title">高度整合性</h3>
+                            <p id="tech-int-desc">具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。</p>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-icon"><i class="fa-solid fa-link"></i></div>
+                        <div class="tech-info">
+                            <h3 id="tech-emp-title">技術同理性</h3>
+                            <p id="tech-emp-desc">具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="prowess-right reveal">
+                <div class="skill-row">
+                    <div class="skill-meta"><span class="skill-name">Three.js / WebGPU</span><span class="skill-pct">95%</span></div>
+                    <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-meta"><span class="skill-name">CAD Integration (IGES/STEP)</span><span class="skill-pct">99%</span></div>
+                    <div class="skill-track"><div class="skill-fill" data-w="99"></div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-meta"><span class="skill-name">Industrial Product Design</span><span class="skill-pct">90%</span></div>
+                    <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-meta"><span class="skill-name">PBR Material / Lighting</span><span class="skill-pct">92%</span></div>
+                    <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
+                </div>
+                <div class="skill-row">
+                    <div class="skill-meta"><span class="skill-name">UX / Interaction Design</span><span class="skill-pct">88%</span></div>
+                    <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
+                </div>
+                <div class="prowess-badges">
+                    <span class="tech-pill">Three.js</span>
+                    <span class="tech-pill">WebGPU</span>
+                    <span class="tech-pill">WebGL</span>
+                    <span class="tech-pill">IGES</span>
+                    <span class="tech-pill">STEP</span>
+                    <span class="tech-pill">glTF / GLB</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			<section id="content_04">
-				<footer id="title_04">把品牌升級到下一個維度—立即啟動你的3D轉型計畫</footer>
-				<button id="learn_more_btn" class="learn-more-btn" onclick="window.location.href='Showroom.html'" type="hud">Learn more</button>
-			</section>
+    <!-- ===== INTEGRATION ===== -->
+    <section id="integration">
+        <div class="integration-inner">
+            <div class="integration-header">
+                <div class="section-label reveal" id="integ-label">Integration</div>
+                <h2 class="section-title reveal" id="integ-title">介面導入</h2>
+                <p class="section-desc reveal" id="integ-desc">三個步驟，從原始CAD到上線的沉浸式3D網頁體驗。</p>
+            </div>
+            <div class="steps-row reveal-stagger">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h3 id="step1-title">資產優化</h3>
+                    <p id="step1-desc">將工業設計的高精度模型（IGES/STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h3 id="step2-title">環境與燈光配置</h3>
+                    <p id="step2-desc">在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h3 id="step3-title">互動邏輯開發</h3>
+                    <p id="step3-desc">撰寫程式碼，讓用戶可以與3D物件產生連結，如360度旋轉、點擊熱點跳出資訊、即時更換顏色或組件。</p>
+                </div>
+            </div>
+            <div class="integration-demo reveal">
+                <div class="iframe-preview">
+                    <iframe src="Laptop.html" loading="lazy" title="3D product demo"></iframe>
+                </div>
+                <div>
+                    <div class="code-panel">
+                        <div class="code-panel-header">
+                            <div class="mac-dots">
+                                <span class="d-red"></span>
+                                <span class="d-yellow"></span>
+                                <span class="d-green"></span>
+                            </div>
+                            <span class="code-lang-tag">HTML</span>
+                            <button class="code-copy-btn" onclick="copyEmbed(this)" id="copy-btn">
+                                <i class="fa-regular fa-copy" style="font-size:11px"></i>
+                                <span id="copy-label">Copy</span>
+                            </button>
+                        </div>
+                        <div class="code-body">
+<span class="code-comment">&lt;!-- Embed anywhere in your site --&gt;</span>
+<span class="code-tag">&lt;iframe</span>
+  <span class="code-attr">style</span>=<span class="code-str">"width:100%;height:500px;border:none;"</span>
+  <span class="code-attr">src</span>=<span class="code-str">"https://fimawork.tw/Laptop.html"</span>
+<span class="code-tag">&gt;&lt;/iframe&gt;</span>
+                        </div>
+                    </div>
+                    <span class="demo-invite" id="demo-invite">歡迎試作我們的介面！Contact us to get started.</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- ===== GALLERY ===== -->
+    <section id="showcase">
+        <div class="showcase-header reveal">
+            <div class="section-label">Portfolio</div>
+            <h2 class="section-title" id="gallery-title">精選作品展示</h2>
+            <p class="section-desc" id="gallery-desc">橫跨電動車、醫療設備、消費電子等產業，每件作品都是工業精度與數位美學的完美融合。</p>
+        </div>
+        <div class="gallery-grid reveal-stagger">
+            <div class="gallery-item" onclick="window.location.href='Showroom.html'">
+                <img src="images/eBike_2026.jpg" alt="eBike 3D Showcase">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-title">E-Bike</div>
+                    <div class="gallery-overlay-tag">3D Product Showcase</div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="window.location.href='Showroom.html'">
+                <img src="images/OfficeChair_S1R_2026.jpg" alt="3D Configurator">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-title">Office Furniture and Office Chairs</div>
+                    <div class="gallery-overlay-tag">3D Product Configurator</div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="window.location.href='Showroom.html'">
+                <img src="images/keyboard_2026.jpg" alt="MacBook Air 3D">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-title">Consumer Electronics</div>
+                    <div class="gallery-overlay-tag">3D Product Showcase</div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="window.location.href='Showroom.html'">
+                <img src="images/diamond_2026.jpg" alt="Jewelry 3D">
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-title">Jewelry Visualization</div>
+                    <div class="gallery-overlay-tag">3D Product Showcase</div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:48px" class="reveal">
+            <button class="btn-secondary" onclick="window.location.href='Showroom.html'">
+                <span id="gallery-more-label">查看全部作品</span>
+                <i class="fa-solid fa-arrow-right" style="font-size:12px"></i>
+            </button>
+        </div>
+    </section>
 
-			<aside id="profile_panel">
-				<div id="contact_us_btn" class="profile_info" data-tally-open="eq07Zo">
-					Contact Us
-				</div>
-				<div class="profile_info">
-					hello@fimawork.tw
-				</div>
-				<div class="profile_info" id="address">
-					臺北市士林區前港街68巷3號
-				</div>
-				<div class="social_links">
-					<i class="fa-brands fa-square-facebook fa-2x" onclick="parent.open('https://www.facebook.com/profile.php?id=61586592837868')"></i>
-					<i class="fa-brands fa-instagram fa-2x" onclick="parent.open('https://www.instagram.com/fimawork/')"></i>
-					<i class="fa-brands fa-x-twitter fa-2x" onclick="parent.open('https://x.com/fimawork_web3D')"></i>
-					<i class="fa-brands fa-blogger fa-2x" onclick="parent.open('https://fimaworkshowcase.blogspot.com/')"></i>
-				</div>
-			</aside>
-			
+    <!-- ===== CTA ===== -->
+    <section id="cta">
+        <iframe id="web3d_threater"  loading="lazy" src="theater.html" frameborder="0"></iframe>
+        <div class="cta-card reveal">
+            <div class="section-label" id="cta-label">Ready to Start?</div>
+            <h2 class="section-title" id="cta-title">把品牌升級到下一個維度</h2>
+            <p class="section-desc" id="cta-desc">立即啟動你的3D轉型計畫——我們提供從概念到上線的全方位解決方案。</p>
+            <div class="cta-actions">
+                <button class="btn-primary" data-tally-open="eq07Zo">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span id="cta-contact-label">Contact Us</span>
+                </button>
+                <button class="btn-secondary" onclick="window.location.href='Showroom.html'">
+                    <i class="fa-solid fa-cube"></i>
+                    <span id="cta-demo-label">探索範例</span>
+                </button>
+            </div>
+        </div>
+    </section>
 
-			<div id="anchor_01"></div>
-			<div id="anchor_02"></div>
-			<div id="anchor_03"></div>
-        </main>
+    <!-- ===== FOOTER ===== -->
+    <footer id="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="./images/fimawork_logo_C_white.png" alt="fimawork">
+            </div>
+            <div class="footer-info">
+                <a href="mailto:hello@fimawork.tw">hello@fimawork.tw</a>
+                <span id="footer-address">臺北市士林區前港街68巷3號</span>
+                <span style="margin-top:4px;font-size:12px">© 2026 fimawork. All rights reserved.</span>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/profile.php?id=61586592837868" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/fimawork/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/fimawork_web3D" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://fimaworkshowcase.blogspot.com/" target="_blank"><i class="fa-brands fa-blogger-b"></i></a>
+            </div>
+        </div>
+    </footer>
 
-		<div class="vignette"></div>
+    <script async src="https://tally.so/widgets/embed.js"></script>
 
-		<script>
-			let _author = document.querySelector('#author');
-			
-			let _digitalRain = document.querySelector('#digitalRain');
-			let _fimawork_logo = document.querySelector('#fimawork_logo');
-			let _carousel = document.querySelector('#carousel');
+    <script>
+    /* =============================================
+       Particle Canvas
+    ============================================= */
+    (function() {
+        const c = document.getElementById('ambient-canvas');
+        const ctx = c.getContext('2d');
+        let pts = [], W, H;
 
-			let _slogan = document.getElementById('slogan');
-			let _configurator_title=document.getElementById("configurator_title");
-			let _configurator_content=document.getElementById("configurator_content");
-			let _showcase_title=document.getElementById("showcase_title");
-			let _showcase_content=document.getElementById("showcase_content");
+        function resize() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+        resize(); window.addEventListener('resize', resize);
 
-			let _web3D_title=document.getElementById("web3D_title");
-			let _web3D_content=document.getElementById("web3D_content");
-			let _integration_title=document.getElementById("integration_title");
-			let _integration_content=document.getElementById("integration_content");
-			let _empathy_title=document.getElementById("empathy_title");
-			let _empathy_content=document.getElementById("empathy_content");
+        function P() { this.reset(); }
+        P.prototype.reset = function() {
+            this.x = Math.random() * W; this.y = Math.random() * H;
+            this.r = Math.random() * 1.2 + 0.3; this.a = Math.random() * 0.3 + 0.05;
+            this.vx = (Math.random() - 0.5) * 0.16; this.vy = (Math.random() - 0.5) * 0.16;
+            this.life = Math.random() * 280 + 180; this.age = 0;
+        };
+        for (let i = 0; i < 100; i++) pts.push(new P());
 
-			let _code_info_title=document.getElementById("code_info_title");
-			let _code_info_content=document.getElementById("code_info_content");
-			let _demoInvitation=document.getElementById("demoInvitation");
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            pts.forEach(p => {
+                p.x += p.vx; p.y += p.vy; p.age++;
+                const lr = p.age / p.life;
+                let a = p.a;
+                if (lr < 0.1) a *= lr / 0.1;
+                if (lr > 0.85) a *= (1 - lr) / 0.15;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(0,212,255,${a})`; ctx.fill();
+                if (p.age >= p.life || p.x < 0 || p.x > W || p.y < 0 || p.y > H) p.reset();
+            });
+            for (let i = 0; i < pts.length; i++) {
+                for (let j = i+1; j < pts.length; j++) {
+                    const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+                    const d = Math.sqrt(dx*dx + dy*dy);
+                    if (d < 90) {
+                        ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y);
+                        ctx.strokeStyle = `rgba(0,212,255,${0.045*(1-d/90)})`; ctx.lineWidth = 0.5; ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+        draw();
+    })();
 
-			let _address=document.getElementById("address");
+    /* =============================================
+       Navbar scroll
+    ============================================= */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 40); });
 
-			let _title_01 = document.getElementById('title_01');
-			let _title_02 = document.getElementById('title_02');
-			let _title_03 = document.getElementById('title_03');
-			let _title_04 = document.getElementById('title_04');
+    /* =============================================
+       Scroll Reveal + Skill Bar Animation
+    ============================================= */
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                e.target.querySelectorAll('.skill-fill').forEach(b => {
+                    b.style.width = b.dataset.w + '%';
+                });
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => obs.observe(el));
 
-			let _step_01_title = document.getElementById('step_01_title');
-			let _step_01_content = document.getElementById('step_01_content');
-			let _step_02_title = document.getElementById('step_02_title');
-			let _step_02_content = document.getElementById('step_02_content');
-			let _step_03_title = document.getElementById('step_03_title');
-			let _step_03_content = document.getElementById('step_03_content');
+    /* =============================================
+       Copy embed
+    ============================================= */
+    function copyEmbed(btn) {
+        const code = '<iframe style="width: 100%; height: 500px; border: none;" src="https://fimawork.tw/Laptop.html"></iframe>';
+        navigator.clipboard.writeText(code).then(() => {
+            const lbl = document.getElementById('copy-label');
+            lbl.textContent = 'Copied!';
+            setTimeout(() => { lbl.textContent = 'Copy'; }, 2000);
+        });
+        try {
+            fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+                fetch('https://script.google.com/macros/s/AKfycbxK3AOGluqtjfJHxkOzoKnsgDnzTj7AQiiDjIRZOMWnNVtmD3bw0wTfEBNeXRRfe26A/exec',{
+                    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({action:'MacBook 3D介面連結複製',country:d.country_name,city:d.city})
+                });
+            });
+        } catch(e) {}
+    }
 
-			let _main_btn_service=document.getElementById("main_btn_service");
-			let _main_btn_technicalEdge=document.getElementById("main_btn_technicalEdge");
-			let _main_btn_integration=document.getElementById("main_btn_integration");
-			let _main_btn_demo=document.getElementById("main_btn_demo");
-			let _language_btn=document.getElementById("language_btn");
-			let _learn_more_btn=document.getElementById("learn_more_btn");
+    /* =============================================
+       Multi-language
+    ============================================= */
+    const LANG = {
+        ZH: {
+            navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', lang:'中文',
+            badge:'3D Web Design Studio',
+            heroTitle:'用維度呈現深度<br>讓產品<span class="highlight">自己說話</span>',
+            heroSub:'費馬工作室 — 融合工業設計 × Three.js × WebGPU，<br>為你打造最懂產品的沉浸式3D網頁體驗。',
+            heroPri:'探索範例作品', heroSec:'聯絡我們',
+            statYears:'年資歷', statTech:'核心技術', statCad:'CAD整合', statLang:'支援語言',
+            svcLabel:'Services', svcTitle:'服務項目', svcDesc:'從工業CAD資產到沉浸式互動體驗，端對端的3D網頁設計服務。',
+            cfgTitle:'3D產品配置器', cfgDesc:'互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品，提升轉換率與品牌專業度。', cfgLink:'查看範例',
+            showTitle:'3D產品櫥窗', showDesc:'在網頁中旋轉、縮放、近距離查看細節，如實體展示般的感受，大幅提高瀏覽互動與購買意願。', showLink:'查看範例',
+            cusTitle:'客製化3D體驗', cusDesc:'結合工業設計與Web開發，量身打造符合品牌調性的互動體驗——從概念發想到上線部署，全程協助。', cusLink:'了解更多',
+            prowLabel:'Technical Prowess', prowTitle:'技術優勢', prowDesc:'十年工業設計×前端開發的跨域積累，讓我們能在最短時間內掌握產品DNA，以最精準的技術呈現。',
+            tw3dTitle:'3D網頁技術', tw3dDesc:'擅長運用Three.js/WebGPU技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。',
+            tiTitle:'高度整合性', tiDesc:'具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。',
+            teTitle:'技術同理性', teDesc:'具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。',
+            integLabel:'Integration', integTitle:'介面導入', integDesc:'三個步驟，從原始CAD到上線的沉浸式3D網頁體驗。',
+            s1:'資產優化', s1d:'將工業設計的高精度模型（IGES/STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。',
+            s2:'環境與燈光配置', s2d:'在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。',
+            s3:'互動邏輯開發', s3d:'撰寫程式碼，讓用戶可以與3D物件產生連結，如360度旋轉、點擊熱點跳出資訊、即時更換顏色或組件。',
+            invite:'歡迎試作我們的介面！Contact us to get started.',
+            gallTitle:'精選作品展示', gallDesc:'橫跨電動車、醫療設備、消費電子等產業，每件作品都是工業精度與數位美學的完美融合。', gallMore:'查看全部作品',
+            ctaLabel:'Ready to Start?', ctaTitle:'把品牌升級到下一個維度', ctaDesc:'立即啟動你的3D轉型計畫——我們提供從概念到上線的全方位解決方案。',
+            ctaCon:'Contact Us', ctaDem:'探索範例', footAddr:'臺北市士林區前港街68巷3號',
+        },
+        EN: {
+            navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', lang:'EN',
+            badge:'3D Web Design Studio',
+            heroTitle:'Depth Through<br><span class="highlight">Dimensions</span>',
+            heroSub:'fimawork — Merging industrial design with Three.js & WebGPU to craft immersive 3D web experiences that make your products unforgettable.',
+            heroPri:'Explore Work', heroSec:'Contact Us',
+            statYears:'Years Exp.', statTech:'Core Tech', statCad:'CAD Ready', statLang:'Languages',
+            svcLabel:'Services', svcTitle:'Services', svcDesc:'From industrial CAD assets to immersive interactive experiences — end-to-end 3D web design.',
+            cfgTitle:'3D Product Configurator', cfgDesc:'Interactive 3D platform letting users rotate, zoom, and freely configure products in-browser — boosting conversions and brand professionalism.', cfgLink:'View Demo',
+            showTitle:'3D Product Showcase', showDesc:'Rotate, zoom, and inspect every detail in the browser. A lifelike showroom that dramatically improves engagement and purchase intent.', showLink:'View Demo',
+            cusTitle:'Custom 3D Experience', cusDesc:'Tailored interactive experiences built to match your brand — from concept to deployment, we handle every step.', cusLink:'Learn More',
+            prowLabel:'Technical Prowess', prowTitle:'Prowess', prowDesc:'A decade of cross-domain expertise in industrial design and front-end development lets us grasp product DNA quickly and render it with precision.',
+            tw3dTitle:'Web3D Technology', tw3dDesc:'Expert in Three.js & WebGPU — transforming complex product features into intuitive, interactive 3D web pages.',
+            tiTitle:'Seamless CAD Integration', tiDesc:'Highly capable of importing IGES and STEP files, bridging the gap between engineering and the web.',
+            teTitle:'Technical Insight', teDesc:'With 10 years in product design & development, we quickly identify and highlight the key features of any product.',
+            integLabel:'Integration', integTitle:'Integration', integDesc:'Three steps from raw CAD to a live immersive 3D web experience.',
+            s1:'Asset Optimization', s1d:'We transform industrial high-fidelity source files (IGES/STEP) into lightweight, web-optimized assets that load fast even on mobile.',
+            s2:'Scene & Lighting Setup', s2d:'We build a virtual studio — fine-tuning lighting, shadows, and PBR materials to achieve a photorealistic premium look.',
+            s3:'Interactive Logic Dev', s3d:'Custom code creates meaningful connections: 360° rotation, interactive hotspots, real-time color & component configurators.',
+            invite:'Want to see it in action? Request a demo!',
+            gallTitle:'Featured Work', gallDesc:'Spanning EVs, medical devices, and consumer electronics — each project is a fusion of industrial precision and digital aesthetics.', gallMore:'View All Work',
+            ctaLabel:'Ready to Start?', ctaTitle:'Elevate Your Brand Through Dimensions', ctaDesc:'Launch your 3D transformation plan today — full-service from concept to deployment.',
+            ctaCon:'Contact Us', ctaDem:'Explore Demos', footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
+        },
+        JP: {
+            navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', lang:'JP',
+            badge:'3D Webデザインスタジオ',
+            heroTitle:'次元で深さを表現し<br>製品に<span class="highlight">語らせる</span>',
+            heroSub:'fimawork — 工業デザイン×Three.js×WebGPUで没入型3D Web体験を提供します。',
+            heroPri:'作品を見る', heroSec:'お問い合わせ',
+            statYears:'年の経験', statTech:'コア技術', statCad:'CAD統合', statLang:'対応言語',
+            svcLabel:'Services', svcTitle:'サービス項目', svcDesc:'工業CAD資産から没入型インタラクティブ体験まで、エンドツーエンドの3D Webデザインサービス。',
+            cfgTitle:'3D製品コンフィギュレーター', cfgDesc:'ブラウザ内で製品を回転・ズーム・自由に構成できるインタラクティブ3D構成プラットフォーム。', cfgLink:'デモを見る',
+            showTitle:'3D製品ショーケース', showDesc:'自由に回転・ズームし細部を確認できる実物展示のような臨場感。閲覧インタラクション・購買意欲を大幅向上。', showLink:'デモを見る',
+            cusTitle:'カスタム3D体験', cusDesc:'ブランドに合わせたオーダーメイドのインタラクティブ体験——コンセプトからデプロイまで全面サポート。', cusLink:'詳しく見る',
+            prowLabel:'Technical Prowess', prowTitle:'技術の強み', prowDesc:'10年の工業デザイン×フロントエンド開発の横断的蓄積で最短時間で製品DNAを掌握します。',
+            tw3dTitle:'Web3D技術', tw3dDesc:'Three.js/WebGPUを駆使し、製品の多様な質感・機能・特徴を直感的な3DWebページに変換します。',
+            tiTitle:'高い整合性', tiDesc:'IGESやSTEPファイルを迅速にインポートできる高度なCAD統合能力を備えています。',
+            teTitle:'技術的共感', teDesc:'10年の製品設計・開発経験から、製品の特徴と重点を迅速に把握できます。',
+            integLabel:'Integration', integTitle:'インターフェース導入', integDesc:'3ステップで原始CADからライブ没入型3D Web体験へ。',
+            s1:'アセット最適化', s1d:'工業設計の高精度モデル（IGES/STEP）をWeb専用軽量モデルに変換。スマホでも高速ロード。',
+            s2:'環境と照明の設定', s2d:'バーチャルスタジオを構築し、光影・質感を調整。製品をリアルかつ精緻に見せます。',
+            s3:'インタラクティブロジック開発', s3d:'360度回転、ホットスポットクリックによる情報表示、リアルタイム製品カラー変更などを実装。',
+            invite:'インターフェースの試作を歓迎します！',
+            gallTitle:'厳選作品', gallDesc:'EV・医療機器・消費電子など多業種にわたる、工業精度とデジタル美学の融合作品。', gallMore:'全作品を見る',
+            ctaLabel:'Ready to Start?', ctaTitle:'ブランドを次の次元へアップグレード', ctaDesc:'今すぐ3Dトランスフォーメーション計画を始動——コンセプトから公開まで全方位サポート。',
+            ctaCon:'お問い合わせ', ctaDem:'デモを見る', footAddr:'台湾台北市士林区前港街68巷3號',
+        },
+        KR: {
+            navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', lang:'KR',
+            badge:'3D 웹 디자인 스튜디오',
+            heroTitle:'차원으로 깊이를 표현하고<br>제품이 <span class="highlight">스스로 말하게</span>',
+            heroSub:'fimawork — 산업 디자인×Three.js×WebGPU로 몰입형 3D 웹 경험을 제공합니다.',
+            heroPri:'작품 탐색', heroSec:'문의하기',
+            statYears:'년 경험', statTech:'핵심 기술', statCad:'CAD 통합', statLang:'지원 언어',
+            svcLabel:'Services', svcTitle:'서비스 항목', svcDesc:'산업 CAD 자산부터 몰입형 인터랙티브 경험까지 엔드투엔드 3D 웹 디자인.',
+            cfgTitle:'3D 제품 컨피규레이터', cfgDesc:'브라우저에서 제품을 회전·확대·자유롭게 구성할 수 있는 인터랙티브 3D 플랫폼.', cfgLink:'데모 보기',
+            showTitle:'3D 제품 쇼케이스', showDesc:'웹에서 자유롭게 회전·확대·세부 확인. 실제 전시와 같은 리얼한 느낌으로 구매 의향을 높입니다.', showLink:'데모 보기',
+            cusTitle:'맞춤형 3D 경험', cusDesc:'브랜드에 맞춤 제작된 인터랙티브 경험——컨셉부터 배포까지 전 과정을 지원합니다.', cusLink:'자세히 보기',
+            prowLabel:'Technical Prowess', prowTitle:'기술적 강점', prowDesc:'10년간의 산업 디자인×프론트엔드 개발 크로스도메인 역량으로 제품 DNA를 빠르게 파악합니다.',
+            tw3dTitle:'Web3D 기술', tw3dDesc:'Three.js/WebGPU를 활용해 다양한 재질·기능·특징을 직관적인 3D 웹 페이지로 변환합니다.',
+            tiTitle:'높은 통합성', tiDesc:'IGES 또는 STEP 파일을 신속하게 가져올 수 있는 고도로 통합된 CAD 기능을 보유합니다.',
+            teTitle:'기술적 통찰력', teDesc:'10년 제품 설계 및 개발 경험으로 제품의 특징과 핵심을 빠르게 파악합니다.',
+            integLabel:'Integration', integTitle:'인터페이스 도입', integDesc:'3단계로 원시 CAD에서 라이브 몰입형 3D 웹 경험으로.',
+            s1:'자산 최적화', s1d:'산업 디자인 고정밀 모델(IGES/STEP)을 웹 전용 경량 모델로 변환. 모바일에서도 빠른 로드.',
+            s2:'환경 및 조명 구성', s2d:'가상 스튜디오를 구축하고 빛·그림자·재질을 조정. 제품이 실제처럼 정교하게 보이도록 합니다.',
+            s3:'상호작용 로직 개발', s3d:'360도 회전, 핫스팟 클릭 정보 표시, 실시간 색상·부품 변경 등을 코딩합니다.',
+            invite:'인터페이스 시제품 제작을 환영합니다!',
+            gallTitle:'선정 작품', gallDesc:'EV·의료기기·소비전자 등 다양한 산업에서 산업 정밀도와 디지털 미학의 완벽한 융합.', gallMore:'전체 작품 보기',
+            ctaLabel:'Ready to Start?', ctaTitle:'브랜드를 다음 차원으로 업그레이드', ctaDesc:'지금 바로 3D 전환 계획을 시작하세요——컨셉부터 배포까지 전방위 솔루션.',
+            ctaCon:'문의하기', ctaDem:'데모 탐색', footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
+        },
+        DE: {
+            navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', lang:'DE',
+            badge:'3D Webdesign Studio',
+            heroTitle:'Tiefe durch<br><span class="highlight">Dimensionen</span>',
+            heroSub:'fimawork — Industriedesign × Three.js × WebGPU für immersive 3D-Weberlebnisse.',
+            heroPri:'Arbeiten ansehen', heroSec:'Kontakt',
+            statYears:'Jahre Erfahrung', statTech:'Technologie', statCad:'CAD bereit', statLang:'Sprachen',
+            svcLabel:'Dienste', svcTitle:'Dienstleistungen', svcDesc:'Von industriellen CAD-Ressourcen bis hin zu immersiven Erlebnissen — End-to-End 3D-Webdesign.',
+            cfgTitle:'3D-Produktkonfigurator', cfgDesc:'Interaktive 3D-Plattform zum Drehen, Zoomen und Konfigurieren von Produkten im Browser.', cfgLink:'Demo ansehen',
+            showTitle:'3D-Produktpräsentation', showDesc:'Im Browser drehen, zoomen und Details aus nächster Nähe betrachten — wie eine physische Ausstellung.', showLink:'Demo ansehen',
+            cusTitle:'Maßgeschneidertes 3D', cusDesc:'Auf Ihre Marke zugeschnittene interaktive Erlebnisse — vom Konzept bis zur Bereitstellung.', cusLink:'Mehr erfahren',
+            prowLabel:'Fähigkeiten', prowTitle:'Fähigkeiten', prowDesc:'Ein Jahrzehnt domänenübergreifender Expertise in Industriedesign und Frontend-Entwicklung.',
+            tw3dTitle:'Web3D-Technologie', tw3dDesc:'Experte in Three.js & WebGPU — Produktmerkmale in intuitive, interaktive 3D-Webseiten verwandeln.',
+            tiTitle:'Hohe Integrationsfähigkeit', tiDesc:'Schneller Import von IGES und STEP-Dateien, um Engineering und Web zu verbinden.',
+            teTitle:'Technisches Einfühlungsvermögen', teDesc:'10 Jahre Produktdesign & -entwicklung ermöglichen uns, Produktmerkmale schnell zu erfassen.',
+            integLabel:'Integration', integTitle:'Integration', integDesc:'Drei Schritte von CAD zu einem live 3D-Web-Erlebnis.',
+            s1:'Asset-Optimierung', s1d:'Hochpräzise Industriemodelle (IGES/STEP) in leichtgewichtige, weboptimierte Assets umwandeln.',
+            s2:'Szene & Beleuchtung', s2d:'Virtuelles Studio aufbauen — Beleuchtung, Schatten und PBR-Materialien für photorealistische Ergebnisse.',
+            s3:'Interaktionslogik', s3d:'Code für 360°-Drehung, interaktive Hotspots, Echtzeit-Konfiguratoren.',
+            invite:'Willkommen zum Prototyping unserer Schnittstelle!',
+            gallTitle:'Ausgewählte Arbeiten', gallDesc:'EVs, Medizintechnik, Unterhaltungselektronik — Fusion aus Industriepräzision und digitalem Design.', gallMore:'Alle Arbeiten ansehen',
+            ctaLabel:'Bereit?', ctaTitle:'Heben Sie Ihre Marke in die nächste Dimension', ctaDesc:'Starten Sie jetzt Ihren 3D-Transformationsplan — Full-Service vom Konzept bis zur Bereitstellung.',
+            ctaCon:'Kontakt', ctaDem:'Demos erkunden', footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
+        },
+        FR: {
+            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navDemo:'Démos', lang:'FR',
+            badge:'Studio de Design Web 3D',
+            heroTitle:'La profondeur<br>par les <span class="highlight">dimensions</span>',
+            heroSub:"fimawork — Fusionner le design industriel avec Three.js & WebGPU pour des expériences 3D inoubliables.",
+            heroPri:'Voir les réalisations', heroSec:'Nous contacter',
+            statYears:"Ans d'exp.", statTech:'Technologie', statCad:'CAD Prêt', statLang:'Langues',
+            svcLabel:'Services', svcTitle:'Services', svcDesc:'Des ressources CAD aux expériences interactives — design web 3D de bout en bout.',
+            cfgTitle:'Configurateur de produits 3D', cfgDesc:"Plateforme 3D interactive permettant de faire pivoter, zoomer et configurer librement les produits dans le navigateur.", cfgLink:'Voir la démo',
+            showTitle:'Vitrine de produits 3D', showDesc:"Faites pivoter, zoomez et examinez chaque détail dans le navigateur — comme une exposition physique.", showLink:'Voir la démo',
+            cusTitle:'Expérience 3D personnalisée', cusDesc:"Expériences interactives sur mesure — du concept au déploiement.", cusLink:'En savoir plus',
+            prowLabel:'Expertise Technique', prowTitle:'Expertise', prowDesc:"Une décennie d'expertise en design industriel et développement front-end.",
+            tw3dTitle:'Technologie Web3D', tw3dDesc:'Expert en Three.js & WebGPU — caractéristiques produit en pages web 3D interactives.',
+            tiTitle:'Intégration CAO', tiDesc:"Import rapide de fichiers IGES et STEP.",
+            teTitle:'Empathie technique', teDesc:'10 ans de design et développement produit.',
+            integLabel:'Intégration', integTitle:'Intégration', integDesc:"Trois étapes du CAD brut à une expérience web 3D immersive.",
+            s1:"Optimisation des assets", s1d:"Transformer des modèles haute fidélité (IGES/STEP) en assets optimisés pour le web.",
+            s2:"Scène & Éclairage", s2d:"Studio virtuel — régler l'éclairage, les ombres et les matériaux PBR.",
+            s3:"Logique interactive", s3d:"Code sur mesure pour rotation 360°, hotspots interactifs, configurateurs en temps réel.",
+            invite:"Bienvenue pour prototyper notre interface !",
+            gallTitle:'Réalisations Sélectionnées', gallDesc:"Des VE aux dispositifs médicaux — fusion de précision industrielle et d'esthétique numérique.", gallMore:'Voir toutes les réalisations',
+            ctaLabel:'Prêt à commencer ?', ctaTitle:'Élevez votre marque vers la dimension supérieure', ctaDesc:'Lancez votre plan de transformation 3D — du concept au déploiement.',
+            ctaCon:'Nous contacter', ctaDem:'Explorer les démos', footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
+        }
+    };
 
-			let scroll=0;
-			let present_scroll=0;
-			let position_ratio=0;
-			let targetPosition;
-			let delta_value=0;
+    function setLang(lang) {
+        const d = LANG[lang]; if (!d) return;
+        const g = id => document.getElementById(id);
+        const gi = (id, v) => { const el = g(id); if (el) el.innerHTML = v; };
+        const gt = (id, v) => { const el = g(id); if (el) el.textContent = v; };
 
-			let title_string="工業設計x3D互動設計，幫你打造最懂產品的3D網頁";
-			let current_title_string="";
-			let text_num=0;
-			const _title = document.querySelector('#title')
+        gt('nav-services', d.navSvc); gt('nav-prowess', d.navProwess);
+        gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); gt('lang-label', d.lang);
+        gt('hero-badge-text', d.badge);
+        gi('hero-title', d.heroTitle); gi('hero-subtitle', d.heroSub);
+        gt('hero-btn-primary', d.heroPri); gt('hero-btn-secondary', d.heroSec);
+        gt('stat-years', d.statYears); gt('stat-tech', d.statTech); gt('stat-cad', d.statCad); gt('stat-lang', d.statLang);
+        gt('services-label', d.svcLabel); gt('services-title', d.svcTitle); gt('services-desc', d.svcDesc);
+        gt('svc-cfg-title', d.cfgTitle); gt('svc-cfg-desc', d.cfgDesc); gt('svc-cfg-link', d.cfgLink);
+        gt('svc-show-title', d.showTitle); gt('svc-show-desc', d.showDesc); gt('svc-show-link', d.showLink);
+        gt('svc-custom-title', d.cusTitle); gt('svc-custom-desc', d.cusDesc); gt('svc-custom-link', d.cusLink);
+        gt('prowess-label', d.prowLabel); gt('prowess-title', d.prowTitle); gt('prowess-desc', d.prowDesc);
+        gt('tech-web3d-title', d.tw3dTitle); gt('tech-web3d-desc', d.tw3dDesc);
+        gt('tech-int-title', d.tiTitle); gt('tech-int-desc', d.tiDesc);
+        gt('tech-emp-title', d.teTitle); gt('tech-emp-desc', d.teDesc);
+        gt('integ-label', d.integLabel); gt('integ-title', d.integTitle); gt('integ-desc', d.integDesc);
+        gt('step1-title', d.s1); gt('step1-desc', d.s1d);
+        gt('step2-title', d.s2); gt('step2-desc', d.s2d);
+        gt('step3-title', d.s3); gt('step3-desc', d.s3d);
+        gt('demo-invite', d.invite);
+        gt('gallery-title', d.gallTitle); gt('gallery-desc', d.gallDesc); gt('gallery-more-label', d.gallMore);
+        gt('cta-label', d.ctaLabel); gt('cta-title', d.ctaTitle); gt('cta-desc', d.ctaDesc);
+        gt('cta-contact-label', d.ctaCon); gt('cta-demo-label', d.ctaDem);
+        gt('footer-address', d.footAddr);
+    }
 
-			let currentLang = 'ZH'; // 'ZH', 'EN', 'JP', 'KR', 'DE', 'FR'
-			
-			SloganRWD();
-			SetLanguage();
+    // Auto-detect
+    (function() {
+        const l = navigator.language || 'en';
+        if      (l.startsWith('zh')) setLang('ZH');
+        else if (l.startsWith('ja')) setLang('JP');
+        else if (l.startsWith('ko')) setLang('KR');
+        else if (l.startsWith('de')) setLang('DE');
+        else if (l.startsWith('fr')) setLang('FR');
+        else                         setLang('EN');
+    })();
 
-			function SloganRWD()
-			{
-				const aspect = window.innerWidth / window.innerHeight;
-
-				if(aspect<1.5)
-				{
-					_fimawork_logo.remove();
-				}
-			}
-
-			function SetLanguage()
-			{
-				const lang = navigator.language || 'en';
-
-				if(lang.startsWith('zh'))
-				{
-					currentLang = 'ZH';
-					console.log("你好");
-				}
-				else if(lang.startsWith('ja'))
-				{
-					currentLang = 'JP';
-					UpdateContent();
-					console.log("こんにちは");
-				}
-				else if(lang.startsWith('ko'))
-				{
-					currentLang = 'KR';
-					UpdateContent();
-					console.log("안녕하세요");
-				}
-				else if(lang.startsWith('de'))
-				{
-					currentLang = 'DE';
-					UpdateContent();
-					console.log("Guten Tag");
-				}
-				else if(lang.startsWith('fr'))
-				{
-					currentLang = 'FR';
-					UpdateContent();
-					console.log("Bonjour");
-				}
-				else
-				{
-					currentLang = 'EN';
-					UpdateContent();
-					console.log("Hello");
-				}
-			}
-
-			async function author_hud_effect()
-			{
-			    setTimeout(() => {_author.classList.toggle("hauthor_hud_effect_anim");}, 6000);
-				setTimeout(() => {_author.classList.remove("hauthor_hud_effect_anim");}, 6900);
-				setTimeout(() => {author_hud_effect();}, 15000);
-			}
-
-			function scrollToPosition(value) 
-			{
-				const rect_1 = document.getElementById('content_01').getBoundingClientRect();
-				const rect_2 = document.getElementById('content_02').getBoundingClientRect();
-				const rect_3 = document.getElementById('content_03').getBoundingClientRect();
-				const viewHeight = window.innerHeight;
-
-				switch(value)
-				{
-					case 1:
-					window.scroll({
-					  top: rect_1.top + rect_1.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' 
-					});
-					break;
-
-					case 2:
-					window.scroll({
-					  top: rect_2.top + rect_2.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' 
-					});
-					break;
-
-					case 3:
-					window.scroll({
-					  top: rect_3.top + rect_3.height / 2 - viewHeight / 2,
-					  behavior: 'smooth' 
-					});
-					break;
-				}
-			}
-
-			function blinking_text_anim(targetCSS,content)
-			{
-				let target_content=content;
-				let current_content="";
-				let index=0;
-				
-				TriggerBlink();
-
-				function TriggerBlink()
-				{
-					if(index<target_content.length)
-					{
-						index++;
-						current_content=target_content.substring(0, index);
-						targetCSS.textContent=current_content;
-						setTimeout(() => {TriggerBlink();}, 80);
-						targetCSS.style.color="rgba(255, 255, 255, 0.3);"
-						targetCSS.style.textDecorationLine = "underline";
-						targetCSS.style.textUnderlineOffset = "10px";
-						targetCSS.style.opacity=0.3;
-					}
-
-					else
-					{
-						targetCSS.style.opacity=1;
-						targetCSS.style.color="rgba(255,255, 255, 1)"
-						targetCSS.style.textDecorationLine = "none";
-					}
-				}	
-			}
-
-			function LanguageSwitch()
-			{
-				if (currentLang === 'ZH') currentLang = 'EN';
-				else if (currentLang === 'EN') currentLang = 'JP';
-				else if (currentLang === 'JP') currentLang = 'KR';
-				else if (currentLang === 'KR') currentLang = 'DE';
-				else if (currentLang === 'DE') currentLang = 'FR';
-				else currentLang = 'ZH';
-
-				UpdateContent();
-			}
-
-			function SetLanguageTo(lang)
-			{
-				currentLang = lang;
-				UpdateContent();
-			}
-
-			function UpdateContent()
-			{
-				if(currentLang === 'EN')
-				{
-					//blinking_text_anim(_main_btn_service,"Services");
-					//blinking_text_anim(_main_btn_technicalEdge,"Prowess");
-					//blinking_text_anim(_main_btn_integration,"Integration");
-					blinking_text_anim(_main_btn_demo,"Demos");
-					blinking_text_anim(_language_btn,"EN");
-
-					_slogan.textContent="Depth, through dimensions.";
-					_title_01.textContent="Services";
-					_configurator_title.textContent="3D Product Configurator";
-					_configurator_content.textContent="Bring your products to life with our interactive 3D platform. Let your customers rotate, zoom, and personalize every detail in real-time. By putting the design power in their hands, you create a deeper connection that drives higher conversions and showcases your brand's innovation.";
-					_showcase_title.textContent="3D Product Showcase";
-					_showcase_content.textContent="Bring the physical showroom experience to your screen. Allow customers to rotate, zoom, and explore every intricate detail of your products. By creating a lifelike viewing experience, you can dramatically improve interaction, keep visitors on your site longer, and drive higher sales.";
-					_title_02.textContent="Prowess";
-					_web3D_title.textContent="Web3D Technology";
-					_web3D_content.textContent="We specialize in Three.js and WebGPU to bridge the gap between complex product details and intuitive interaction—turning diverse materials and features into immersive 3D web realities.";
-					_integration_title.textContent="Seamless CAD Integration";
-					_integration_content.textContent="Bridge the gap between engineering and the web. Our platform enables the swift import of IGES and STEP files, ensuring your CAD models transition smoothly into 3D web assets.";
-					_empathy_title.textContent="Technical Insight";
-					_empathy_content.textContent="With a decade of experience in product design and development, we possess a deep understanding of product DNA, allowing us to quickly identify and highlight key features and unique selling points.";
-					_title_03.textContent="Integration";
-					_step_01_title.textContent="Step 1: Asset Optimization";
-					_step_01_content.textContent="From High-Poly to Web-Ready We transform industrial design high-fidelity source files (such as IGES,STEP) into lightweight, web-optimized assets.";
-					_step_02_title.textContent="Step 2: Scene & Lighting Configuration";
-					_step_02_content.textContent="The Virtual Studio Setup We build a bespoke virtual environment for your product within the development framework. Fine-tuning lighting, shadows, and material properties to achieve a photorealistic and premium look.";
-					_step_03_title.textContent="Interactive Logic Development";
-					_step_03_content.textContent="User and Product We write custom code to create meaningful connections between users and 3D objects. Smooth rotation, interactive hotspots for detailed info, and real-time configurators for colors or components.";
-					_demoInvitation.textContent="Want to see it in action? Request a demo！";
-					_title_04.textContent="Elevate your brand through dimensions.";
-					_learn_more_btn.textContent="Learn more";
-					_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
-				}
-				else if(currentLang === 'JP')
-				{
-					//blinking_text_anim(_main_btn_service,"サービス項目");
-					//blinking_text_anim(_main_btn_technicalEdge,"技術の強み");
-					//blinking_text_anim(_main_btn_integration,"インターフェース導入");
-					blinking_text_anim(_main_btn_demo,"デモ展示");
-					blinking_text_anim(_language_btn,"JP");
-
-					_slogan.textContent="次元で深さを表現し、製品に語らせる";
-					_title_01.textContent="サービス項目";
-					_configurator_title.textContent="3D製品コンフィギュレーター";
-					_configurator_content.textContent="インタラクティブな3D構成プラットフォームにより、ユーザーはブラウザ内で製品を回転、ズーム、自由に構成できます。注文前に顧客が「自分の手で」欲しい製品を作れるようにすることで、コンバージョン率とブランドのプロ意識を高めます。";
-					_showcase_title.textContent="3D製品ショーケース";
-					_showcase_content.textContent="ウェブページ内で自由に回転、ズーム、細部を間近で確認でき、実物展示のような臨場感を得られます。ブラウジングの相互作用、滯在時間、購入意欲を大幅に向上させます。";
-					_title_02.textContent="技術の強み";
-					_web3D_title.textContent="Web3D技術";
-					_web3D_content.textContent="Three.js/WebGPU技術を駆使し、製品の多様な質感、機能、特徴を直感的に操作できる3Dウェブページに変換することに長けています。";
-					_integration_title.textContent="高い整合性";
-					_integration_content.textContent="高度なエンジニアリングCAD統合能力を備え、IGESやSTEPなどのファイルを迅速に導入できます。";
-					_empathy_title.textContent="技術的共感";
-					_empathy_content.textContent="10年にわたる製品設計と開発の経験を持ち、製品の特徴や重點を迅速に把握できます。";
-					_title_03.textContent="インターフェース導入";
-					_step_01_title.textContent="ステップ1：アセットの最適化";
-					_step_01_content.textContent="工業デザインの高精度モデル（IGESやSTEPなど）をウェブ專用の軽量モデルに変換し、スマートフォンでも高速に読み込めるようにします。";
-					_step_02_title.textContent="ステップ2：環境と照明の設定";
-					_step_02_content.textContent="開発環境内にバーチャルスタジオを構築し、光影や質感の調整を行い、製品がリアルで精緻に見えるようにします。";
-					_step_03_title.textContent="ステップ3：インタラクティブ・ロジックの開発";
-					_step_03_content.textContent="コードを記述して、ユーザーが3Dオブジェクトと対話できるようにします。360度回転、ホットスポットのクリックによる情報表示、リアルタイムでの製品カラーやコンポーネントの変更など。";
-					_demoInvitation.textContent="インターフェースの試作を歓迎します！";
-					_title_04.textContent="ブランドを次の次元へアップグレード — 今すぐ3Dトランスフォーメーション計画を始動しましょう";
-					_learn_more_btn.textContent="詳しくはこちら";
-					_address.textContent="台湾台北市士林区前港街68巷3號";
-				}
-				else if(currentLang === 'KR')
-				{
-					//blinking_text_anim(_main_btn_service,"서비스 항목");
-					//blinking_text_anim(_main_btn_technicalEdge,"기술적 강점");
-					//blinking_text_anim(_main_btn_integration,"인터페이스 도입");
-					blinking_text_anim(_main_btn_demo,"데모 전시");
-					blinking_text_anim(_language_btn,"KR");
-
-					_slogan.textContent="차원으로 깊이를 표현하고, 제품이 스스로 말하게 하세요";
-					_title_01.textContent="서비스 항목";
-					_configurator_title.textContent="3D 제품 컨피규레이터";
-					_configurator_content.textContent="대화형 3D 구성 플랫폼을 통해 사용자는 브라우저에서 제품을 회전, 확대/축소 및 자유롭게 구성할 수 있습니다. 고객이 주문하기 전에 원하는 제품을 '직접' 만들 수 있도록 하여 전환율과 브랜드 전문성을 높입니다.";
-					_showcase_title.textContent="3D 제품 쇼케이스";
-					_showcase_content.textContent="웹 페이지에서 자유롭게 회전, 확대/축소, 세부 사항을 가까이에서 확인할 수 있어 실제 전시와 같은 리얼한 느낌을 줍니다. 탐색 상호 작용, 체류 시간 및 구매 의사를 크게 높입니다.";
-					_title_02.textContent="기술적 강점";
-					_web3D_title.textContent="Web3D 기술";
-					_web3D_content.textContent="Three.js/WebGPU 기술을 활용하여 제품의 다양한 재질, 기능 또는 특징을 직관적이고 상호 작용 가능한 3D 웹 페이지로 변환하는 데 능숙합니다.";
-					_integration_title.textContent="높은 통합성";
-					_integration_content.textContent="고도로 통합된 엔지니어링 CAD 기능을 갖추고 있어 IGES 또는 STEP과 같은 파일을 신속하게 가져올 수 있습니다.";
-					_empathy_title.textContent="기술적 통찰력";
-					_empathy_content.textContent="10년 육박하는 제품 설계 및 개발 경험을 바탕으로 제품의 특징과 핵심을 신속하게 파악할 수 있습니다.";
-					_title_03.textContent="인터페이스 도입";
-					_step_01_title.textContent="1단계: 자산 최적화";
-					_step_01_content.textContent="산업 디자인의 고정밀 모델(IGES 또는 STEP 등)을 웹 전용 경량 모델로 변환하여 모바일에서도 빠르게 로드되도록 합니다.";
-					_step_02_title.textContent="2단계: 환경 및 조명 구성";
-					_step_02_content.textContent="개발 환경 내에 가상 스튜디오를 구축하고 빛과 그림자, 재질의 질감을 조정하여 제품이 실제처럼 정교하게 보이도록 합니다.";
-					_step_03_title.textContent="3단계: 상호 작용 로직 개발";
-					_step_03_content.textContent="코드를 작성하여 사용자가 3D 개체와 연결될 수 있도록 합니다. 360도 회전, 핫스팟 클릭 시 정보 표시, 실시간 제품 색상 또는 부품 변경 등.";
-					_demoInvitation.textContent="우리의 인터페이스 시제품 제작을 환영합니다!";
-					_title_04.textContent="브랜드를 다음 차원으로 업그레이드하세요 — 지금 바로 3D 전환 계획을 시작하세요.";
-					_learn_more_btn.textContent="자세히 알아보기";
-					_address.textContent="대만 타이베이시 스린구 첸강가 68번길 3호";
-				}
-				else if(currentLang === 'DE')
-				{
-					//blinking_text_anim(_main_btn_service,"Dienstleistungen");
-					//blinking_text_anim(_main_btn_technicalEdge,"Fachkenntnis");
-					//blinking_text_anim(_main_btn_integration,"Integration");
-					blinking_text_anim(_main_btn_demo,"Demos");
-					blinking_text_anim(_language_btn,"DE");
-
-					_slogan.textContent="Tiefe durch Dimensionen, die Produkte für sich selbst sprechen lassen.";
-					_title_01.textContent="Dienstleistungen";
-					_configurator_title.textContent="3D-Produktkonfigurator";
-					_configurator_content.textContent="Interaktive 3D-Konfigurationsplattform, mit der Benutzer Produkte im Browser drehen, zoomen und frei konfigurieren können. Ermöglichen Sie es Kunden, ihr Wunschprodukt vor der Bestellung „selbst“ zu erstellen, was die Konversionsraten und die Markenprofessionalität steigert.";
-					_showcase_title.textContent="3D-Produktschaufenster";
-					_showcase_content.textContent="Im Webbrowser können Details frei gedreht, gezoomt und aus der Nähe betrachtet werden, was ein realistisches Gefühl wie bei einer physischen Ausstellung vermittelt. Dies erhöht die Interaktion beim Browsen, die Verweildauer und die Kaufabsicht erheblich.";
-					_title_02.textContent="Fachkenntnis";
-					_web3D_title.textContent="Web3D-Technologie";
-					_web3D_content.textContent="Wir sind Experten in der Nutzung von Three.js/WebGPU-Technologie, um vielfältige Materialien, Funktionen oder Merkmale von Produkten in intuitive, interaktive 3D-Webseiten zu verwandeln.";
-					_integration_title.textContent="Hohe Integrationsfähigkeit";
-					_integration_content.textContent="Verfügt über hohe Integrationsfähigkeiten für technische CAD-Daten und kann Dateien wie IGES oder STEP schnell importieren.";
-					_empathy_title.textContent="Technisches Einfühlungsvermögen";
-					_empathy_content.textContent="Verfügt über zehn Jahre Erfahrung in Produktdesign und -entwicklung und kann Produktmerkmale und -schwerpunkte schnell erfassen.";
-					_title_03.textContent="Integration";
-					_step_01_title.textContent="Schritt 1: Asset-Optimierung";
-					_step_01_content.textContent="Konvertiert hochpräzise Modelle aus dem Industriedesign (wie IGES oder STEP) in leichtgewichtige Modelle für das Web, um ein schnelles Laden auf Mobiltelefonen zu gewährleisten.";
-					_step_02_title.textContent="Schritt 2: Umgebungs- und Lichtkonfiguration";
-					_step_02_content.textContent="Aufbau eines virtuellen Studios in der Entwicklungsumgebung, Anpassung von Licht und Schatten sowie Materialtexturen, um sicherzustellen, dass das Produkt realistisch und exquisit aussieht.";
-					_step_03_title.textContent="Schritt 3: Interaktionslogik-Entwicklung";
-					_step_03_content.textContent="Schreiben von Code, der es Benutzern ermöglicht, mit 3D-Objekten in Verbindung zu treten, z. B. 360-Grad-Rotation, Klick auf Hotspots zum Einblenden von Informationen, sofortiger Wechsel der Produktfarben oder Komponenten.";
-					_demoInvitation.textContent="Willkommen zum Prototyping unserer Schnittstelle!";
-					_title_04.textContent="Heben Sie Ihre Marke auf die nächste Dimension – starten Sie jetzt Ihren 3D-Transformationsplan.";
-					_learn_more_btn.textContent="Mehr erfahren";
-					_address.textContent="Nr. 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taiwan (R.O.C.)";
-				}
-				else if(currentLang === 'FR')
-				{
-					//blinking_text_anim(_main_btn_service,"Services");
-					//blinking_text_anim(_main_btn_technicalEdge,"Prouesse");
-					//blinking_text_anim(_main_btn_integration,"Intégration");
-					blinking_text_anim(_main_btn_demo,"Demos");
-					blinking_text_anim(_language_btn,"FR");
-
-					_slogan.textContent="La profondeur par les dimensions, laisser les produits s'exprimer.";
-					_title_01.textContent="Services";
-					_configurator_title.textContent="Configurateur de produits 3D";
-					_configurator_content.textContent="Plateforme de configuration 3D interactive permettant aux utilisateurs de faire pivoter, de zoomer et de configurer librement les produits dans le navigateur. Permettez aux clients de créer « personnellement » le produit qu'ils souhaitent avant de commander, augmentant ainsi les taux de conversion et le professionnalisme de la marque.";
-					_showcase_title.textContent="Vitrine de produits 3D";
-					_showcase_content.textContent="Dans le navigateur web, les détails peuvent être librement pivotés, zoomés et examinés de près, offrant une sensation réaliste comme lors d'une exposition physique. Cela améliore considérablement l'interaction de navigation, le temps de visite et l'intention d'achat.";
-					_title_02.textContent="Prouesse";
-					_web3D_title.textContent="Technologie Web3D";
-					_web3D_content.textContent="Nous sommes experts dans l'utilisation de la technologie Three.js/WebGPU pour transformer les divers matériaux, fonctions ou caractéristiques des produits en pages web 3D intuitives et interactives.";
-					_integration_title.textContent="Haute intégration";
-					_integration_content.textContent="Dispose de hautes capacités d'intégration CAO technique et peut importer rapidement des fichiers de type IGES ou STEP.";
-					_empathy_title.textContent="Empathie technique";
-					_empathy_content.textContent="Dispose de dix ans d'expérience dans la conception et le développement de produits et peut rapidement saisir les caractéristiques et les points forts des produits.";
-					_title_03.textContent="Intégration";
-					_step_01_title.textContent="Étape 1 : Optimisation des actifs";
-					_step_01_content.textContent="Convertit les modèles haute précision issus du design industriel (tels que IGES ou STEP) en modèles légers dédiés au web, garantissant un chargement rapide sur les téléphones mobiles.";
-					_step_02_title.textContent="Étape 2 : Configuration de l'environnement et de l'éclairage";
-					_step_02_content.textContent="Mise en place d'un studio virtuel dans l'environnement de développement, ajustement de la lumière et de l'ombre ainsi que des textures de matériaux pour garantir que le produit paraisse réaliste et raffiné.";
-					_step_03_title.textContent="Étape 3 : Développement de la logique interactive";
-					_step_03_content.textContent="Écriture de code permettant aux utilisateurs d'interagir avec les objets 3D, par exemple rotation à 360 degrés, clic sur des points chauds pour afficher des informations, changement instantané des couleurs ou des composants du produit.";
-					_demoInvitation.textContent="Bienvenue pour prototyper notre interface !";
-					_title_04.textContent="Élevez votre marque vers la dimension supérieure — lancez dès maintenant votre plan de transformation 3D.";
-					_learn_more_btn.textContent="En savoir plus";
-					_address.textContent="N° 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taïwan (R.O.C.)";
-				}
-				else // ZH
-				{
-					//blinking_text_anim(_main_btn_service,"服務項目");
-					//blinking_text_anim(_main_btn_technicalEdge,"技術優勢");
-					//blinking_text_anim(_main_btn_integration,"介面導入");
-					blinking_text_anim(_main_btn_demo,"範例展示");
-					blinking_text_anim(_language_btn,"中文");
-
-					_slogan.textContent="用維度呈現深度，讓產品自己說話";
-					_title_01.textContent="服務項目";
-					_configurator_title.textContent="3D產品配置器";
-					_configurator_content.textContent="互動性的3D配置平台，讓使用者能在瀏覽器中旋轉、縮放、自由配置產品。讓客戶在下單前，就能「親手」打造他們想要的產品，提升轉換率與品牌專業度。";
-					_showcase_title.textContent="3D產品櫥窗";
-					_showcase_content.textContent="在網頁中可任意旋轉、縮放、近距離查看細節，得到如同實體展示般的真實感受，大幅提高瀏覽互動、停留時間與購買意願。";
-					_title_02.textContent="技術優勢";
-					_web3D_title.textContent="3D網頁技術";
-					_web3D_content.textContent="擅長運用Three.js/WebGPU技術，將產品多元的材質、功能或特色轉化為直覺可互動的3D網頁。";
-					_integration_title.textContent="高度整合性";
-					_integration_content.textContent="具備高度整合工程類CAD能力，可快速導入IGES或STEP等類型檔案。";
-					_empathy_title.textContent="技術同理性";
-					_empathy_content.textContent="具備十年產品設計與開發經驗，能快速掌握產品的特色與重點。";
-					_title_03.textContent="介面導入";
-					_step_01_title.textContent="第一步：資產優化";
-					_step_01_content.textContent="將工業設計的高精度模型（如 IGES或STEP），轉換為網頁專用的輕量化模型，確保在手機上也能快速載入。";
-					_step_02_title.textContent="第二步：環境與燈光配置";
-					_step_02_content.textContent="在開發環境中搭建虛擬攝影棚，調整光影、材質質感，確保產品看起來真實且精緻。";
-					_step_03_title.textContent="第三步：互動邏輯開發";
-					_step_03_content.textContent="撰寫程式碼，讓用戶可以與 3D 物件產生連結，如360 度旋轉、點擊熱點跳出資訊、即時更換產品顏色或組件。";
-					_demoInvitation.textContent="歡迎試作我們的介面！";
-					_title_04.textContent="把品牌升級到下一個維度—立即啟動你的3D轉型計畫";
-					_learn_more_btn.textContent="了解更多";
-					_address.textContent="臺北市士林區前港街68巷3號";
-				}
-			}
-
-  			function updateCounter(data) 
-			{
-				const counterElem = document.getElementById('busuanzi_value_site_pv');
-				if (counterElem) counterElem.innerText = data.count;
-    			//console.log("目前的總人數是：" + data.count);
-  			}
-
-			async function copyCodeSnippet()
-			{
-
-				const sample_link = `<iframe style="width: 100%; height: 500px; border: none;" src="https://fimawork.tw/Laptop.html"></iframe>`;
-
-            	// 1.調用剪貼簿 API
-            	navigator.clipboard.writeText(sample_link).then(() => {
-            	    console.log('連結已複製到剪貼簿:', sample_link);
-            	}).catch(err => {
-            	    console.error('複製失敗', err);
-            	});
-
-				// 2. 同步發送紀錄到 Google 試算表 (不影響複製速度)
-			    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxK3AOGluqtjfJHxkOzoKnsgDnzTj7AQiiDjIRZOMWnNVtmD3bw0wTfEBNeXRRfe26A/exec';
-
-			    try {
-			        // 使用免費的 ipapi.co 取得訪客的地理資訊
-			        const ipResponse = await fetch('https://ipapi.co/json/');
-			        const ipData = await ipResponse.json();
-
-			        // 提取國家名稱與城市名稱（例如：Taiwan, Taipei）
-			        const country = ipData.country_name || '未知國家';
-			        const city = ipData.city || '未知城市';
-
-			        // 將數據發送到 Google 試算表
-			        fetch(GAS_URL, {
-			            method: 'POST',
-			            mode: 'no-cors',
-			            headers: {
-			                'Content-Type': 'application/json'
-			            },
-			            body: JSON.stringify({
-			                action: 'MacBook 3D介面連結複製',
-			                country: country,
-			                city: city
-			            })
-			        });
-				
-			        console.log(`位置紀錄已送出: ${country}, ${city}`);
-				
-			    } catch (err) {
-			        // 如果客人裝了 AdBlock 阻擋了 IP API，或者網路異常，則發送未知資訊，確保統計不中斷
-			        console.warn('無法取得地理位置，改發送預設值。', err);
-				
-			        fetch(GAS_URL, {
-			            method: 'POST',
-			            mode: 'no-cors',
-			            headers: { 'Content-Type': 'application/json' },
-			            body: JSON.stringify({
-			                action: 'MacBook 3D 連結複製',
-			                country: '查詢失敗',
-			                city: '查詢失敗'
-			            })
-			        });
-			    }
-			}
-
-  			window.onload = function() 
-			{
-				fetch('https://ipapi.co/json/')
-      			.then(response => response.json())
-      			.then(geoData => {
-        			window.userCountry = geoData.country_name;
-    				var gasUrl = "https://script.google.com/macros/s/AKfycbw2OxPC1odHpovNDZINBhMox9MoX5z594xtv6K7LjSiIh5-Syy7uUROXOCe_ZcCsqoD1g/exec";
-					var script = document.createElement('script');
-    
-    			script.src = gasUrl + "?callback=updateCounter"+ 
-                     "&country=" + encodeURIComponent(geoData.country_name) + 
-                     "&city=" + encodeURIComponent(geoData.city) +
-                     "&t=" + new Date().getTime();
-	
-    			document.body.appendChild(script);
-
-				})
-    			.catch(error => {
-    			   console.error("無法取得地理位置", error);
-      			});
-  			};
-		</script>
-    </body>
+    /* Analytics */
+    window.addEventListener('load', () => {
+        fetch('https://ipapi.co/json/').then(r=>r.json()).then(d=>{
+            const gasUrl = "https://script.google.com/macros/s/AKfycbw2OxPC1odHpovNDZINBhMox9MoX5z594xtv6K7LjSiIh5-Syy7uUROXOCe_ZcCsqoD1g/exec";
+            const s = document.createElement('script');
+            s.src = gasUrl+"?callback=_noop&country="+encodeURIComponent(d.country_name)+"&city="+encodeURIComponent(d.city)+"&t="+Date.now();
+            document.body.appendChild(s);
+        }).catch(()=>{});
+    });
+    window._noop = function(){};
+    </script>
+</body>
 </html>
