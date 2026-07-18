@@ -61,7 +61,7 @@ let controls;
 // 2. 建立新版的 Timer（取代舊的 Clock）
 const timer = new THREE.Timer();
 
-const CameraDefaultPos=new THREE.Vector3(16.855,16.167,29.758);
+const CameraDefaultPos=new THREE.Vector3(10.861,11.661,20.352);
 const ControlsTargetDefaultPos=new THREE.Vector3(-0.181,3.360,3.024);
 
 let keyboardModule = new THREE.Object3D();
@@ -116,7 +116,7 @@ async function init()
   	controls.enableDamping = true;
   	controls.dampingFactor =0.015;
   	controls.maxDistance = 100;
-	controls.minDistance = 30;
+	controls.minDistance = 10;
   	controls.target.copy( ControlsTargetDefaultPos );
   	controls.zoomSpeed=0.5;
 	controls.autoRotate=false;
