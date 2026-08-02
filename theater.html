@@ -64,7 +64,7 @@
 			<source src="videos/F0042_Showcase3DDemo_20260322_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 		</video>
 		<video id="video_7" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
-			<source src="videos/MacBookAir_2026_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+			<source src="videos/yacht_2026_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
 		</video>
 		<video id="video_8" loop muted crossOrigin="anonymous" playsinline autoplay style="display:none">
 			<source src="videos/exerciseBike_2026_XR_02_20260614_720p_5Mb.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
@@ -96,6 +96,7 @@ let item_04 = new THREE.Object3D();
 let item_05 = new THREE.Object3D();
 let item_06 = new THREE.Object3D();
 let item_07 = new THREE.Object3D();
+let item_08 = new THREE.Object3D();
 let carouselManu = new THREE.Object3D();
 
 let CameraDefaultPos=new THREE.Vector3(0,0,10);
@@ -197,7 +198,7 @@ function init()
 	
 	function SetupCarousel()
 	{
-		const divisionAngle=FX.ToThreeEulerAngle(360/7)
+		const divisionAngle=FX.ToThreeEulerAngle(360/8)
 		item_01.rotation.y=divisionAngle*6;
 		item_02.rotation.y=divisionAngle*5;
 		item_03.rotation.y=divisionAngle*4;
@@ -205,8 +206,9 @@ function init()
 		item_05.rotation.y=divisionAngle*2;
 		item_06.rotation.y=divisionAngle*1;
 		item_07.rotation.y=divisionAngle*7;
+		item_08.rotation.y=divisionAngle*8;
 
-		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06).add(item_07);
+		carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06).add(item_07).add(item_08);
 		scene.add(carouselManu);
 	}
 
@@ -219,8 +221,9 @@ function init()
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_4',item_04);resolve(); }, 40)), 
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_5',item_05);resolve(); }, 50)), 
 		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_6',item_06);resolve(); }, 60)), 
-		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_8',item_07);resolve(); }, 70)), 
-		() => new Promise((resolve) => setTimeout(() => { SetupCarousel();resolve(); }, 70)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_7',item_07);resolve(); }, 70)), 
+		() => new Promise((resolve) => setTimeout(() => { InstVideoMesh('video_8',item_08);resolve(); }, 80)), 
+		() => new Promise((resolve) => setTimeout(() => { SetupCarousel();resolve(); }, 90)), 
 		() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 100)),
 	];
 
