@@ -40,7 +40,7 @@ jobs:
             --exclude='node_modules' \
             --exclude='.git' \
             --exclude='.github' \
-            --exclude='*.js' \
+            --exclude='build-blog.js' \
             --exclude='package*.json' \
             ./ dist/
 
