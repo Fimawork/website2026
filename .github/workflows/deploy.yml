@@ -7,10 +7,10 @@ on:
     - cron: '0 0 * * *' # 每天 UTC 00:00 (台灣時間早上 8 點) 自動定時執行打包
   workflow_dispatch: # 支援在 GitHub 網頁上點按鈕手動觸發
 
-# 新增此區塊，明確賦予工作流程寫入權限
+# 明確賦予工作流程寫入權限
 permissions:
   contents: write
-  
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,9 +32,21 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: npm run build:blog
 
+      # 👈 新增步驟：自動將 main 的所有頁面與靜態素材同步複製至 dist/
+      - name: 一次複製所有靜態資源與頁面至 dist
+        run: |
+          rsync -av \
+            --exclude='dist' \
+            --exclude='node_modules' \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='*.js' \
+            --exclude='package*.json' \
+            ./ dist/
+
       - name: 發布 dist/ 至 GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          cname: fimawork.tw # 👈 換成你的自訂網域名稱（例如 blog.yourdomain.com 或 yourdomain.com）
+          cname: fimawork.tw
