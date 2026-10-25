@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="zh-TW">
+	<head>
+		<meta charset="utf-8">
+		<meta name="google-site-verification" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="description" content="我是費馬工作室，專注於3D網頁介面與使用者體驗設計。"/>
+		<meta name="keywords" content="設計工作室,3D網頁設計,3D Website Design"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>作品展示 | 費馬工作室 | Fimawork</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    	<script src="https://kit.fontawesome.com/28b78de879.js" crossorigin="anonymous"></script>
+    	<link rel="stylesheet" type="text/css" href="Main_v2.css">
+		<style type="text/css">
+			
+
+			#title_showroom
+			{
+				position: absolute;
+				top: 120px;
+				left: 50%;
+				transform: translate(-50%,0%);
+			}
+			
+			.container {
+				max-width: 1400px;
+				margin: 0px auto;
+				padding: 240px var(--spacing);
+			}
+
+			.masonry {
+				column-count: 3;
+				column-gap: var(--spacing);
+			}
+
+			.showcase-item {
+				break-inside: avoid;
+				margin-bottom: var(--spacing);
+				position: relative;
+				border-radius: 16px;
+				overflow: hidden;
+				background: var(--card-bg);
+				transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+				cursor: pointer;
+				border: 1px solid rgba(255, 255, 255, 0.05);
+			}
+
+			.showcase-item:hover {
+				transform: translateY(-8px) scale(1.02);
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+				border-color: rgba(255, 255, 255, 0.15);
+			}
+
+			.showcase-item img {
+				width: 100%;
+				display: block;
+				transition: transform 0.6s ease;
+			}
+
+			.showcase-item:hover img {
+				transform: scale(1.1);
+			}
+
+			.overlay {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				padding: 30px;
+				background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+				opacity: 0;
+				transition: opacity 0.4s ease;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+			}
+
+			.showcase-item:hover .overlay {
+				opacity: 1;
+			}
+
+			.item-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				margin-bottom: 4px;
+				color: #fff;
+			}
+
+			.item-category {
+				font-size: 0.85rem;
+				color: var(--text-muted);
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+
+			.view-btn {
+				margin-top: 15px;
+				padding: 8px 20px;
+				background: var(--glass-bg);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.2);
+				color: #fff;
+				border-radius: 30px;
+				font-size: 0.8rem;
+				width: fit-content;
+				transition: all 0.3s ease;
+			}
+
+			.view-btn:hover {
+				background: #fff;
+				color: #000;
+			}
+
+			video 
+			{
+			  	width: 100%;
+			  	height: 100%;
+			  	object-fit: cover; /* 確保填滿磚塊，不留白 */
+			  	object-position: center 20%; /* 視產品位置調整，讓它保持在視窗內 */
+			}
+
+			
+
+			@media (max-width: 1024px) {
+				.masonry { column-count: 2; }
+			}
+
+			@media (max-width: 600px) {
+				.masonry { column-count: 1; }
+				header { padding: 15px 20px; }
+
+				.container {
+				padding: 210px var(--spacing);
+				}
+			}
+
+			/* Utility Animations */
+			.fade-in {
+				animation: fadeIn 1s ease forwards;
+				opacity: 0;
+			}
+
+			@keyframes fadeIn {
+				from { opacity: 0; transform: translateY(20px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+		</style>
+	</head>
+	
+	<body>
+		<canvas id="ambient-canvas"></canvas>
+    <div class="grid-overlay"></div>
+    <div class="vignette"></div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav id="navbar">
+        <a class="nav-logo" href="#" onclick="window.location.href='index.html'">
+            <img src="./images/fimawork_logo_C_white.png" alt="fimawork logo">
+        </a>
+    </nav>
+
+		<span id="busuanzi_container_site_pv" style="display: none;">
+  本站總訪問量 <span id="busuanzi_value_site_pv"></span> 次
+		</span>
+
+		<h1 class="section-title" id="title_showroom">範例展示</h1>
+		<div class="container fade-in">
+			<div class="masonry">
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/smartPhone_2026.html')">
+					<video autoplay loop muted playsinline poster="images/smartPhone_2026.jpg">
+  					<source src="videos/smartPhone_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Computer and Information Technology</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Carousel3D_2026.html')">
+					<video autoplay loop muted playsinline poster="images/F0042_Showcase3DDemo_2026.jpg">
+  					<source src="videos/F0042_Showcase3DDemo_20260322_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Interior Design Elements</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/S1R.html')">
+					<video autoplay loop muted playsinline poster="images/OfficeChair_S1R_02_2026.jpg">
+  					<source src="videos/S1R_recording_02_20261004_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Configurator</div>
+						<div class="item-title">Office Furniture and Office Chairs</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/eBike_2026.html')">
+					<video autoplay loop muted playsinline poster="images/eBike_2026.jpg">
+  					<source src="videos/eBike_2026_5mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">E-Bike</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Keyboard_2026.html')">
+					<video autoplay loop muted playsinline poster="images/keyboard_2026.jpg">
+  					<source src="videos/keyboard_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Computer and Information Technology</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Diamond_2026.html')">
+					<video autoplay loop muted playsinline poster="images/diamond_2026.jpg">
+  					<source src="videos/diamond_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Jewellery</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/Chevrolet_350_Twin_Turbo_2026.html')">
+					<video autoplay loop muted playsinline poster="images/Chevrolet_350_Twin_Turbo_2026.jpg">
+  					<source src="videos/Chevrolet_350_Twin_Turbo_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Configurator</div>
+						<div class="item-title">Commercial Vehicles</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/car_2026_demo.html')">
+					<video autoplay loop muted playsinline poster="images/lamborghini_centenario_roadster_demo_2026.jpg">
+  					<source src="videos/lamborghini_centenario_roadster_demo_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Cars and Motorcycles</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/exerciseBike_2026_XR.html')">
+					<video autoplay loop muted playsinline poster="images/exerciseBike_2026_XR.jpg">
+  					<source src="videos/exerciseBike_2026_XR_02_20260614_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Fitness Equipments</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/wallMountWorkspace_XR.html')">
+					<video autoplay loop muted playsinline poster="images/wallMountWorkspace_2026.jpg">
+  					<source src="videos/wallMountWorkspace_20260712_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Showcase</div>
+						<div class="item-title">Wall Mount Worksation</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/furniture_2026.html')">
+					<video autoplay loop muted playsinline poster="images/furniture_2026.jpg">
+  					<source src="videos/furniture_2026_20260930_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Configurator</div>
+						<div class="item-title">Furniture</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+
+				<div class="showcase-item" onclick="parent.open('https://fimawork.github.io/Showcase/suitcase_2026.html')">
+					<video autoplay loop muted playsinline poster="images/suitcase_2026.jpg">
+  					<source src="videos/suitcase_2026_720p_5Mb.mp4" type="video/mp4">
+					</video>
+					<div class="overlay">
+						<div class="item-category">3D Product Configurator</div>
+						<div class="item-title">Suitcase</div>
+						<div class="view-btn">View Experience</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ===== FOOTER ===== -->
+    <footer id="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="./images/fimawork_logo_C_white.png" alt="fimawork">
+            </div>
+            <div class="footer-info">
+                <a href="mailto:hello@fimawork.tw">hello@fimawork.tw</a>
+                <span id="footer-address">臺北市士林區前港街68巷3號</span>
+                <span style="margin-top:4px;font-size:12px">© 2026 fimawork. All rights reserved.</span>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/profile.php?id=61586592837868" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/fimawork/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/fimawork_web3D" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://fimaworkshowcase.blogspot.com/" target="_blank"><i class="fa-brands fa-blogger-b"></i></a>
+            </div>
+        </div>
+    </footer>
+
+		<script>
+			let currentLang = 'ZH'; // 'ZH', 'EN', 'JP', 'KR', 'DE', 'FR'
+
+			SetLanguage();
+
+			function SetLanguage()
+			{
+				const lang = navigator.language || 'en';
+
+				if(lang.startsWith('zh'))
+				{
+					currentLang = 'ZH';
+					console.log("你好");
+				}
+				else if(lang.startsWith('ja'))
+				{
+					currentLang = 'JP';
+					UpdateContent();
+					console.log("こんにちは");
+				}
+				else if(lang.startsWith('ko'))
+				{
+					currentLang = 'KR';
+					UpdateContent();
+					console.log("안녕하세요");
+				}
+				else if(lang.startsWith('de'))
+				{
+					currentLang = 'DE';
+					UpdateContent();
+					console.log("Guten Tag");
+				}
+				else if(lang.startsWith('fr'))
+				{
+					currentLang = 'FR';
+					UpdateContent();
+					console.log("Bonjour");
+				}
+				else
+				{
+					currentLang = 'EN';
+					UpdateContent();
+					console.log("Hello");
+				}
+			}
+
+			function UpdateContent()
+			{
+				let _address=document.getElementById("footer-address");
+				let _title_showroom=document.getElementById("title_showroom");
+
+				if(currentLang === 'EN')
+				{
+					_address.textContent=`No.3, Ln.68, Qiangang St., Shilin Dist.,\nTaipei City 111059, Taiwan(R.O.C.)`;
+					_title_showroom.textContent="Demos";
+				}
+
+				else if(currentLang === 'JP')
+				{
+					_address.textContent="台湾台北市士林区前港街68巷3号";
+					_title_showroom.textContent="デモ展示";
+				}
+
+				else if(currentLang === 'KR')
+				{
+					_address.textContent="대만 타이베이시 스린구 첸강가 68번길 3호";
+					_title_showroom.textContent="데모 전시";
+				}
+
+				else if(currentLang === 'DE')
+				{
+					_address.textContent="Nr. 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taiwan (R.O.C.)";
+					_title_showroom
+				}
+				else if(currentLang === 'FR')
+				{
+					_address.textContent="N° 3, Ln. 68, Qiangang St., Shilin Dist., Taipei City 111059, Taïwan (R.O.C.)";
+					_title_showroom.textContent="Demos";
+				}
+
+				else // ZH
+				{
+					_address.textContent="臺北市士林區前港街68巷3號";
+					_title_showroom.textContent="範例展示";
+				}
+			}
+
+			function updateCounter(data) 
+			{
+				const counterElem = document.getElementById('busuanzi_value_site_pv');
+				if (counterElem) counterElem.innerText = data.count;
+    			//console.log("目前的總人數是：" + data.count);
+  			}
+
+  			window.onload = function() 
+			{
+				fetch('https://ipapi.co/json/')
+      			.then(response => response.json())
+      			.then(geoData => {
+        			window.userCountry = geoData.country_name;
+    				var gasUrl = "https://script.google.com/macros/s/AKfycbyQp7ED_VstSj03vHZWl591aE-GRZLlXtN0NwQNbvExvPAWj5FFRpctpFphf-N3v2d-/exec";
+					var script = document.createElement('script');
+    
+    			script.src = gasUrl + "?callback=updateCounter"+ 
+                     "&country=" + encodeURIComponent(geoData.country_name) + 
+                     "&city=" + encodeURIComponent(geoData.city) +
+                     "&t=" + new Date().getTime();
+	
+    			document.body.appendChild(script);
+
+				})
+    			.catch(error => {
+    			   console.error("無法取得地理位置", error);
+      			});
+  			};
+		</script>
+	</body>
+</html>
