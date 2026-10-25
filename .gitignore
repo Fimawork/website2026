@@ -1,0 +1,17 @@
+# 1. 敏感金鑰與環境變數（絕對不能 Push）
+.env
+.env.local
+.env.*.local
+
+# 2. 依賴套件資料夾（體積龐大，部署平台會自行安裝）
+node_modules/
+
+# 3. 打包產出的靜態 HTML 檔案（由 GitHub Actions 自動建置）
+dist/
+
+# 4. 系統與編輯器暫存檔
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

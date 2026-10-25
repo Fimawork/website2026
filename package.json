@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "test:notion": "node test-notion.js",
+    "build:blog": "node build-blog.js"
+  },
+  "dependencies": {
+    "marked": "^18.1.1",
+    "notion-to-md": "^3.1.9"
+  }
+}
