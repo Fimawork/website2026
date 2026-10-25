@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
 
       - name: 安裝專案套件
-        run: npm ci
+        run: npm ci --include=dev
 
       - name: 執行 Notion 部落格打包
         env:
