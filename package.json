@@ -4,6 +4,7 @@
     "build:blog": "node build-blog.js"
   },
   "dependencies": {
+    "@notionhq/client": "^5.28.0",
     "dotenv": "^18.0.9",
     "marked": "^18.1.1",
     "notion-to-md": "^3.1.9"
