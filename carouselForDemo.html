@@ -255,8 +255,8 @@ async function init()
 	FX.SetupEnvironment("cloud");
 
   	scene = new THREE.Scene();
-  	//scene.background= new THREE.Color( 0x000000 );
-	scene.fog = new THREE.Fog( 0x000000, 25, 30 );
+  	scene.background= new THREE.Color( 0x0b0f14 );
+	scene.fog = new THREE.Fog( 0x0b0f14, 25, 30 );
 
   	camera = new THREE.PerspectiveCamera( 30, threeContainer.clientWidth / threeContainer.clientHeight,0.1, 50 );//8 30
 	camera.layers.set(1);
