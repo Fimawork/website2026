@@ -1,0 +1,933 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width", initial-scale="1.0"/>
+		<meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+		<title>Carousel</title>
+		<link rel="stylesheet" type="text/css" href="Main_v2.css">
+		<style type="text/css">
+			@import url('https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@main/fx_ui.css');
+
+			body
+			{
+				margin: 0;
+				padding:0; 
+				overflow: hidden;
+				background: radial-gradient(circle at 50% 50%, #505050 0%, #000000 100%);
+				color: #fff;
+				font-family: 'Montserrat', sans-serif;
+				user-select: none;
+			}
+			
+			canvas
+			{
+				width: 100%;
+   				height: 100%;
+			}
+
+			#threeContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto; /* Allow interactions on the canvas */
+        }
+
+			/* Background Accents */
+			.bg-glow {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 90vh;
+				height: 90vh;
+				background: radial-gradient(circle, rgba(255, 184, 0, 0.08) 0%, rgba(255, 184, 0, 0) 70%);
+				border-radius: 50%;
+				filter: blur(60px);
+				z-index: 0;
+				pointer-events: none;
+			}
+
+			.bg-lines {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.02) 75%, transparent 75%, transparent);
+				background-size: 100px 100px;
+				opacity: 0.3;
+				z-index: 0;
+				pointer-events: none;
+			}
+
+			.bg-watermark {
+				position: absolute;
+				right: 5%;
+				bottom: 10%;
+				font-family: 'Teko', sans-serif;
+				font-size: 12vh;
+				font-weight: 700;
+				color: rgba(255, 255, 255, 0.15);
+				line-height: 0.8;
+				text-align: right;
+				z-index: 1;
+				letter-spacing: 5px;
+				pointer-events: none;
+			}
+
+		</style>
+
+		<script type="importmap">
+			{
+			  "imports": {
+			    "three": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
+			    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.webgpu.js",
+			    "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.tsl.js",
+			    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/"
+			  }
+			}
+		</script>
+
+	</head>
+	
+	<body>
+<!--		<canvas id="ambient-canvas"></canvas>
+		<div class="grid-overlay"></div>
+    <div class="vignette"></div>
+	<nav id="navbar">
+        <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+            <img src="./images/fimawork_logo_C_white.png" alt="fimawork logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="#services" id="nav-services">服務項目</a></li>
+            <li><a href="#prowess" id="nav-prowess">技術優勢</a></li>
+            <li><a href="#integration" id="nav-integration">介面導入</a></li>
+        </ul>
+        <div class="nav-cta">
+            <div class="lang-drop">
+                <button class="lang-drop-btn">
+                    <i class="fa-solid fa-globe" style="font-size:12px"></i>
+                    <span id="lang-label">中文</span>
+                </button>
+                <div class="lang-drop-content">
+                    <a href="#" onclick="setLang('ZH');return false;">中文</a>
+                    <a href="#" onclick="setLang('EN');return false;">EN</a>
+                    <a href="#" onclick="setLang('JP');return false;">JP</a>
+                    <a href="#" onclick="setLang('KR');return false;">KR</a>
+                    <a href="#" onclick="setLang('DE');return false;">DE</a>
+                    <a href="#" onclick="setLang('FR');return false;">FR</a>
+                </div>
+            </div>
+            <button class="btn-nav-demo" onclick="window.location.href='Showroom.html'">
+                <i class="fa-solid fa-play" style="font-size:11px"></i>
+                <span id="nav-demo-label">範例展示</span>
+            </button>
+        </div>
+    </nav>
+
+		<section id="hero">
+			<div id="threeContainer"></div>
+			<div class="hero-badge">
+            <span class="pulse-dot"></span>
+            <span id="hero-badge-text">3D Web Design Studio</span>
+        </div>
+
+			<h1 class="hero-title" id="hero-title" >
+        	    Depth Through<br><span class="highlight">Dimensions</span>
+        	</h1>
+
+			 <p class="hero-subtitle" id="hero-subtitle">
+            fimawork — Merging industrial design with Three.js & WebGPU to craft immersive 3D web experiences that make your products unforgettable.
+        </p>
+
+		 <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-num">10+</div>
+                <div class="stat-label" id="stat-years">Years Exp.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">Three.js</div>
+                <div class="stat-label" id="stat-tech">Core Tech</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">CAD</div>
+                <div class="stat-label" id="stat-cad">IGES / STEP</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-num">6</div>
+                <div class="stat-label" id="stat-lang">Languages</div>
+            </div>
+        </div>
+
+		</section>-->
+
+		<div id="threeContainer"></div>
+		
+		
+		<script type="module">
+
+			import * as THREE from 'three';
+			
+			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+			import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v2.2/fx_functions.js';
+			import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
+			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+			import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+			import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
+			import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeezer_Juicy_Salif_slices.js';
+			import { chair_20251216 } from './models/chair_20251216_slices.js';
+			import { eBike_2026 } from './models/eBike_2026_slices.js';
+			import { JEEP_COMPASS_2021_20251217 } from './models/JEEP_COMPASS_2021_20251217_slices.js';
+			import { car_20260604 } from './models/car_20260604_slices.js';
+			import { Laptop_20260604 } from './models/Laptop_20260604_slices.js';
+			import { exerciseBike_2026 } from './models/exerciseBike_2026_slices.js';
+			import { suitcase_2026 } from './models/suitcase_2026_slices.js';
+
+let scene, camera, renderer, stats, mixer,container;
+let controls;
+let idleTime=0;
+
+let threeContainer = document.getElementById("threeContainer");
+
+
+//const clock = new THREE.Clock();
+
+// 2. 建立新版的 Timer（取代舊的 Clock）
+const timer = new THREE.Timer();
+
+const modelPosition=new THREE.Vector3(60,0,0);
+const modelRotation=new THREE.Vector3(0,Math.PI, 0);
+const modeScale=0.05;
+
+const CameraDefaultPos=new THREE.Vector3(60,6,-20);
+const ControlsTargetDefaultPos=new THREE.Vector3(60,0,0);
+
+let carouselManu = new THREE.Object3D();
+let rotationTarget = new THREE.Object3D();
+const item_num=6;
+const divisionAngle = 2*Math.PI/item_num;//2*Math.PI為360度
+
+const quaternion_rotationTarget = new THREE.Quaternion();
+const quaternion_carouselManu = new THREE.Quaternion();
+
+let item_01 = new THREE.Object3D();
+let item_02 = new THREE.Object3D();
+let item_03 = new THREE.Object3D();
+let item_04 = new THREE.Object3D();
+let item_05 = new THREE.Object3D();
+let item_06 = new THREE.Object3D();
+
+let item_01_object = new THREE.Object3D();
+let item_02_object = new THREE.Object3D();
+let item_03_object = new THREE.Object3D();
+let item_04_object = new THREE.Object3D();
+let item_05_object = new THREE.Object3D();
+let item_06_object = new THREE.Object3D();
+
+let item_object_list=[];
+let isRotateOn=false;
+
+let gridWall = new THREE.GridHelper( 100, 500, 0x3AAE07, 0x3AAE07 );	
+let rotation_interpolation=0;
+
+let item_list=[];
+
+
+const hold_time=15;
+
+
+init();
+
+
+async function init()
+{
+	FX.SetupEnvironment("cloud");
+
+  	scene = new THREE.Scene();
+  	//scene.background= new THREE.Color( 0x000000 );
+	scene.fog = new THREE.Fog( 0x000000, 25, 30 );
+
+  	camera = new THREE.PerspectiveCamera( 30, threeContainer.clientWidth / threeContainer.clientHeight,0.1, 50 );//8 30
+	camera.layers.set(1);
+  	//renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
+	renderer = new THREE.WebGPURenderer( { alpha: true, antialias: true } );
+  	renderer.setPixelRatio( window.devicePixelRatio );
+  	renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
+
+  	renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  	renderer.toneMappingExposure = 1.0;
+  	threeContainer.appendChild( renderer.domElement );
+
+	// 1. 先等待 Renderer 初始化完成
+	await renderer.init(); // 記得 r184 一定要加上這行非同步初始化！
+	// 2. 初始化完成後，再啟動動畫循環（這行會自己一直跑，不用手動 call 第一次）
+	renderer.setAnimationLoop( animate );
+	
+
+  	camera.position.copy(CameraDefaultPos);
+  	FX.posData[0]={ camera_pos:CameraDefaultPos, controlsTarget_pos:ControlsTargetDefaultPos};
+
+
+  	///利用座標設定旋轉中心及鏡頭焦點，camera不須另外設定初始角度
+  	controls = new OrbitControls( camera, renderer.domElement );
+  	controls.enablePan = false;//右鍵平移效果
+	controls.enableZoom = true;
+	controls.enableRotate = true;
+  	controls.panSpeed = 0.4;
+  	controls.enableDamping = true;
+  	controls.dampingFactor =0.05;
+  	controls.maxDistance = 500;
+  	controls.target.copy( ControlsTargetDefaultPos );
+  	controls.zoomSpeed=0.5;
+	//controls.autoRotate=true;
+	//controls.autoRotateSpeed=2;
+	controls.maxPolarAngle=FX.ToThreeEulerAngle(96);
+  	controls.update();
+
+  	///hdri 環境光源
+	//FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer) 
+
+	FX.LoadUltraHDRForWebGPU('./textures/hdri/studio_small_09_2k.jpg',scene);
+	
+
+//	gridWall.material.opacity = 0.3;
+//	gridWall.material.depthWrite = false;
+//	gridWall.material.transparent = true;
+//
+//	scene.add(gridWall);
+//	gridWall.position.set(60,0,5);
+//	gridWall.rotation.x=Math.PI/2;
+//	gridWall.visible=false;
+//	gridWall.scale.set(0.1,0.1, 0.1);
+
+	
+  ///主要物件
+	const defaultScenes = 
+    [
+		() => new Promise((resolve) => setTimeout(() => { InstantModel();resolve(); }, 10)), 
+		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
+		//() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
+		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 500)),
+		//() => new Promise((resolve) => setTimeout(() => { FX.Material_Inspector(scene);resolve();}, 1000)),
+	];
+
+	async function SetupDefaultScene() 
+  	{
+		for (const task of defaultScenes) 
+    	{
+			await task(); // 確保每個任務依次完成
+		}
+		
+    	console.log('All scenes loaded');
+	}
+
+	SetupDefaultScene();
+
+	function InstantModel()
+	{
+		///E Bike
+		const loader_eBike = new GLTFLoader();
+	    loader_eBike.setDRACOLoader(FX.dracoLoader);
+		loader_eBike.parse(
+	    FX.Base64ToArrayBuffer(eBike_2026()),
+	    '',
+	    (gltf) => {
+		
+			const model = gltf.scene;
+			
+			const saddle_back_01_material=FXM.InstEtchingMaterial(0x080808,0.4,0.3,0.75,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./	textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+			const tire_material=FXM.InstEtchingMaterial(0x292929,0.7,0.35,1,false,1,"./textures/Leather.png",new THREE.Vector2(10,10),new THREE.Vector2(0,0),"./textures/	Leather.png",new THREE.Vector2(50,100),30);
+
+			const black_housing_material=FXM.InstEtchingMaterial(0x363636,0.35,0.5,0.75,false,1,'./textures/Gravel.png',new THREE.Vector2(100, 100),new THREE.Vector2(0, 0),	'./textures/Gravel.png',new THREE.Vector2(600, 600),2);
+
+			const metal_housing_material=FXM.InstEtchingMaterial(0x737373,0.3,0.5,1,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./	textures/Gravel.png",new THREE.Vector2(50,50),2);
+
+			const lightLens_material=FXM.InstMaterial(0x183A25,0,0.5,1,2.4,1,true,0.9,true);
+
+			const brake_material=FXM.InstMaterial(0x919191,0.3,0.9,0,1.27,0,false,1,true);
+
+			const fork_material=FXM.InstMaterial(0x4F4F4F,0.3,0.9,0,2.3333333333333335,1,false,1,true);
+
+			const wheel_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const logo_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const freeWheel_material=FXM.InstMaterial(0xD5783F,0.53,1,0,2.3333333333333335,1,false,1,true);
+
+			const frame_material=FXM.InstMaterial(0x4F4F4F,0.3,0.9,0,2.3333333333333335,1,false,1,true);
+
+			model.traverse( function ( object ) {	
+                  
+        	    if(object.name.includes("wheel"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,wheel_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("tire"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,tire_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("saddle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,saddle_back_01_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("frame"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,frame_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("plasticHousing"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,black_housing_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("cable"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("fork"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,fork_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("metalHousing"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,metal_housing_material,item_01_object,scene);
+        	    }
+
+				//if(object.name.includes("light"))
+        	    //{
+        	    //  FX.ReturnBufferGeometry(object,null,null,scene);
+        	    //}
+
+				if(object.name.includes("lightLens"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,lightLens_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("handle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,tire_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("screw"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("spoke"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("freeWheel"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,null,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("brake"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("axle"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,brake_material,item_01_object,scene);
+        	    }
+
+				if(object.name.includes("logo"))
+        	    {
+        	      FX.ReturnBufferGeometry(object,logo_material,item_01_object,scene);
+        	    }
+			})
+
+			const scale =0.005;
+			item_01_object.position.set(60,0,-3);
+			item_01_object.rotation.set(0,FX.ToThreeEulerAngle(180), 0);
+			item_01_object.scale.set(scale,scale,scale);
+
+			//FX.ToThreeEulerAngle(90),FX.ToThreeEulerAngle(-90), FX.ToThreeEulerAngle(90)
+
+			item_01.add(item_01_object)
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
+	);
+
+	///eames-chair
+	const loader_eames_chair = new GLTFLoader();
+    loader_eames_chair.setDRACOLoader(FX.dracoLoader);
+	loader_eames_chair.parse(
+    FX.Base64ToArrayBuffer(chair_20251216()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+		//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+		//InstEtchingMaterial(thisColor,thisRoughness,thisMetalness,thisReflectivity,isTransparent,thisOpacity,map_src,map_repeat,map_offset,bumpMap_src,bumpMap_repeat,bumpMap_scale)
+		const support_material=FXM.InstMaterial(0x000000,0.5,0.75,0,2.333,1,false,1,true);
+
+		const knob_material=FXM.InstMaterial(0x000000,0.15,1,0,2.333,1,false,1,true);
+
+		const sofa_back_01_material=FXM.InstEtchingMaterial(0x080808,0.4,0.3,0.75,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const woodPanel_01_material=FXM.InstEtchingMaterial(0xc08854,0.5,0.5,0.5,false,1,'./textures/Walnut_culomn.png',new THREE.Vector2(0.8,0.8),new THREE.Vector2(0,0),'./textures/Walnut_culomn.png',new THREE.Vector2(1, 1),0);
+
+		const woodPanel_02_material=FXM.InstEtchingMaterial(0xc08854,0.5,0.5,0.5,false,1,'./textures/Walnut.png',new THREE.Vector2(1,1),new THREE.Vector2(0,0),'./textures/Walnut.png',new THREE.Vector2(1, 1),0);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_01"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_02"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_03"),woodPanel_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wood_panel_04"),woodPanel_02_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_back"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_buttom_main"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("support_buttom_sub"),support_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("cap"),null,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_back_01"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_back_02"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_main"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_sub"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_01"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_02"),sofa_back_01_material,item_02_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("knob"),knob_material,item_02_object,scene);
+
+		//item_02_object.add(model);
+
+		item_02_object.position.set(60,1.2,0);
+		item_02_object.rotation.set(0,FX.ToThreeEulerAngle(-90), 0);
+		item_02_object.scale.set(0.005,0.005,0.005);
+
+		item_02.add(item_02_object);
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
+	);
+
+
+	///car
+	const loader_car_20260604 = new GLTFLoader();
+    loader_car_20260604.setDRACOLoader(FX.dracoLoader);
+	loader_car_20260604.parse(
+    FX.Base64ToArrayBuffer(car_20260604()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+		//InstMaterial(thisColor,thisRoughness,thisMetalness,thisTransmission,thisIor,thisReflectivity,isTransparent,thisOpacity,isDepthWrite)
+		//InstEtchingMaterial(thisColor,thisRoughness,thisMetalness,thisReflectivity,isTransparent,thisOpacity,map_src,map_repeat,map_offset,bumpMap_src,bumpMap_repeat,bumpMap_scale)
+		const inner_material=FXM.InstMaterial(0x000000,1,0.5,0,2.333,0.5,false,1,true);
+
+		const silver_paint_material=FXM.InstMaterial(0xA9B7C1,0.39,1,0,2.3333333333333335,1,false,1,true);
+
+		const wheel_frame_sliver_material=FXM.InstMaterial(0xeff3f6,0.3,0.6,0,2.333,1,false,1,true);
+
+		const window_material=FXM.InstMaterial(0xD1D1D1,0,0.3,1,2.3333333333333335,1,true,1,false);
+
+		const red_light_material=FXM.InstMaterial(0xff0000,0,1,1,2.4,1,true,0.95,false);
+
+		const wipers_material=FXM.InstMaterial(0x000000,0.5,0.5,0,2.333,1,false,1,true);
+
+		const black_carbon_fiber_01_material=FXM.InstEtchingMaterial(0x585555,0.5,0.75,1,false,1,'./textures/Carbon_Fiber_10_B35F70.jpg',new THREE.Vector2(100,100),new THREE.Vector2(0,0),'./textures/Carbon_Fiber_10_B35F70.jpg',new THREE.Vector2(100, 100),0);
+
+		const brown_leather_material=FXM.InstEtchingMaterial(0xd2852d,0.5,0.1,0.5,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const black_leather_material=FXM.InstEtchingMaterial(0x383838,0.5,0.1,0.5,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const other_material=FXM.InstMaterial(0x000000,0,1,0,1.5,1,false,1,true);
+
+		FX.ReturnBufferGeometry(model.getObjectByName("silver_paint"),silver_paint_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("black_carbon_fiber"),black_carbon_fiber_01_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("leather_brown"),brown_leather_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("car_window"),window_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("red_light"),red_light_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wheel_frame_black"),inner_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wheel_frame_sliver"),wheel_frame_sliver_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("tire"),null,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("wipers"),wipers_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("inner"),inner_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("leather_black"),black_leather_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("inner_silver"),silver_paint_material,item_03_object,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("other"),other_material,item_03_object,scene);
+
+		//item_03_object.add(model.getObjectByName("logo"));
+
+		//item_02_object.add(model);
+
+		//item_03_object.add(model);
+
+		item_03_object.position.set(60,1.8,0);
+		item_03_object.rotation.set(0,Math.PI, 0);
+		item_03_object.scale.set(0.003,0.003,0.003);
+
+		item_03.add(item_03_object);
+
+		//FX.Material_Inspector(scene);
+	    },
+	    (error) => {
+	        console.error('Failed to load model:', error);
+	    }
+		);
+	}
+
+	///Laptop
+	const loader_Laptop_20260604 = new GLTFLoader();
+    loader_Laptop_20260604.setDRACOLoader(FX.dracoLoader);
+	loader_Laptop_20260604.parse(
+    FX.Base64ToArrayBuffer(Laptop_20260604()),
+    '',
+    (gltf) => {
+        
+		const model = gltf.scene;
+
+		const silver_paint_material=FXM.InstMaterial(0xe2e9ee,0.5,0.5,0,2.333,1,false,1,true);
+		const keyboard_material=FXM.InstMaterial(0x000000,0.5,0,0,2.333,1,false,1,true);
+		const touchPanel_material=FXM.InstMaterial(0xc0c6c9,0.5,0,0,2.333,1,false,1,true);
+
+		let keyboardModule = new THREE.Object3D();
+		let screenModule = new THREE.Object3D();
+		let RotatePivot = new THREE.Object3D();
+
+		FX.ReturnBufferGeometry(model.getObjectByName("keyboard"),keyboard_material,keyboardModule,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("screen"),null,screenModule,scene);
+		FX.ReturnBufferGeometry(model.getObjectByName("border"),silver_paint_material,screenModule,scene);
+
+		model.traverse((child) => {
+
+			if (child.name.includes("mainbody_keyboard") ) 
+			{
+				FX.ReturnBufferGeometry(child,silver_paint_material,keyboardModule,scene);
+			}
+
+			if (child.name.includes("touchPanel") ) 
+			{
+				FX.ReturnBufferGeometry(child,touchPanel_material,keyboardModule,scene);
+			}
+
+			if (child.name.includes("mainbody_housing") ) 
+			{
+				FX.ReturnBufferGeometry(child,silver_paint_material,screenModule,scene);
+			}
+
+			if (child.name.includes("logo") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+			}
+
+			if (child.name.includes("camera") ) 
+			{
+				FX.ReturnBufferGeometry(child,null,screenModule,scene);
+			}
+
+			if (child.name.includes("Pivot")) //螢幕轉軸
+			{
+				const box = new THREE.Box3().setFromObject(child); // 創建包圍盒
+				const center = new THREE.Vector3();
+				box.getCenter(center); // 計算中心點
+				RotatePivot.position.copy(center);
+				screenModule.position.set(-RotatePivot.position.x,-RotatePivot.position.y,-RotatePivot.position.z);
+			}
+
+		});
+
+		//scene.add(model);
+
+		item_04_object.position.set(60,0,0);
+		item_04_object.rotation.set(FX.ToThreeEulerAngle(0),FX.ToThreeEulerAngle(180), FX.ToThreeEulerAngle(0));
+		item_04_object.scale.set(0.02,0.02,0.02);
+		RotatePivot.add(screenModule);
+		item_04_object.add(RotatePivot);
+		item_04_object.add(keyboardModule);
+		item_04.add(item_04_object);
+		
+    	},
+    	(error) => {
+    	    console.error('Failed to load model:', error);
+    	}
+	);
+
+	///Exercise Bike
+	const loader_ExerciseBike = new GLTFLoader();
+    loader_ExerciseBike.setDRACOLoader(FX.dracoLoader);
+	loader_ExerciseBike.parse(
+    FX.Base64ToArrayBuffer(exerciseBike_2026()),
+    '',
+    (gltf) => {
+        
+		
+		const model = gltf.scene;
+
+
+		const saddle_01_material=FXM.InstEtchingMaterial(0x080808,0.4,0.3,0.75,false,1,'./textures/Leather.png',new THREE.Vector2(10,10),new THREE.Vector2(0,0),'./textures/Leather.png',new THREE.Vector2(15, 15),0);
+
+		const tube_01_material=FXM.InstMaterial(0x828282,0.263,1,0,1,0,false,1,true);
+		const tube_02_material=FXM.InstMaterial(0x828282,0.263,1,0,1,0,false,1,true);
+
+		const black_plastic_material=FXM.InstEtchingMaterial(0x363636,0.35,0.5,0.75,false,1,'./textures/Gravel.png',new THREE.Vector2(100, 100),new THREE.Vector2(0, 0),'./textures/Gravel.png',new THREE.Vector2(600, 600),2);
+
+		const logo_material=FXM.InstMaterial(0x878787,0,1,0,2.3333333333333335,1,false,1,true);
+
+		const housing_01_material=FXM.InstMaterial(0xE0E0E0,0.3,0.6,0,2.4,1,false,1,true);
+
+		const housing_02_material=FXM.InstMaterial(0x86BAFE,0.3,0.5,0,2.4,1,false,1,true);
+
+		model.traverse( function ( object ) {	
+                  
+            if(object.name.includes("saddle"))
+            {
+              FX.ReturnBufferGeometry(object,saddle_01_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("handle"))
+            {
+              FX.ReturnBufferGeometry(object,saddle_01_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("tube_01"))
+            {
+              FX.ReturnBufferGeometry(object,tube_01_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("tube_02"))
+            {
+              FX.ReturnBufferGeometry(object,tube_02_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("endCap"))
+            {
+              FX.ReturnBufferGeometry(object,black_plastic_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("housing_01"))
+            {
+              FX.ReturnBufferGeometry(object,housing_01_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("housing_02"))
+            {
+              FX.ReturnBufferGeometry(object,housing_02_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("housing_03"))//mesh有問題無法buffergeomatry處理
+            {
+              	object.traverse((child) => {
+    			    
+    			    if (child.isMesh) {
+    			        
+    			        child.material=housing_02_material;
+    			    }
+    			});
+            }
+
+			if(object.name.includes("knob"))
+            {
+              FX.ReturnBufferGeometry(object,black_plastic_material,item_05_object,scene);
+            }
+
+			if(object.name.includes("logo"))
+            {
+              FX.ReturnBufferGeometry(object,logo_material,item_05_object,scene);
+            }
+
+        })
+
+		item_05_object.add(model);
+		item_05_object.position.set(60,-2,0);
+		item_05_object.scale.set(5.7,5.7,5.7);
+		item_05.add(item_05_object);
+
+		
+    },
+    (error) => {
+        console.error('Failed to load model:', error);
+    }
+	);
+
+	const loader_sucase = new GLTFLoader();
+	loader_sucase.setDRACOLoader(FX.dracoLoader);
+	loader_sucase.parse(
+		FX.Base64ToArrayBuffer(suitcase_2026()),
+		'',
+		(gltf) => {
+
+			const model = gltf.scene;
+
+
+			const champagne_housing_material = FXM.InstEtchingMaterial(0xEEEBD3,0.3,0.5,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const pink_housing_material      = FXM.InstEtchingMaterial(0xFE90BC,0.3,0.5,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const blue_housing_material      = FXM.InstEtchingMaterial(0xdbf7ff,0.3,0.5,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const black_housing_material     = FXM.InstEtchingMaterial(0x484747,0.278,0.5,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const purple_housing_material    = FXM.InstEtchingMaterial(0xF3B4F1,0.5,0.22,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const orange_housing_material    = FXM.InstEtchingMaterial(0xFF8566,0.509,0.634,0.3,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const white_housing_material     = FXM.InstEtchingMaterial(0xF5F4EF,0.5,0.307,0.3,false,1,"./textures/Light_Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const blueNavy_housing_material  = FXM.InstEtchingMaterial(0x4B5A86,0.413,0.432,0.682,false,1,"./textures/Gravel.png",new THREE.Vector2(0,0),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const casterMount_material       = FXM.InstEtchingMaterial(0x363636,0.35,0.5,0.75,false,1,"./textures/Gravel.png",new THREE.Vector2(100,100),new THREE.Vector2(0,0),"./textures/Gravel.png",new THREE.Vector2(300,300),6);
+			const locker_material=FXM.InstMaterial(0xA8ACA0,0.3,0.9,0,1.5,0.5,false,1,true);
+			const tube_material=FXM.InstMaterial(0xA6A0A0,0.3,0.731,0,1.5,0.5,false,1,true);
+
+			model.traverse(function (object) {
+				if (object.name.includes("housing")) FX.ReturnBufferGeometry(object, champagne_housing_material, item_06_object, scene);
+				if (object.name.includes("rubber"))  FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+				if (object.name.includes("padding")) FX.ReturnBufferGeometry(object, casterMount_material, item_06_object, scene);
+				if (object.name.includes("handle")) FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+				if (object.name.includes("Rivet")) FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+				if (object.name.includes("Locker")) FX.ReturnBufferGeometry(object, locker_material, item_06_object, scene);
+				if (object.name.includes("tube")) FX.ReturnBufferGeometry(object, tube_material, item_06_object, scene);
+				if (object.name.includes("screw")) FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+				if (object.name.includes("wheel")) FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+				if (object.name.includes("caster")) FX.ReturnBufferGeometry(object, null, item_06_object, scene);
+			});
+
+			item_06_object.add(model);
+			item_06_object.position.set(60,-2.5,0);
+			item_06_object.scale.set(10,10,10);
+			item_06.add(item_06_object);
+
+
+		},
+		(error) => { console.error('Failed to load model:', error); }
+	);
+
+	
+
+	carouselManu.add(item_01).add(item_02).add(item_03).add(item_04).add(item_05).add(item_06);
+	item_01.rotation.y=divisionAngle*6;
+	item_02.rotation.y=divisionAngle*5;
+	item_03.rotation.y=divisionAngle*4;
+	item_04.rotation.y=divisionAngle*3;
+	item_05.rotation.y=divisionAngle*2;
+	item_06.rotation.y=divisionAngle*1;
+
+	carouselManu.position.y=-1.5;
+	scene.add(carouselManu);
+
+
+	function SetupItemGroup()
+	{
+		item_object_list.push(item_01_object)
+		item_object_list.push(item_02_object)
+		item_object_list.push(item_03_object)
+		item_object_list.push(item_04_object)
+		item_object_list.push(item_05_object)
+		item_object_list.push(item_06_object);
+	}
+
+	///EventListener
+  	window.addEventListener( 'resize', onWindowResize );  
+
+}
+
+
+function onWindowResize() 
+{
+	camera.aspect = threeContainer.clientWidth/threeContainer.clientHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
+}
+
+function animate(timestamp) 
+{
+  	//requestAnimationFrame( animate );
+
+	
+
+  	controls.update();
+  	renderer.render( scene, camera );
+
+  	//FX.UpdateCameraPosition(camera,controls);
+
+	UpdateRotationManu();
+
+	//const delta = clock.getDelta();
+
+	// 自動更新時間（用來計算移動速度、旋轉等）
+    timer.update( timestamp );
+	const delta = timer.getDelta();// 兩幀之間的時間差
+
+	if ( mixer ) mixer.update( delta );
+
+	idleTime+=delta;
+
+	if(idleTime>hold_time)
+	{
+		idleTime=0;
+		rotationTarget.rotation.y+=divisionAngle;
+		isRotateOn=true;
+	}
+
+//	if(isRotateOn)
+//	{
+//		GridWallEffect();
+//	}
+
+	//FX.WebGLInspector(container , renderer);
+}
+
+function GridWallEffect()
+{
+	if(idleTime<=3.4&&idleTime>1.0)
+	{
+		gridWall.visible=true;
+
+		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(1,1, 1),0.05);
+		//gridWall.rotation.x=FX.ToThreeEulerAngle(FX.LerpFloat(90,180,rotation_interpolation+=0.004*idleTime));
+	}
+
+	if(idleTime>2)
+	{
+		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(0.01,0.01, 0.01),0.25);
+	}
+
+	if(idleTime>3.6)
+	{
+		gridWall.visible=false;
+		//gridWall.rotation.x=FX.ToThreeEulerAngle(90);
+		rotation_interpolation=0;
+	}
+}
+
+
+
+function UpdateRotationManu()
+{
+	quaternion_rotationTarget.setFromEuler(rotationTarget.rotation);
+	quaternion_carouselManu.slerp(quaternion_rotationTarget,0.025);
+	carouselManu.rotation.setFromQuaternion(quaternion_carouselManu);   
+	const rpm=0.004;
+
+	for(let i=0;i<item_object_list.length;i++)
+	{
+		if(item_object_list[i]!=null)
+		{
+			item_object_list[i].rotation.y+=rpm;
+		}
+
+		else
+		{
+			item_object_list[i]=scene.getObjectByName(`item_0${i+1}`);
+		}
+	}
+}
+
+
+
+		</script>
+    </body>
+
+</html>
