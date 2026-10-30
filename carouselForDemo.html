@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -8,78 +8,306 @@
 		<link rel="stylesheet" type="text/css" href="Main_v2.css">
 		<style type="text/css">
 			@import url('https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@main/fx_ui.css');
+			@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap');
 
-			body
-			{
+			*, *::before, *::after { box-sizing: border-box; }
+
+			body {
 				margin: 0;
-				padding:0; 
+				padding: 0;
 				overflow: hidden;
-				background: radial-gradient(circle at 50% 50%, #505050 0%, #000000 100%);
+				background: #080b10;
 				color: #fff;
-				font-family: 'Montserrat', sans-serif;
+				font-family: 'Space Grotesk', sans-serif;
 				user-select: none;
 			}
-			
-			canvas
-			{
-				width: 100%;
-   				height: 100%;
-			}
+
+			canvas { width: 100%; height: 100%; }
 
 			#threeContainer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: auto; /* Allow interactions on the canvas */
-        }
-
-			/* Background Accents */
-			.bg-glow {
 				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				width: 90vh;
-				height: 90vh;
-				background: radial-gradient(circle, rgba(255, 184, 0, 0.08) 0%, rgba(255, 184, 0, 0) 70%);
-				border-radius: 50%;
-				filter: blur(60px);
-				z-index: 0;
-				pointer-events: none;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				z-index: 2;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				pointer-events: auto;
 			}
 
-			.bg-lines {
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(135deg, rgba(255,255,255,0.02) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.02) 75%, transparent 75%, transparent);
-				background-size: 100px 100px;
-				opacity: 0.3;
-				z-index: 0;
+			/* ══ GLASS SHOWCASE FRAME ══ */
+			#showcase-frame {
+				position: fixed;
+				top: 0; left: 0;
+				width: 100%; height: 100%;
+				z-index: 10;
 				pointer-events: none;
 			}
-
-			.bg-watermark {
+			.glass-top-glare {
 				position: absolute;
-				right: 5%;
-				bottom: 10%;
-				font-family: 'Teko', sans-serif;
-				font-size: 12vh;
-				font-weight: 700;
-				color: rgba(255, 255, 255, 0.15);
-				line-height: 0.8;
+				top: 0; left: 0; right: 0;
+				height: 3px;
+				background: linear-gradient(90deg,
+					transparent 0%, rgba(255,255,255,0.05) 15%,
+					rgba(255,255,255,0.45) 40%, rgba(255,255,255,0.7) 50%,
+					rgba(255,255,255,0.45) 60%, rgba(255,255,255,0.05) 85%,
+					transparent 100%);
+			}
+			.glass-left-fade {
+				position: absolute; top: 0; left: 0;
+				width: 18%; height: 100%;
+				background: linear-gradient(to right, rgba(8,11,16,0.82) 0%, rgba(8,11,16,0.35) 60%, transparent 100%);
+			}
+			.glass-right-fade {
+				position: absolute; top: 0; right: 0;
+				width: 18%; height: 100%;
+				background: linear-gradient(to left, rgba(8,11,16,0.82) 0%, rgba(8,11,16,0.35) 60%, transparent 100%);
+			}
+			.glass-floor {
+				position: absolute; bottom: 0; left: 0; right: 0;
+				height: 28%;
+				background: linear-gradient(to top, rgba(8,11,16,0.90) 0%, rgba(8,11,16,0.55) 40%, transparent 100%);
+			}
+			.glass-border {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				border: 1px solid rgba(255,255,255,0.07);
+				pointer-events: none;
+			}
+			.glass-border::before, .glass-border::after {
+				content: ''; position: absolute;
+				width: 28px; height: 28px;
+			}
+			.glass-border::before {
+				top: 10px; left: 10px;
+				border-top: 1px solid rgba(255,255,255,0.35);
+				border-left: 1px solid rgba(255,255,255,0.35);
+			}
+			.glass-border::after {
+				bottom: 10px; right: 10px;
+				border-bottom: 1px solid rgba(255,255,255,0.35);
+				border-right: 1px solid rgba(255,255,255,0.35);
+			}
+			.corner-tr, .corner-bl { position: absolute; width: 28px; height: 28px; }
+			.corner-tr {
+				top: 10px; right: 10px;
+				border-top: 1px solid rgba(255,255,255,0.35);
+				border-right: 1px solid rgba(255,255,255,0.35);
+			}
+			.corner-bl {
+				bottom: 10px; left: 10px;
+				border-bottom: 1px solid rgba(255,255,255,0.35);
+				border-left: 1px solid rgba(255,255,255,0.35);
+			}
+
+			/* ══ MASTHEAD ══ */
+			#masthead {
+				position: absolute;
+				top: 0; left: 0; right: 0;
+				padding: 22px 5%;
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				pointer-events: none;
+			}
+			.masthead-brand { display: flex; flex-direction: column; gap: 4px; }
+			.masthead-logo {
+				font-family: 'Playfair Display', serif;
+				font-size: clamp(1.8rem, 4vw, 3.8rem);
+				font-weight: 900;
+				letter-spacing: 0.18em;
+				line-height: 1;
+				text-transform: uppercase;
+				color: #fff;
+				text-shadow: 0 0 60px rgba(255,255,255,0.12);
+			}
+			.masthead-tagline {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: clamp(0.5rem, 0.8vw, 0.75rem);
+				font-weight: 300;
+				letter-spacing: 0.35em;
+				color: rgba(255,255,255,0.38);
+				text-transform: uppercase;
+			}
+			.masthead-meta {
 				text-align: right;
-				z-index: 1;
-				letter-spacing: 5px;
+				display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+			}
+			.masthead-issue {
+				font-size: 9px; font-weight: 400;
+				letter-spacing: 2.5px;
+				color: rgba(255,255,255,0.22);
+				text-transform: uppercase;
+			}
+			.masthead-date {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: clamp(0.6rem, 1vw, 0.9rem);
+				font-style: italic;
+				color: rgba(255,255,255,0.42);
+			}
+			.masthead-rule {
+				position: absolute;
+				top: 86px; left: 5%; right: 5%;
+				height: 1px;
+				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 15%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.12) 85%, transparent);
+			}
+
+			/* ══ LEFT SIDEBAR ══ */
+			#sidebar-left {
+				position: absolute;
+				left: 3.5%; top: 50%;
+				transform: translateY(-50%);
+				display: flex; flex-direction: column; gap: 14px;
+				pointer-events: none; max-width: 15%;
+			}
+			.sidebar-category {
+				font-size: 8px; font-weight: 600;
+				letter-spacing: 3px;
+				color: rgba(255,255,255,0.26);
+				text-transform: uppercase;
+				margin-bottom: -8px;
+			}
+			.sidebar-product-name {
+				font-family: 'Playfair Display', serif;
+				font-size: clamp(0.9rem, 1.4vw, 1.32rem);
+				font-weight: 700; line-height: 1.2; color: #fff;
+				transition: opacity 0.5s ease, transform 0.5s ease;
+			}
+			.sidebar-product-sub {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: clamp(0.65rem, 0.9vw, 0.82rem);
+				font-style: italic; font-weight: 300;
+				color: rgba(255,255,255,0.38); line-height: 1.65;
+				transition: opacity 0.5s ease;
+			}
+			.sidebar-rule { width: 28px; height: 1px; background: rgba(255,255,255,0.2); }
+			.sidebar-specs { display: flex; flex-direction: column; gap: 8px; }
+			.spec-row { display: flex; flex-direction: column; gap: 1px; }
+			.spec-key {
+				font-size: 8px; letter-spacing: 2px;
+				color: rgba(255,255,255,0.2); text-transform: uppercase;
+			}
+			.spec-val {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: 13px; color: rgba(255,255,255,0.52);
+			}
+
+			/* ══ RIGHT SIDEBAR ══ */
+			#sidebar-right {
+				position: absolute;
+				right: 3.5%; top: 50%;
+				transform: translateY(-50%);
+				display: flex; flex-direction: column; align-items: flex-end; gap: 18px;
+				pointer-events: none; max-width: 14%;
+			}
+			.sidebar-index {
+				font-family: 'Playfair Display', serif;
+				font-size: clamp(2.5rem, 4vw, 4rem);
+				font-weight: 900; font-style: italic; line-height: 1;
+				color: rgba(255,255,255,0.05); text-align: right;
+			}
+			.sidebar-collection {
+				font-size: 8px; font-weight: 600;
+				letter-spacing: 3px; color: rgba(255,255,255,0.17);
+				text-transform: uppercase; text-align: right;
+			}
+			.sidebar-dots { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+			.dot {
+				width: 4px; height: 4px; border-radius: 50%;
+				background: rgba(255,255,255,0.13);
+				transition: background 0.4s, transform 0.4s;
+			}
+			.dot.active { background: rgba(255,255,255,0.7); transform: scale(1.6); }
+			.sidebar-nav-hint {
+				font-size: 8px; font-weight: 300; letter-spacing: 2px;
+				color: rgba(255,255,255,0.15); text-transform: uppercase;
+				writing-mode: vertical-rl; text-orientation: mixed; height: 60px;
+			}
+
+			/* ══ BOTTOM FOOTER ══ */
+			#cover-footer {
+				position: absolute;
+				bottom: 0; left: 0; right: 0;
+				padding: 0 5% 22px;
+				display: flex; align-items: flex-end; justify-content: space-between;
 				pointer-events: none;
+			}
+			.footer-rule {
+				position: absolute; bottom: 54px; left: 5%; right: 5%;
+				height: 1px;
+				background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1) 15%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.1) 85%, transparent);
+			}
+			.footer-headline { display: flex; flex-direction: column; gap: 3px; }
+			.footer-hl-main {
+				font-family: 'Playfair Display', serif;
+				font-size: clamp(0.65rem, 1.1vw, 0.95rem);
+				font-weight: 700; color: rgba(255,255,255,0.72);
+				transition: opacity 0.5s ease;
+			}
+			.footer-hl-sub {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: clamp(0.55rem, 0.85vw, 0.75rem);
+				font-style: italic; color: rgba(255,255,255,0.28);
+			}
+			.footer-center-bar {
+				position: absolute; left: 50%; bottom: 22px;
+				transform: translateX(-50%);
+				display: flex; align-items: center; gap: 12px;
+				pointer-events: auto;
+			}
+			.nav-arrow {
+				width: 32px; height: 32px;
+				border: 1px solid rgba(255,255,255,0.16);
+				border-radius: 50%;
+				display: flex; align-items: center; justify-content: center;
+				cursor: pointer; font-size: 11px;
+				color: rgba(255,255,255,0.42);
+				background: rgba(255,255,255,0.03);
+				transition: border-color 0.3s, background 0.3s, color 0.3s;
+			}
+			.nav-arrow:hover {
+				border-color: rgba(255,255,255,0.42);
+				background: rgba(255,255,255,0.08);
+				color: #fff;
+			}
+			.nav-progress {
+				font-size: 10px; font-weight: 300;
+				letter-spacing: 3px; color: rgba(255,255,255,0.26);
+				min-width: 44px; text-align: center;
+			}
+			.footer-website { text-align: right; }
+			.footer-url {
+				font-size: 9px; font-weight: 400;
+				letter-spacing: 2.5px; color: rgba(255,255,255,0.17);
+				text-transform: uppercase; display: block;
+			}
+			.footer-powered {
+				font-family: 'Cormorant Garamond', serif;
+				font-size: 10px; font-style: italic; color: rgba(255,255,255,0.12);
+			}
+
+			/* ══ Animations ══ */
+			.slide-out { animation: slideOut 0.32s cubic-bezier(0.4,0,0.6,1) forwards; }
+			.slide-in  { animation: slideIn  0.48s cubic-bezier(0.23,1,0.32,1) forwards; }
+			@keyframes slideOut { to { opacity:0; transform:translateY(-10px); } }
+			@keyframes slideIn  { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+
+			/* ══ Scan-line texture ══ */
+			.scan-lines {
+				position: absolute; top:0; left:0; right:0; bottom:0;
+				background-image: repeating-linear-gradient(
+					0deg, transparent, transparent 3px,
+					rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px);
+				pointer-events: none; z-index: 11;
+			}
+
+			/* ══ Scene ambient glow ══ */
+			.scene-glow {
+				position: absolute; top:50%; left:50%;
+				transform: translate(-50%,-55%);
+				width: 60vw; height: 60vw;
+				background: radial-gradient(circle, rgba(180,195,220,0.035) 0%, transparent 70%);
+				filter: blur(50px); pointer-events: none; z-index: 1;
 			}
 
 		</style>
@@ -98,42 +326,99 @@
 	</head>
 	
 	<body>
-<!--		<canvas id="ambient-canvas"></canvas>
-		<div class="grid-overlay"></div>
-    <div class="vignette"></div>
-	<nav id="navbar">
-        <a class="nav-logo" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
-            <img src="./images/fimawork_logo_C_white.png" alt="fimawork logo">
-        </a>
-        <ul class="nav-links">
-            <li><a href="#services" id="nav-services">服務項目</a></li>
-            <li><a href="#prowess" id="nav-prowess">技術優勢</a></li>
-            <li><a href="#integration" id="nav-integration">介面導入</a></li>
-        </ul>
-        <div class="nav-cta">
-            <div class="lang-drop">
-                <button class="lang-drop-btn">
-                    <i class="fa-solid fa-globe" style="font-size:12px"></i>
-                    <span id="lang-label">中文</span>
-                </button>
-                <div class="lang-drop-content">
-                    <a href="#" onclick="setLang('ZH');return false;">中文</a>
-                    <a href="#" onclick="setLang('EN');return false;">EN</a>
-                    <a href="#" onclick="setLang('JP');return false;">JP</a>
-                    <a href="#" onclick="setLang('KR');return false;">KR</a>
-                    <a href="#" onclick="setLang('DE');return false;">DE</a>
-                    <a href="#" onclick="setLang('FR');return false;">FR</a>
-                </div>
-            </div>
-            <button class="btn-nav-demo" onclick="window.location.href='Showroom.html'">
-                <i class="fa-solid fa-play" style="font-size:11px"></i>
-                <span id="nav-demo-label">範例展示</span>
-            </button>
-        </div>
-    </nav>
 
-		<section id="hero">
-			<div id="threeContainer"></div>
+	<!-- ═══════════════════════════════════════════
+	     VOGUE MAGAZINE COVER — GLASS SHOWCASE UI
+	════════════════════════════════════════════ -->
+
+	<!-- Ambient scene glow (behind 3D) -->
+	<div class="scene-glow"></div>
+
+	<!-- Scan-line texture overlay -->
+	<div class="scan-lines"></div>
+
+	<!-- ── Glass Showcase Frame ── -->
+	<div id="showcase-frame">
+		<div class="glass-top-glare"></div>
+		<div class="glass-left-fade"></div>
+		<div class="glass-right-fade"></div>
+		<div class="glass-floor"></div>
+		<div class="glass-border">
+			<div class="corner-tr"></div>
+			<div class="corner-bl"></div>
+		</div>
+
+		<!-- MASTHEAD -->
+		<div id="masthead">
+			<div class="masthead-brand">
+				<div class="masthead-logo">Your Product in 3D</div>
+				<div class="masthead-tagline">fimawork · 3D Web Design Studio</div>
+			</div>
+			<div class="masthead-meta">
+				<div class="masthead-issue">3D SHOWCASE EDITION</div>
+				<div class="masthead-date" id="masthead-date">October 2026</div>
+			</div>
+		</div>
+		<div class="masthead-rule"></div>
+
+		<!-- LEFT SIDEBAR — dynamic product info -->
+		<div id="sidebar-left">
+			<div class="sidebar-category" id="sb-category">3D Product Showcase</div>
+			<div class="sidebar-product-name" id="sb-name">E-Bike</div>
+			<div class="sidebar-product-sub" id="sb-sub">Industrial-grade WebGPU rendering with real-time PBR materials.</div>
+			<div class="sidebar-rule"></div>
+			<div class="sidebar-specs">
+				<div class="spec-row">
+					<span class="spec-key">Renderer</span>
+					<span class="spec-val" id="sb-spec-renderer">Three.js WebGPU</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-key">Format</span>
+					<span class="spec-val" id="sb-spec-format">glTF / DRACO</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-key">Lighting</span>
+					<span class="spec-val" id="sb-spec-light">Ultra HDR · PMREM</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- RIGHT SIDEBAR — navigation & index -->
+		<div id="sidebar-right">
+			<div class="sidebar-index" id="sb-index">01</div>
+			<div class="sidebar-collection">Collection 2026</div>
+			<div class="sidebar-dots" id="sb-dots">
+				<div class="dot active" data-i="0"></div>
+				<div class="dot" data-i="1"></div>
+				<div class="dot" data-i="2"></div>
+				<div class="dot" data-i="3"></div>
+				<div class="dot" data-i="4"></div>
+				<div class="dot" data-i="5"></div>
+			</div>
+			<div class="sidebar-nav-hint">Drag to rotate</div>
+		</div>
+
+		<!-- BOTTOM FOOTER -->
+		<div id="cover-footer">
+			<div class="footer-rule"></div>
+			<div class="footer-headline">
+				<div class="footer-hl-main" id="ft-main">Redefining Product Presentation</div>
+				<div class="footer-hl-sub">Interactive · Immersive · Industrial</div>
+			</div>
+			<div class="footer-center-bar">
+				<div class="nav-arrow" id="btn-prev" title="Previous">&#8592;</div>
+				<div class="nav-progress" id="nav-progress">01 / 06</div>
+				<div class="nav-arrow" id="btn-next" title="Next">&#8594;</div>
+			</div>
+			<div class="footer-website">
+				<span class="footer-url">fimawork.tw</span>
+				<span class="footer-powered">Powered by WebGPU</span>
+			</div>
+		</div>
+	</div><!-- /showcase-frame -->
+
+	<!-- ── Three.js scene container ── -->
+	<div id="threeContainer"></div>
 			<div class="hero-badge">
             <span class="pulse-dot"></span>
             <span id="hero-badge-text">3D Web Design Studio</span>
@@ -143,11 +428,11 @@
         	    Depth Through<br><span class="highlight">Dimensions</span>
         	</h1>
 
-			 <p class="hero-subtitle" id="hero-subtitle">
+			 <p class="hero-subtitle" id="hero-subtitle" style="display: none;">
             fimawork — Merging industrial design with Three.js & WebGPU to craft immersive 3D web experiences that make your products unforgettable.
         </p>
 
-		 <div class="hero-stats">
+		 <div class="hero-stats" style="display: none;">
             <div class="stat-item">
                 <div class="stat-num">10+</div>
                 <div class="stat-label" id="stat-years">Years Exp.</div>
@@ -169,11 +454,8 @@
             </div>
         </div>
 
-		</section>-->
+		</section>
 
-		<div id="threeContainer"></div>
-		
-		
 		<script type="module">
 
 			import * as THREE from 'three';
@@ -925,6 +1207,187 @@ function UpdateRotationManu()
 	}
 }
 
+
+
+
+
+		/* ═══════════════════════════════════════════
+		   VOGUE UI CONTROLLER
+		════════════════════════════════════════════ */
+
+		// Product data for each carousel slot (matches item_01 → item_06 order)
+		const PRODUCTS = [
+			{
+				category: '3D Product Showcase',
+				name: 'E-bike',
+				sub: 'Urban electric mobility with full-detail WebGPU rendering and custom PBR materials.',
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Urban Mobility, Redefined',
+			},
+			{
+				category: '3D Product Showcase',
+				name: 'Suitcase',
+				sub: 'Premium luggage with multi-colour shell variants and polished hardware accents.', 
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Design Classics, Live in 3D',
+			},
+			{
+				category: '3D Product Showcase',
+				name: 'Fitness Equipments',
+				sub: 'Fitness equipment showcase with detailed tube, housing and leather saddle materials.',
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Performance Meets Precision',
+			},
+			{
+				category: '3D Product Showcase',
+				name: 'Computer and Information Technology',
+				sub: 'Consumer electronics presented with accurate aluminium texture and animated display hinge.',
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Technology, Beautifully Rendered',
+			},
+			{
+				category: '3D Product Showcase',
+				name: 'Cars and Motorcycles',
+				sub: 'High-fidelity automotive render — silver paint, carbon fibre, real-time glass.',
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Form & Function in Motion',
+			},
+			{
+				category: '3D Product Showcase',
+				name: 'Furniture',
+				sub: 'Mid-century icon faithfully recreated with walnut grain textures and leather PBR.',
+				renderer: 'Three.js WebGPU',
+				format: 'DRACO / glTF',
+				light: 'Ultra HDR · PMREM',
+				headline: 'Travel in Style',
+			},
+		];
+
+		const TOTAL = PRODUCTS.length;
+		let currentIndex = 0; // tracks which item is front-facing
+
+		/* ── Helper: set current index from carousel rotation ── */
+		// The carousel starts with item_01 at front (after initial shift in init)
+		// item slot visible = ( divisionAngle steps ) mapping
+		function getActiveIndex() {
+			// rotationTarget.rotation.y increases by divisionAngle each step
+			// 0 shift → item_01 front; after 1 shift → item_02, etc.
+			let steps = Math.round(-rotationTarget.rotation.y / divisionAngle);
+			// normalise to 0–5
+			return ((steps % TOTAL) + TOTAL) % TOTAL;
+		}
+
+		/* ── UI updater ── */
+		function updateVogueUI(idx, animate = true) {
+			const p = PRODUCTS[idx];
+
+			const sbName    = document.getElementById('sb-name');
+			const sbSub     = document.getElementById('sb-sub');
+			const sbCat     = document.getElementById('sb-category');
+			const sbRen     = document.getElementById('sb-spec-renderer');
+			const sbFmt     = document.getElementById('sb-spec-format');
+			const sbLit     = document.getElementById('sb-spec-light');
+			const sbIdx     = document.getElementById('sb-index');
+			const ftMain    = document.getElementById('ft-main');
+			const navProg   = document.getElementById('nav-progress');
+
+			if (animate) {
+				[sbName, sbSub, ftMain].forEach(el => {
+					el.classList.remove('slide-in');
+					el.classList.add('slide-out');
+				});
+				setTimeout(() => {
+					applyText();
+					[sbName, sbSub, ftMain].forEach(el => {
+						el.classList.remove('slide-out');
+						el.classList.add('slide-in');
+					});
+				}, 340);
+			} else {
+				applyText();
+			}
+
+			function applyText() {
+				sbCat.textContent    = p.category;
+				sbName.textContent   = p.name;
+				sbSub.textContent    = p.sub;
+				sbRen.textContent    = p.renderer;
+				sbFmt.textContent    = p.format;
+				sbLit.textContent    = p.light;
+				sbIdx.textContent    = String(idx + 1).padStart(2, '0');
+				ftMain.textContent   = p.headline;
+				navProg.textContent  = `${String(idx + 1).padStart(2, '0')} / ${String(TOTAL).padStart(2, '0')}`;
+			}
+
+			// Dots
+			document.querySelectorAll('.dot').forEach((d, i) => {
+				d.classList.toggle('active', i === idx);
+			});
+
+			currentIndex = idx;
+		}
+
+		/* ── Advance / retreat carousel ── */
+		function stepCarousel(dir) {
+			rotationTarget.rotation.y += dir * divisionAngle;
+			idleTime = 0; // reset auto-rotate timer
+		}
+
+		/* ── Button listeners ── */
+		document.getElementById('btn-next').addEventListener('click', () => {
+			stepCarousel(-1);
+			setTimeout(() => updateVogueUI(getActiveIndex()), 200);
+		});
+		document.getElementById('btn-prev').addEventListener('click', () => {
+			stepCarousel(1);
+			setTimeout(() => updateVogueUI(getActiveIndex()), 200);
+		});
+
+		/* ── Dot click ── */
+		document.querySelectorAll('.dot').forEach((dot, i) => {
+			dot.style.pointerEvents = 'auto';
+			dot.addEventListener('click', () => {
+				const diff = i - getActiveIndex();
+				rotationTarget.rotation.y -= diff * divisionAngle;
+				idleTime = 0;
+				setTimeout(() => updateVogueUI(i), 200);
+			});
+		});
+
+		/* ── Auto-update UI in sync with auto-rotate ── */
+		const _origAnimate = typeof window._vogueHooked === 'undefined';
+		window._vogueHooked = true;
+		// Intercept the auto-rotate trigger inside animate() by polling
+		let _lastStep = 0;
+		setInterval(() => {
+			const step = Math.round(-rotationTarget.rotation.y / divisionAngle);
+			if (step !== _lastStep) {
+				_lastStep = step;
+				updateVogueUI(getActiveIndex(), true);
+			}
+		}, 300);
+
+		/* ── Set masthead date ── */
+		(function() {
+			const months = ['January','February','March','April','May','June',
+							'July','August','September','October','November','December'];
+			const now = new Date();
+			document.getElementById('masthead-date').textContent =
+				months[now.getMonth()] + ' ' + now.getFullYear();
+		})();
+
+		/* ── Initial UI state ── */
+		updateVogueUI(0, false);
 
 
 		</script>
