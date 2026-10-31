@@ -7,7 +7,6 @@
 		<title>Carousel</title>
 		<link rel="stylesheet" type="text/css" href="Main_v2.css">
 		<style type="text/css">
-			@import url('https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@main/fx_ui.css');
 			@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap');
 
 			*, *::before, *::after { box-sizing: border-box; }
@@ -181,16 +180,6 @@
 				transition: opacity 0.5s ease;
 			}
 			.sidebar-rule { width: 28px; height: 1px; background: rgba(255,255,255,0.2); }
-			.sidebar-specs { display: flex; flex-direction: column; gap: 8px; }
-			.spec-row { display: flex; flex-direction: column; gap: 1px; }
-			.spec-key {
-				font-size: 8px; letter-spacing: 2px;
-				color: rgba(255,255,255,0.2); text-transform: uppercase;
-			}
-			.spec-val {
-				font-family: 'Cormorant Garamond', serif;
-				font-size: 13px; color: rgba(255,255,255,0.52);
-			}
 
 			/* ══ RIGHT SIDEBAR ══ */
 			#sidebar-right {
@@ -367,20 +356,6 @@
 			<div class="sidebar-product-name" id="sb-name">E-Bike</div>
 			<div class="sidebar-product-sub" id="sb-sub">Industrial-grade WebGPU rendering with real-time PBR materials.</div>
 			<div class="sidebar-rule"></div>
-			<div class="sidebar-specs" style="display: none;">
-				<div class="spec-row">
-					<span class="spec-key">Renderer</span>
-					<span class="spec-val" id="sb-spec-renderer">Three.js WebGPU</span>
-				</div>
-				<div class="spec-row">
-					<span class="spec-key">Format</span>
-					<span class="spec-val" id="sb-spec-format">glTF / DRACO</span>
-				</div>
-				<div class="spec-row">
-					<span class="spec-key">Lighting</span>
-					<span class="spec-val" id="sb-spec-light">Ultra HDR · PMREM</span>
-				</div>
-			</div>
 		</div>
 
 		<!-- RIGHT SIDEBAR — navigation & index -->
@@ -419,42 +394,6 @@
 
 	<!-- ── Three.js scene container ── -->
 	<div id="threeContainer"></div>
-			<div class="hero-badge">
-            <span class="pulse-dot"></span>
-            <span id="hero-badge-text">3D Web Design Studio</span>
-        </div>
-
-			<h1 class="hero-title" id="hero-title" >
-        	    Depth Through<br><span class="highlight">Dimensions</span>
-        	</h1>
-
-			 <p class="hero-subtitle" id="hero-subtitle" style="display: none;">
-            fimawork — Merging industrial design with Three.js & WebGPU to craft immersive 3D web experiences that make your products unforgettable.
-        </p>
-
-		 <div class="hero-stats" style="display: none;">
-            <div class="stat-item">
-                <div class="stat-num">10+</div>
-                <div class="stat-label" id="stat-years">Years Exp.</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-num">Three.js</div>
-                <div class="stat-label" id="stat-tech">Core Tech</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-num">CAD</div>
-                <div class="stat-label" id="stat-cad">IGES / STEP</div>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <div class="stat-num">6</div>
-                <div class="stat-label" id="stat-lang">Languages</div>
-            </div>
-        </div>
-
-		</section>
 
 		<script type="module">
 
@@ -463,34 +402,26 @@
 			import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 			import * as FX from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v2.2/fx_functions.js';
 			import * as FXM from 'https://cdn.jsdelivr.net/gh/Fimawork/threejs_tools@v1.5/fx_materials.js';
-			import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 			import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-			import { TIFFLoader } from 'three/addons/loaders/TIFFLoader.js';
-			import { ALESSI_Lemon_Squeezer_Juicy_Salif } from './models/ALESSI_Lemon_Squeezer_Juicy_Salif_slices.js';
 			import { chair_20251216 } from './models/chair_20251216_slices.js';
 			import { eBike_2026 } from './models/eBike_2026_slices.js';
-			import { JEEP_COMPASS_2021_20251217 } from './models/JEEP_COMPASS_2021_20251217_slices.js';
 			import { car_20260604 } from './models/car_20260604_slices.js';
 			import { Laptop_20260604 } from './models/Laptop_20260604_slices.js';
 			import { exerciseBike_2026 } from './models/exerciseBike_2026_slices.js';
 			import { suitcase_2026 } from './models/suitcase_2026_slices.js';
 
-let scene, camera, renderer, stats, mixer,container;
+let scene, camera, renderer;
 let controls;
 let idleTime=0;
 
 let threeContainer = document.getElementById("threeContainer");
 
 
-//const clock = new THREE.Clock();
 
 // 2. 建立新版的 Timer（取代舊的 Clock）
 const timer = new THREE.Timer();
 
-const modelPosition=new THREE.Vector3(60,0,0);
-const modelRotation=new THREE.Vector3(0,Math.PI, 0);
-const modeScale=0.05;
 
 const CameraDefaultPos=new THREE.Vector3(60,6,-20);
 const ControlsTargetDefaultPos=new THREE.Vector3(60,0,0);
@@ -518,12 +449,8 @@ let item_05_object = new THREE.Object3D();
 let item_06_object = new THREE.Object3D();
 
 let item_object_list=[];
-let isRotateOn=false;
 
-let gridWall = new THREE.GridHelper( 100, 500, 0x3AAE07, 0x3AAE07 );	
-let rotation_interpolation=0;
 
-let item_list=[];
 
 
 const hold_time=15;
@@ -542,7 +469,6 @@ async function init()
 
   	camera = new THREE.PerspectiveCamera( 30, threeContainer.clientWidth / threeContainer.clientHeight,0.1, 50 );//8 30
 	camera.layers.set(1);
-  	//renderer = new THREE.WebGLRenderer({  alpha: true, antialias: true  });
 	renderer = new THREE.WebGPURenderer( { alpha: true, antialias: true } );
   	renderer.setPixelRatio( window.devicePixelRatio );
   	renderer.setSize( threeContainer.clientWidth, threeContainer.clientHeight );
@@ -572,36 +498,18 @@ async function init()
   	controls.maxDistance = 500;
   	controls.target.copy( ControlsTargetDefaultPos );
   	controls.zoomSpeed=0.5;
-	//controls.autoRotate=true;
-	//controls.autoRotateSpeed=2;
 	controls.maxPolarAngle=FX.ToThreeEulerAngle(96);
   	controls.update();
 
-  	///hdri 環境光源
-	//FX.LoadHDRWithPMREM('./textures/hdri/studio_small_09_2k.hdr',scene,renderer) 
-
 	FX.LoadUltraHDRForWebGPU('./textures/hdri/studio_small_09_2k.jpg',scene);
-	
-
-//	gridWall.material.opacity = 0.3;
-//	gridWall.material.depthWrite = false;
-//	gridWall.material.transparent = true;
-//
-//	scene.add(gridWall);
-//	gridWall.position.set(60,0,5);
-//	gridWall.rotation.x=Math.PI/2;
-//	gridWall.visible=false;
-//	gridWall.scale.set(0.1,0.1, 0.1);
 
 	
   ///主要物件
 	const defaultScenes = 
     [
 		() => new Promise((resolve) => setTimeout(() => { InstantModel();resolve(); }, 10)), 
-		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)), 
-		//() => new Promise((resolve) => setTimeout(() => { animate();resolve();}, 200)),
+		() => new Promise((resolve) => setTimeout(() => { SetupItemGroup();rotationTarget.rotation.y+=divisionAngle;resolve(); }, 100)),
 		() => new Promise((resolve) => setTimeout(() => { camera.layers.set(0);resolve();}, 500)),
-		//() => new Promise((resolve) => setTimeout(() => { FX.Material_Inspector(scene);resolve();}, 1000)),
 	];
 
 	async function SetupDefaultScene() 
@@ -692,11 +600,6 @@ async function init()
         	      FX.ReturnBufferGeometry(object,metal_housing_material,item_01_object,scene);
         	    }
 
-				//if(object.name.includes("light"))
-        	    //{
-        	    //  FX.ReturnBufferGeometry(object,null,null,scene);
-        	    //}
-
 				if(object.name.includes("lightLens"))
         	    {
         	      FX.ReturnBufferGeometry(object,lightLens_material,item_01_object,scene);
@@ -743,8 +646,6 @@ async function init()
 			item_01_object.rotation.set(0,FX.ToThreeEulerAngle(180), 0);
 			item_01_object.scale.set(scale,scale,scale);
 
-			//FX.ToThreeEulerAngle(90),FX.ToThreeEulerAngle(-90), FX.ToThreeEulerAngle(90)
-
 			item_01.add(item_01_object)
 	    },
 	    (error) => {
@@ -788,8 +689,6 @@ async function init()
 		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_01"),sofa_back_01_material,item_02_object,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("sofa_hand_02"),sofa_back_01_material,item_02_object,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("knob"),knob_material,item_02_object,scene);
-
-		//item_02_object.add(model);
 
 		item_02_object.position.set(60,1.2,0);
 		item_02_object.rotation.set(0,FX.ToThreeEulerAngle(-90), 0);
@@ -848,19 +747,11 @@ async function init()
 		FX.ReturnBufferGeometry(model.getObjectByName("inner_silver"),silver_paint_material,item_03_object,scene);
 		FX.ReturnBufferGeometry(model.getObjectByName("other"),other_material,item_03_object,scene);
 
-		//item_03_object.add(model.getObjectByName("logo"));
-
-		//item_02_object.add(model);
-
-		//item_03_object.add(model);
-
 		item_03_object.position.set(60,1.8,0);
 		item_03_object.rotation.set(0,Math.PI, 0);
 		item_03_object.scale.set(0.003,0.003,0.003);
 
 		item_03.add(item_03_object);
-
-		//FX.Material_Inspector(scene);
 	    },
 	    (error) => {
 	        console.error('Failed to load model:', error);
@@ -927,8 +818,6 @@ async function init()
 			}
 
 		});
-
-		//scene.add(model);
 
 		item_04_object.position.set(60,0,0);
 		item_04_object.rotation.set(FX.ToThreeEulerAngle(0),FX.ToThreeEulerAngle(180), FX.ToThreeEulerAngle(0));
@@ -1125,24 +1014,17 @@ function onWindowResize()
 
 function animate(timestamp) 
 {
-  	//requestAnimationFrame( animate );
 
 	
 
   	controls.update();
   	renderer.render( scene, camera );
 
-  	//FX.UpdateCameraPosition(camera,controls);
-
 	UpdateRotationManu();
-
-	//const delta = clock.getDelta();
 
 	// 自動更新時間（用來計算移動速度、旋轉等）
     timer.update( timestamp );
 	const delta = timer.getDelta();// 兩幀之間的時間差
-
-	if ( mixer ) mixer.update( delta );
 
 	idleTime+=delta;
 
@@ -1150,39 +1032,9 @@ function animate(timestamp)
 	{
 		idleTime=0;
 		rotationTarget.rotation.y+=divisionAngle;
-		isRotateOn=true;
-	}
-
-//	if(isRotateOn)
-//	{
-//		GridWallEffect();
-//	}
-
-	//FX.WebGLInspector(container , renderer);
-}
-
-function GridWallEffect()
-{
-	if(idleTime<=3.4&&idleTime>1.0)
-	{
-		gridWall.visible=true;
-
-		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(1,1, 1),0.05);
-		//gridWall.rotation.x=FX.ToThreeEulerAngle(FX.LerpFloat(90,180,rotation_interpolation+=0.004*idleTime));
-	}
-
-	if(idleTime>2)
-	{
-		gridWall.scale.lerpVectors(gridWall.scale,new THREE.Vector3(0.01,0.01, 0.01),0.25);
-	}
-
-	if(idleTime>3.6)
-	{
-		gridWall.visible=false;
-		//gridWall.rotation.x=FX.ToThreeEulerAngle(90);
-		rotation_interpolation=0;
 	}
 }
+
 
 
 
@@ -1274,7 +1126,6 @@ function UpdateRotationManu()
 		];
 
 		const TOTAL = PRODUCTS.length;
-		let currentIndex = 0; // tracks which item is front-facing
 
 		/* ── Helper: set current index from carousel rotation ── */
 		// The carousel starts with item_01 at front (after initial shift in init)
@@ -1294,9 +1145,6 @@ function UpdateRotationManu()
 			const sbName    = document.getElementById('sb-name');
 			const sbSub     = document.getElementById('sb-sub');
 			const sbCat     = document.getElementById('sb-category');
-			const sbRen     = document.getElementById('sb-spec-renderer');
-			const sbFmt     = document.getElementById('sb-spec-format');
-			const sbLit     = document.getElementById('sb-spec-light');
 			const sbIdx     = document.getElementById('sb-index');
 			const ftMain    = document.getElementById('ft-main');
 			const navProg   = document.getElementById('nav-progress');
@@ -1321,9 +1169,6 @@ function UpdateRotationManu()
 				sbCat.textContent    = p.category;
 				sbName.textContent   = p.name;
 				sbSub.textContent    = p.sub;
-				sbRen.textContent    = p.renderer;
-				sbFmt.textContent    = p.format;
-				sbLit.textContent    = p.light;
 				sbIdx.textContent    = String(idx + 1).padStart(2, '0');
 				ftMain.textContent   = p.headline;
 				navProg.textContent  = `${String(idx + 1).padStart(2, '0')} / ${String(TOTAL).padStart(2, '0')}`;
@@ -1333,8 +1178,6 @@ function UpdateRotationManu()
 			document.querySelectorAll('.dot').forEach((d, i) => {
 				d.classList.toggle('active', i === idx);
 			});
-
-			currentIndex = idx;
 		}
 
 		/* ── Advance / retreat carousel ── */
@@ -1365,8 +1208,6 @@ function UpdateRotationManu()
 		});
 
 		/* ── Auto-update UI in sync with auto-rotate ── */
-		const _origAnimate = typeof window._vogueHooked === 'undefined';
-		window._vogueHooked = true;
 		// Intercept the auto-rotate trigger inside animate() by polling
 		let _lastStep = 0;
 		setInterval(() => {
