@@ -739,37 +739,43 @@
     ============================================= */
     const LANG = {
         ZH: {
+            blogTitle:'探索 3D 網頁與工業設計的<br><span class="highlight">思維維度</span>',
             navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', navBlog:'網站專欄',
             ctaCon:'Contact Us', ctaDem:'探索範例',footAddr:'臺北市士林區前港街68巷3號',
             ctaLabel:'Ready to Start?', ctaTitle:'把品牌升級到下一個維度',
             ctaSubtitle:'我們協助品牌將實體產品轉化為兼具極致質感與高效能的3D網頁體驗。歡迎與我們討論您的專案！',
         },
         EN: {
+            blogTitle:'Exploring 3D Web & Industrial Design:<br><span class="highlight">Dimensions of Thought</span>',
             navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
             ctaCon:'Contact Us', ctaDem:'Explore Demos',footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
             ctaLabel:'Ready to Start?', ctaTitle:'Elevate Your Brand Through Dimensions', 
             ctaSubtitle:'We empower physical product brands to transform their products into photorealistic, high-performance 3D web experiences. Let’s discuss your project!',
         },
         JP: {
+            blogTitle:'3Dウェブとプロダクトデザインを探求する<br><span class="highlight">思考の次元</span>',
             navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', navBlog:'ブログ',
             ctaCon:'お問い合わせ', ctaDem:'デモを見る',footAddr:'台湾台北市士林区前港街68巷3號',
             ctaLabel:'Ready to Start?', ctaTitle:'ブランドを次の次元へアップグレード',
             ctaSubtitle:'実物製品を持つブランド企業様向けに、圧倒的なクオリティとハイパフォーマンスを兼ね備えたWeb3D体験へのアップデートをサポートします。プロジェクトのご相談をお待ちしております。',
         },
         KR: {
+            blogTitle:'3D 웹과 산업 디자인을 탐구하는<br><span class="highlight">사고의 차원</span>',
             navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', navBlog:'블로그',
             ctaCon:'문의하기', ctaDem:'데모 탐색',footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
             ctaLabel:'Ready to Start?', ctaTitle:'브랜드를 다음 차원으로 업그레이드',
             ctaSubtitle:'우리는 실물 제품 브랜드가 극대화된 비주얼과 고성능을 겸비한 3D 웹 경험으로 제품을 전환할 수 있도록 지원합니다. 지금 프로젝트에 대해 이야기해 보세요!',
         },
         DE: {
+            blogTitle:'3D-Web & Industrie-Design erkunden:<br><span class="highlight">Dimensionen des Denkens</span>',
             navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
             ctaCon:'Kontakt', ctaDem:'Demos erkunden',footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
             ctaLabel:'Bereit?', ctaTitle:'Heben Sie Ihre Marke in die nächste Dimension',
             ctaSubtitle:'Wir unterstützen Marken für physische Produkte dabei, ihre Produkte in hochperformante 3D-Web-Erlebnisse mit höchstem Designanspruch zu verwandeln. Lassen Sie uns über Ihr Projekt sprechen!', 
         },
         FR: {
-            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navBlog:'Blog',
+            blogTitle:'Explorer le Web 3D et le design industriel :<br><span class="highlight">Dimensions de la pensée</span>',
+            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navDemo:'Démos',navBlog:'Blog',
             ctaCon:'Nous contacter', ctaDem:'Explorer les démos',footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
             ctaLabel:'Prêt à commencer ?', ctaTitle:'Élevez votre marque vers la dimension supérieure',
             ctaSubtitle:'Nous aidons les marques de produits physiques à transformer leurs créations en expériences Web 3D haute performance et au rendu d’exception. Discutons de votre projet !',
@@ -782,7 +788,7 @@
         const gi = (id, v) => { const el = g(id); if (el) el.innerHTML = v; };
         const gt = (id, v) => { const el = g(id); if (el) el.textContent = v; };
 
-        //新增blog頁面
+        gi('blog-index-title', d.blogTitle);
         gt('nav-blog', d.navBlog); 
         gt('nav-services', d.navSvc); gt('nav-prowess', d.navProwess);
         gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); 
