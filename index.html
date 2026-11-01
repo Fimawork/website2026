@@ -516,7 +516,7 @@
     ============================================= */
     const LANG = {
         ZH: {
-            navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', lang:'中文',
+            navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', lang:'中文', navBlog:'網站專欄',
             badge:'3D Web Design Studio',
             heroTitle:'用維度呈現深度<br>讓產品<span class="highlight">自己說話</span>',
             heroSub:'費馬工作室 — 融合工業設計 × Three.js × WebGPU，<br>為你打造最懂產品的沉浸式3D網頁體驗。',
@@ -541,7 +541,7 @@
             ctaCon:'Contact Us', ctaDem:'探索範例', footAddr:'臺北市士林區前港街68巷3號',
         },
         EN: {
-            navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', lang:'EN',
+            navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', lang:'EN', navBlog:'Blog',
             badge:'3D Web Design Studio',
             heroTitle:'Depth Through<br><span class="highlight">Dimensions</span>',
             heroSub:'fimawork — Merging industrial design with Three.js & WebGPU to craft immersive 3D web experiences that make your products unforgettable.',
@@ -566,7 +566,7 @@
             ctaCon:'Contact Us', ctaDem:'Explore Demos', footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
         },
         JP: {
-            navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', lang:'JP',
+            navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', lang:'JP', navBlog:'ブログ',
             badge:'3D Webデザインスタジオ',
             heroTitle:'次元で深さを表現し<br>製品に<span class="highlight">語らせる</span>',
             heroSub:'fimawork — 工業デザイン×Three.js×WebGPUで没入型3D Web体験を提供します。',
@@ -591,7 +591,7 @@
             ctaCon:'お問い合わせ', ctaDem:'デモを見る', footAddr:'台湾台北市士林区前港街68巷3號',
         },
         KR: {
-            navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', lang:'KR',
+            navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', lang:'KR', navBlog:'블로그',
             badge:'3D 웹 디자인 스튜디오',
             heroTitle:'차원으로 깊이를 표현하고<br>제품이 <span class="highlight">스스로 말하게</span>',
             heroSub:'fimawork — 산업 디자인×Three.js×WebGPU로 몰입형 3D 웹 경험을 제공합니다.',
@@ -616,7 +616,7 @@
             ctaCon:'문의하기', ctaDem:'데모 탐색', footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
         },
         DE: {
-            navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', lang:'DE',
+            navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', lang:'DE', navBlog:'Blog',
             badge:'3D Webdesign Studio',
             heroTitle:'Tiefe durch<br><span class="highlight">Dimensionen</span>',
             heroSub:'fimawork — Industriedesign × Three.js × WebGPU für immersive 3D-Weberlebnisse.',
@@ -641,7 +641,7 @@
             ctaCon:'Kontakt', ctaDem:'Demos erkunden', footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
         },
         FR: {
-            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navDemo:'Démos', lang:'FR',
+            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navDemo:'Démos', lang:'FR',  navBlog:'Blog',
             badge:'Studio de Design Web 3D',
             heroTitle:'La profondeur<br>par les <span class="highlight">dimensions</span>',
             heroSub:"fimawork — Fusionner le design industriel avec Three.js & WebGPU pour des expériences 3D inoubliables.",
@@ -673,6 +673,8 @@
         const gi = (id, v) => { const el = g(id); if (el) el.innerHTML = v; };
         const gt = (id, v) => { const el = g(id); if (el) el.textContent = v; };
 
+        //新增blog頁面
+        gt('nav-blog', d.navBlog); 
         gt('nav-services', d.navSvc); gt('nav-prowess', d.navProwess);
         gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); gt('lang-label', d.lang);
         gt('hero-badge-text', d.badge);

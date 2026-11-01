@@ -517,7 +517,7 @@
         <div class="nav-cta">
             <button class="btn-nav-demo" onclick="window.location.href='/Showroom.html'">
                 <i class="fa-solid fa-play" style="font-size:11px"></i>
-                <span>範例展示</span>
+                <span  id="nav-demo-label">範例展示</span>
             </button>
         </div>
     </nav>
@@ -757,6 +757,60 @@
                 filterCards();
             });
         }
+    })();
+
+    /* =============================================
+       Multi-language
+    ============================================= */
+    const LANG = {
+        ZH: {
+            navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', navBlog:'網站專欄',
+            footAddr:'臺北市士林區前港街68巷3號',
+        },
+        EN: {
+            navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
+            footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
+        },
+        JP: {
+            navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', navBlog:'ブログ',
+            footAddr:'台湾台北市士林区前港街68巷3號',
+        },
+        KR: {
+            navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', navBlog:'블로그',
+            footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
+        },
+        DE: {
+            navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
+            footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
+        },
+        FR: {
+            navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navBlog:'Blog',
+            footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
+        }
+    };
+
+    function setLang(lang) {
+        const d = LANG[lang]; if (!d) return;
+        const g = id => document.getElementById(id);
+        const gi = (id, v) => { const el = g(id); if (el) el.innerHTML = v; };
+        const gt = (id, v) => { const el = g(id); if (el) el.textContent = v; };
+
+        //新增blog頁面
+        gt('nav-blog', d.navBlog); 
+        gt('nav-services', d.navSvc); gt('nav-prowess', d.navProwess);
+        gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); 
+        gt('footer-address', d.footAddr);
+    }
+
+    // Auto-detect
+    (function() {
+        const l = navigator.language || 'en';
+        if      (l.startsWith('zh')) setLang('ZH');
+        else if (l.startsWith('ja')) setLang('JP');
+        else if (l.startsWith('ko')) setLang('KR');
+        else if (l.startsWith('de')) setLang('DE');
+        else if (l.startsWith('fr')) setLang('FR');
+        else                         setLang('EN');
     })();
     </script>
 </body>
