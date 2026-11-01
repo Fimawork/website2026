@@ -565,8 +565,8 @@
 
         <!-- Bottom Studio CTA -->
         <section class="catalog-cta">
-            <div class="section-label" style="justify-content:center; margin-bottom:12px;">Ready to Elevate?</div>
-            <h3 id="blog-index-cta">為你的產品打造次世代 3D 互動體驗</h3>
+            <div class="section-label" style="justify-content:center; margin-bottom:12px;" id="cta-label">Ready to Start?</div>
+            <h3 id="cta-title">把品牌升級到下一個維度</h3>
             <p id="blog-index-desc">橫跨醫療設備、電動車、工業五金與消費電子，我們協助品牌透過 3D 網頁提升互動轉換率。歡迎與我們討論你的專案！</p>
             <div class="catalog-cta-actions">
                 <button class="btn-primary" data-tally-open="eq07Zo">
@@ -741,26 +741,32 @@
         ZH: {
             navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', navBlog:'網站專欄',
             ctaCon:'Contact Us', ctaDem:'探索範例',footAddr:'臺北市士林區前港街68巷3號',
+            ctaLabel:'Ready to Start?', ctaTitle:'把品牌升級到下一個維度',
         },
         EN: {
             navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
             ctaCon:'Contact Us', ctaDem:'Explore Demos',footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
+            ctaLabel:'Ready to Start?', ctaTitle:'Elevate Your Brand Through Dimensions', 
         },
         JP: {
             navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', navBlog:'ブログ',
             ctaCon:'お問い合わせ', ctaDem:'デモを見る',footAddr:'台湾台北市士林区前港街68巷3號',
+            ctaLabel:'Ready to Start?', ctaTitle:'ブランドを次の次元へアップグレード',
         },
         KR: {
             navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', navBlog:'블로그',
             ctaCon:'문의하기', ctaDem:'데모 탐색',footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
+            ctaLabel:'Ready to Start?', ctaTitle:'브랜드를 다음 차원으로 업그레이드',
         },
         DE: {
             navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
             ctaCon:'Kontakt', ctaDem:'Demos erkunden',footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
+            ctaLabel:'Bereit?', ctaTitle:'Heben Sie Ihre Marke in die nächste Dimension', 
         },
         FR: {
             navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navBlog:'Blog',
             ctaCon:'Nous contacter', ctaDem:'Explorer les démos',footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
+            ctaLabel:'Prêt à commencer ?', ctaTitle:'Élevez votre marque vers la dimension supérieure',
         }
     };
 
@@ -776,6 +782,7 @@
         gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); 
         gt('footer-address', d.footAddr);
         gt('cta-contact-label', d.ctaCon); gt('cta-demo-label', d.ctaDem);
+        gt('cta-label', d.ctaLabel); gt('cta-title', d.ctaTitle);
     }
 
     // Auto-detect
