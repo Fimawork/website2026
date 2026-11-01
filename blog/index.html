@@ -530,10 +530,10 @@
                 <span class="pulse-dot"></span>
                 <span>Tech Blog & Insights</span>
             </div>
-            <h1 class="catalog-title">
+            <h1 class="catalog-title" id="blog-index-title">
                 探索 3D 網頁與工業設計的<br><span class="highlight">思維維度</span>
             </h1>
-            <p class="catalog-subtitle">
+            <p class="catalog-subtitle" id="blog-index-subtitle">
                 費馬工作室的實踐筆記、Three.js / WebGPU 核心技術與跨領域設計思維。
             </p>
         </header>
@@ -591,16 +591,16 @@
         <!-- Bottom Studio CTA -->
         <section class="catalog-cta">
             <div class="section-label" style="justify-content:center; margin-bottom:12px;">Ready to Elevate?</div>
-            <h3>為你的產品打造次世代 3D 互動體驗</h3>
-            <p>橫跨醫療設備、電動車、工業五金與消費電子，我們協助品牌透過 3D 網頁提升互動轉換率。歡迎與我們討論你的專案！</p>
+            <h3 id="blog-index-cta">為你的產品打造次世代 3D 互動體驗</h3>
+            <p id="blog-index-desc">橫跨醫療設備、電動車、工業五金與消費電子，我們協助品牌透過 3D 網頁提升互動轉換率。歡迎與我們討論你的專案！</p>
             <div class="catalog-cta-actions">
                 <button class="btn-primary" data-tally-open="eq07Zo">
                     <i class="fa-solid fa-paper-plane"></i>
-                    <span>聯絡我們 Contact Us</span>
+                    <span id="cta-contact-label">Contact Us</span>
                 </button>
                 <button class="btn-secondary" onclick="window.location.href='/Showroom.html'">
                     <i class="fa-solid fa-cube"></i>
-                    <span>探索範例作品</span>
+                    <span id="cta-demo-label">探索範例</span>
                 </button>
             </div>
         </section>
@@ -765,27 +765,27 @@
     const LANG = {
         ZH: {
             navSvc:'服務項目', navProwess:'技術優勢', navInteg:'介面導入', navDemo:'範例展示', navBlog:'網站專欄',
-            footAddr:'臺北市士林區前港街68巷3號',
+            ctaCon:'Contact Us', ctaDem:'探索範例',footAddr:'臺北市士林區前港街68巷3號',
         },
         EN: {
             navSvc:'Services', navProwess:'Prowess', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
-            footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
+            ctaCon:'Contact Us', ctaDem:'Explore Demos',footAddr:'No.3, Ln.68, Qiangang St., Shilin Dist., Taipei 111059, Taiwan',
         },
         JP: {
             navSvc:'サービス', navProwess:'技術の強み', navInteg:'導入', navDemo:'デモ', navBlog:'ブログ',
-            footAddr:'台湾台北市士林区前港街68巷3號',
+            ctaCon:'お問い合わせ', ctaDem:'デモを見る',footAddr:'台湾台北市士林区前港街68巷3號',
         },
         KR: {
             navSvc:'서비스', navProwess:'기술 강점', navInteg:'도입', navDemo:'데모', navBlog:'블로그',
-            footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
+            ctaCon:'문의하기', ctaDem:'데모 탐색',footAddr:'대만 타이베이시 스린구 첸강가 68번길 3호',
         },
         DE: {
             navSvc:'Dienste', navProwess:'Fähigkeiten', navInteg:'Integration', navDemo:'Demos', navBlog:'Blog',
-            footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
+            ctaCon:'Kontakt', ctaDem:'Demos erkunden',footAddr:'Nr. 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taiwan',
         },
         FR: {
             navSvc:'Services', navProwess:'Expertise', navInteg:'Intégration', navBlog:'Blog',
-            footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
+            ctaCon:'Nous contacter', ctaDem:'Explorer les démos',footAddr:"N° 3, Ln. 68, Qiangang St., Shilin, Taipei 111059, Taïwan",
         }
     };
 
@@ -800,6 +800,7 @@
         gt('nav-services', d.navSvc); gt('nav-prowess', d.navProwess);
         gt('nav-integration', d.navInteg); gt('nav-demo-label', d.navDemo); 
         gt('footer-address', d.footAddr);
+        gt('cta-contact-label', d.ctaCon); gt('cta-demo-label', d.ctaDem);
     }
 
     // Auto-detect
