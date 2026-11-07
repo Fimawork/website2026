@@ -7,16 +7,23 @@ on:
     - cron: '0 0 * * *' # 每天 UTC 00:00 (台灣時間早上 8 點) 自動定時執行打包
   workflow_dispatch: # 支援在 GitHub 網頁上點按鈕手動觸發
 
-# 明確賦予工作流程寫入權限
+# 官方 Pages 部署需要的權限
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
-# 強制所有 JavaScript Actions 使用 Node24（Node20 已於 2026/9/23 從 runner 移除）
+# 同一時間只跑一個部署，避免互相覆蓋
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# 強制所有 JavaScript Actions 使用 Node24
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: 檢出專案程式碼
@@ -36,7 +43,6 @@ jobs:
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
         run: npm run build:blog
 
-      # 👈 新增步驟：自動將 main 的所有頁面與靜態素材同步複製至 dist/
       - name: 一次複製所有靜態資源與頁面至 dist
         run: |
           rsync -av \
@@ -44,13 +50,29 @@ jobs:
             --exclude='node_modules' \
             --exclude='.git' \
             --exclude='.github' \
+            --exclude='.vscode' \
             --exclude='build-blog.js' \
+            --exclude='test-notion.js' \
             --exclude='package*.json' \
             ./ dist/
 
-      - name: 發布 dist/ 至 GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: 設定 GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上傳 dist/ 為 Pages 檔案
+        uses: actions/upload-pages-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          cname: fimawork.tw
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 發布至 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000 # 30 分鐘（單位：毫秒），預設只有 10 分鐘
